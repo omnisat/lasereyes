@@ -1,5 +1,5 @@
 # @omnisat/lasereyes
-![Laser Eyes](https://github.com/omnisat-foundation/lasereyes/raw/main/lasereyes.png)
+![Laser Eyes](./lasereyes.png)
 
 # Laser Eyes 
 ## React Hooks for Bitcoin
