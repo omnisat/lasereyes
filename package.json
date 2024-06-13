@@ -1,6 +1,6 @@
 {
   "name": "@omnisat/lasereyes",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "sideEffects": false,
   "private": false,
   "main": "./dist/index.js",
