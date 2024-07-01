@@ -53,6 +53,12 @@ const WalletCard = ({
     hasOyl,
     hasLeather,
     hasXverse,
+    network,
+    switchNetwork,
+    publicKey,
+    paymentAddress,
+    paymentPublicKey,
+    balance,
   } = useLaserEyes()
   const hasWallet = {
     unisat: hasUnisat,
@@ -83,6 +89,31 @@ const WalletCard = ({
             {provider === walletName ? 'disconnect' : 'Connect'}
           </Button>
         </div>
+        <p>{network}</p>
+        <Button onClick={() => switchNetwork('mainnet')}>
+          Switch to Mainnet
+        </Button>
+        <Button onClick={() => switchNetwork('testnet')}>
+          Switch to Testnet
+        </Button>
+        <p>
+          <strong>Public Keys</strong>
+        </p>
+        <p>{publicKey}</p>
+        <p>
+          <strong>Payment Public Key</strong>
+        </p>
+        <p>{paymentPublicKey}</p>
+        <p>
+          <strong>Payment Address</strong>
+        </p>
+        <p>{paymentAddress}</p>
+        <p>
+          <strong>Balance</strong>
+        </p>
+        <p>Confirmed: {balance.confirmed}</p>
+        <p>Unconfirmed: {balance.unconfirmed}</p>
+        <p>Total: {balance.total}</p>
       </CardContent>
       <CardFooter>
         <p className={'text-gray-700 m-auto'}>
