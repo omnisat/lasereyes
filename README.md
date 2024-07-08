@@ -1,84 +1,58 @@
-# @omnisat/lasereyes
-![Laser Eyes](./lasereyes.png)
+<p align="center">
+  <a href="https://lasereyesdocs.vercel.app/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./lasereyes.png">
+      <img alt="Laser Eyes" src="./lasereyes.png" width="auto" height="60">
+    </picture>
+  </a>
+</p>
 
-# Laser Eyes 
-## React Hooks for Bitcoin
+<p align="center">
+  <a href="https://www.npmjs.com/package/@omnisat/lasereyes">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/@omnisat/lasereyes?colorA=21262d&colorB=21262d">
+      <img src="https://img.shields.io/npm/v/@omnisat/lasereyes?colorA=f6f8fa&colorB=f6f8fa" alt="Version">
+    </picture>
+  </a>
+</p>
 
-Laser Eyes is a collection of React Hooks containing everything you need to start working with Bitcoin.
-Laser Eyes makes it easy to "Connect" interface with Bitcoin, Inscriptions, balance information, interact with BRC-20s, and more.
+---
 
-### Install
+## Documentation
 
-```yarn add @omnisat/lasereyes```
+For documentation and guides, visit [Laser Eyes Docs](https://lasereyes.vercel.app/).
 
-### Usage Overview
-```javascript
+## Community
 
-import { LaserEyesProvider, createConfig } from '@omnisat/lasereyes'
+For help, discussion about best practices, or any other conversation that would benefit from being searchable:
 
-const config = createConfig({
- ...
-})
- 
-function App() {
-  return (
-    <LaserEyesProvider config={config}>
-      <Profile />
-    </LaserEyesProvider>
-  )
-}
-```
+[Discuss Laser Eyes on GitHub](https://github.com/omnisat/lasereyes/discussions)
 
-# Usage
-## how to
+## Contributing
 
-The following hooks support typed inference:
+Contributions to Wagmi are greatly appreciated! If you're interested in contributing to Wagmi, please read the [Contributing Guide](https://wagmi.sh/dev/contributing) **before submitting a pull request**.
 
-### Read Methods
+## Sponsors
 
-connect
-```lasereyes.connect()```
+If you find Wagmi useful or use it for work, please consider [sponsoring Laser Eyes](https://github.com/sponsors/omnisat). Thank you 🙏
 
-Get addresses of current account
-```lasereyes.requestAccounts()```
+<p>
+<a href="https://www.utxo.management/" style="margin-right: 40px;">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./github/main/content/sponsors/utxo-dark-mode.svg">
+    <img alt="UTXO Management" src="./github/main/content/sponsors/utxo-dark-mode.svg" width="auto" height="70">
+  </picture>
+</a>
+<a href="https://satsventures.com/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./github/main/content/sponsors/sat-ventures-dark-mode.svg">
+    <img alt="Sats Ventures" src="./github/main/content/sponsors/sat-ventures-dark-mode.svg" width="auto" height="70">
+  </picture>
+</a>
+</p>
+<br>
 
-Returns testnet or mainnet
-```lasereyes.getNetwork()```
+[Sponsor Laser Eyes](https://github.com/sponsors/omnisat)
 
-Get public key of account
-```lasereyes.getPublicKey()```
-
-Get Balance of current account
-```lasereyes.getBalance()```
-
-Get All inscriptions
-```lasereyes.getInscriptions()```
-
-Get All Tokens
-```lasereyes.getAllBRC20Tokens()```
-
-### Write Methods
-
-Send Bitcoin
-```lasereyes.sendBTC(toPK, btc_in_sats, ...)```
-
-Transferable: The amount has been inscribed into one or more TRANSFER inscriptions (can be transferred immediately).
-Available: The amount that is available as a part of a balance (including both minted and received) but not transferable yet.
-To spend an available amount, you must first inscribe a certain amount into a TRANSFER inscription.
-
-The transfer Amount can be calculated by the sum of the chosen amounts of TRANSFER inscriptions.
-If you don’t have enough transferable inscriptions, you will need to inscribe them first.
-
-Once a number of TRANSFER inscriptions are chosen, proceed to send them by asserting an address
-
-sign the tx to send.
-
-Sign a message
-```lasereyes.signMessage(...)```
-
-Sign a single PSBT
-```lasereyes.signPsbt(...)```
-
-Sign an array of PSBT
-```lasereyes.signPsbts(...)```
-
+<br />
+<br />
