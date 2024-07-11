@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@omnisat/lasereyes": "^0.0.4",
+    "@omnisat/lasereyes": "^0.0.5",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",

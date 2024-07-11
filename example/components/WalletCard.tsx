@@ -58,7 +58,7 @@ const WalletCard = ({
       setSignature(signature)
     } catch (error) {
       if (error instanceof Error) {
-        toast(error.message)
+        toast.error(`${walletName} hasn't implemented signMessage yet`)
       }
     }
   }
