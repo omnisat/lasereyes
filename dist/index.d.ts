@@ -79,15 +79,10 @@ type LaserEyesContextType = {
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;
-    switchNetwork: (network: 'mainnet' | 'testnet') => Promise<string | undefined>;
+    switchNetwork: (network: "mainnet" | "testnet") => Promise<string | undefined>;
     getPublicKey: () => Promise<string>;
     getBalance: () => Promise<string>;
-    getInscriptions: () => Promise<any>;
-    getAllBRC20Tokens: () => Promise<any>;
     sendBTC: (to: string, amount: number) => Promise<string>;
-    payInscribe: () => Promise<void>;
-    deploy: () => Promise<void>;
-    mint: () => Promise<void>;
     signMessage: (message: string) => Promise<string>;
     signPsbt: (tx: string, finalize?: boolean, broadcast?: boolean) => Promise<string | {
         signedPsbtHex: string;
@@ -97,15 +92,15 @@ type LaserEyesContextType = {
 };
 type Config = {
     network: string;
-    provider: string;
-    chainId: number;
 };
 
 declare const createConfig: (config: Config) => Config;
 
 declare const useLaserEyes: () => LaserEyesContextType;
-declare const LaserEyesProvider: ({ children }: {
+declare const LaserEyesProvider: ({ children, config, }: {
     children: ReactNode;
+    config: Config;
 }) => react_jsx_runtime.JSX.Element;
+//# sourceMappingURL=LaserEyesProvider.d.ts.map
 
 export { LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAINNET, OYL, P2PKH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, getLeatherNetwork, getNetworkForLeather, getNetworkForUnisat, getNetworkForXverse, getUnisatNetwork, getXverseNetwork, useLaserEyes };

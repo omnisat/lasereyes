@@ -1,0 +1,94 @@
+import { useLaserEyes } from '@omnisat/lasereyes'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { truncateString } from '@/lib/utils'
+import { useEffect, useState } from 'react'
+
+const WalletCard = ({
+  walletName,
+  setAddress,
+  setSignature,
+}: {
+  walletName: 'unisat' | 'oyl' | 'xverse' | 'leather'
+  setAddress: (address: string) => void
+  setSignature: (signature: string) => void
+}) => {
+  const {
+    connect,
+    disconnect,
+    provider,
+    address,
+    hasUnisat,
+    hasOyl,
+    hasLeather,
+    hasXverse,
+    signMessage,
+  } = useLaserEyes()
+
+  const hasWallet = {
+    unisat: hasUnisat,
+    oyl: hasOyl,
+    leather: hasLeather,
+    xverse: hasXverse,
+  }
+
+  useEffect(() => {
+    if (provider === walletName) {
+      setAddress(address)
+    }
+  }, [address])
+
+  return (
+    <Card className={'grow'}>
+      <CardHeader>
+        <CardTitle className={'uppercase text-center'}>{walletName}</CardTitle>
+        <CardDescription></CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className={'flex flex-col gap-4'}>
+          <div className={'flex flex-row space-between items-center gap-6'}>
+            <Badge
+              variant={provider === walletName ? 'success' : 'destructive'}
+            >
+              {provider === walletName ? 'Connected' : 'Disconnected'}
+            </Badge>
+
+            <Button
+              disabled={!hasWallet[walletName]}
+              variant={provider === walletName ? 'destructive' : 'default'}
+              onClick={() =>
+                provider === walletName ? disconnect() : connect(walletName)
+              }
+            >
+              {provider === walletName ? 'disconnect' : 'Connect'}
+            </Button>
+          </div>
+          <div className={'flex flex-row space-between items-center gap-6'}>
+            <Button
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'destructive' : 'default'}
+              onClick={() =>
+                provider !== walletName
+                  ? null
+                  : signMessage(walletName).then(setSignature)
+              }
+            >
+              Sign Message
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter></CardFooter>
+    </Card>
+  )
+}
+
+export default WalletCard

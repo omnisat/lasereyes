@@ -18,6 +18,7 @@ import {
   OYL,
   P2TR,
   P2WPKH,
+  PHANTOM,
   TESTNET,
   UNISAT,
   XVERSE,
@@ -25,6 +26,7 @@ import {
 } from "../consts/wallets";
 import { getAddress, GetAddressOptions, signTransaction } from "sats-connect";
 import {
+  Config,
   LaserEyesContextType,
   LeatherAddress,
   LeatherRequestAddressResponse,
@@ -42,60 +44,36 @@ const initialWalletContext = {
   hasLeather: false,
   connected: false,
   isConnecting: false,
-  publicKey: "", // Empty string as the public key is unknown
-  address: "", // Empty string as the address is unknown
-  paymentAddress: "", // Empty string as the address is unknown
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
   paymentPublicKey: "",
   balance: {
-    confirmed: 0, // Initial confirmed balance is zero
-    unconfirmed: 0, // Initial unconfirmed balance is zero
-    total: 0, // Initial total balance is zero
+    confirmed: 0,
+    unconfirmed: 0,
+    total: 0,
   },
-  network: "", // Empty string as the network is unknown
-  library: null, // Initial library is null, assuming it will be an object once initialized
-  provider: null, // Initial provider is null, assuming it will be an object once initialized
-  accounts: [], // Initially, there are no accounts
-
-  // Placeholder functions for wallet operations. These should be replaced with actual implementations.
+  network: "",
+  library: null,
+  provider: null,
+  accounts: [],
   connect: async (
     walletName: typeof OYL | typeof UNISAT | typeof XVERSE | typeof LEATHER
-  ) => {
-    /* Implementation */
-  },
-  disconnect: () => {
-    /* Implementation */
-  },
+  ) => {},
+  disconnect: () => {},
   requestAccounts: async () => [],
   getNetwork: async () => "",
   switchNetwork: async (network: "mainnet" | "testnet") => "",
   getPublicKey: async () => "",
   getBalance: async () => "",
-  getInscriptions: async () => {
-    /* Implementation */
-  },
-  getAllBRC20Tokens: async () => {
-    /* Implementation */
-  },
   sendBTC: async (to: string, amount: number) => "",
-  payInscribe: async () => {
-    /* Implementation */
-  },
-  deploy: async () => {
-    /* Implementation */
-  },
-  mint: async () => {
-    /* Implementation */
-  },
   signMessage: async (message: string) => "",
   signPsbt: async (tx: string) => {
-    /* Implementation */
     return "";
   },
   pushPsbt: async (tx: string) => {
-    /* Implementation */
     return "";
   },
-  // signPsbts: async () => { /* Implementation */ },
 };
 
 const LaserEyesContext =
@@ -105,7 +83,13 @@ const useLaserEyes = (): LaserEyesContextType => {
   return useContext(LaserEyesContext);
 };
 
-const LaserEyesProvider = ({ children }: { children: ReactNode }) => {
+const LaserEyesProvider = ({
+  children,
+  config,
+}: {
+  children: ReactNode;
+  config: Config;
+}) => {
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -119,16 +103,32 @@ const LaserEyesProvider = ({ children }: { children: ReactNode }) => {
     total: 0,
   });
 
-  const [network, setNetwork] = useLocalStorage("network", NETWORK);
+  const [network, setNetwork] = useLocalStorage(
+    "network",
+    config.network ?? NETWORK
+  );
   const [library, setLibrary] = useState<any>(null);
   const [provider, setProvider] = useState<
-    typeof OYL | typeof UNISAT | typeof XVERSE | string
+    | typeof OYL
+    | typeof UNISAT
+    | typeof XVERSE
+    | typeof LEATHER
+    | typeof PHANTOM
+    | string
   >("");
 
   const [hasOyl, setHasOyl] = useState(false);
   const [hasUnisat, setHasUnisat] = useState(false);
   const [hasXverse, setHasXverse] = useState(false);
   const [hasLeather, setHasLeather] = useState(false);
+
+  useEffect(() => {
+    if (config) {
+      setNetwork(config.network);
+    } else {
+      setNetwork(MAINNET);
+    }
+  }, [config]);
 
   useEffect(() => {
     const oylLib = (window as any)?.oyl;
@@ -873,15 +873,9 @@ const LaserEyesProvider = ({ children }: { children: ReactNode }) => {
         switchNetwork,
         getPublicKey,
         getBalance,
-        getInscriptions,
-        getAllBRC20Tokens,
-
         sendBTC,
         signPsbt,
         pushPsbt,
-        payInscribe,
-        deploy,
-        mint,
         signMessage,
       }}
     >

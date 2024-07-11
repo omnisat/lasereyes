@@ -224,29 +224,18 @@ var initialWalletContext = {
   connected: false,
   isConnecting: false,
   publicKey: "",
-  // Empty string as the public key is unknown
   address: "",
-  // Empty string as the address is unknown
   paymentAddress: "",
-  // Empty string as the address is unknown
   paymentPublicKey: "",
   balance: {
     confirmed: 0,
-    // Initial confirmed balance is zero
     unconfirmed: 0,
-    // Initial unconfirmed balance is zero
     total: 0
-    // Initial total balance is zero
   },
   network: "",
-  // Empty string as the network is unknown
   library: null,
-  // Initial library is null, assuming it will be an object once initialized
   provider: null,
-  // Initial provider is null, assuming it will be an object once initialized
   accounts: [],
-  // Initially, there are no accounts
-  // Placeholder functions for wallet operations. These should be replaced with actual implementations.
   connect: (walletName) => __async(void 0, null, function* () {
   }),
   disconnect: () => {
@@ -266,18 +255,8 @@ var initialWalletContext = {
   getBalance: () => __async(void 0, null, function* () {
     return "";
   }),
-  getInscriptions: () => __async(void 0, null, function* () {
-  }),
-  getAllBRC20Tokens: () => __async(void 0, null, function* () {
-  }),
   sendBTC: (to, amount) => __async(void 0, null, function* () {
     return "";
-  }),
-  payInscribe: () => __async(void 0, null, function* () {
-  }),
-  deploy: () => __async(void 0, null, function* () {
-  }),
-  mint: () => __async(void 0, null, function* () {
   }),
   signMessage: (message) => __async(void 0, null, function* () {
     return "";
@@ -288,13 +267,16 @@ var initialWalletContext = {
   pushPsbt: (tx) => __async(void 0, null, function* () {
     return "";
   })
-  // signPsbts: async () => { /* Implementation */ },
 };
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
 };
-var LaserEyesProvider = ({ children }) => {
+var LaserEyesProvider = ({
+  children,
+  config
+}) => {
+  var _a;
   const [connected, setConnected] = (0, import_react.useState)(false);
   const [isConnecting, setIsConnecting] = (0, import_react.useState)(false);
   const [accounts, setAccounts] = (0, import_react.useState)([]);
@@ -307,13 +289,23 @@ var LaserEyesProvider = ({ children }) => {
     unconfirmed: 0,
     total: 0
   });
-  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", NETWORK);
+  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)(
+    "network",
+    (_a = config.network) != null ? _a : NETWORK
+  );
   const [library, setLibrary] = (0, import_react.useState)(null);
   const [provider, setProvider] = (0, import_react.useState)("");
   const [hasOyl, setHasOyl] = (0, import_react.useState)(false);
   const [hasUnisat, setHasUnisat] = (0, import_react.useState)(false);
   const [hasXverse, setHasXverse] = (0, import_react.useState)(false);
   const [hasLeather, setHasLeather] = (0, import_react.useState)(false);
+  (0, import_react.useEffect)(() => {
+    if (config) {
+      setNetwork(config.network);
+    } else {
+      setNetwork(MAINNET);
+    }
+  }, [config]);
   (0, import_react.useEffect)(() => {
     const oylLib = window == null ? void 0 : window.oyl;
     setHasOyl(!!oylLib);
@@ -323,8 +315,8 @@ var LaserEyesProvider = ({ children }) => {
     setHasUnisat(!!unisatLib);
   }, []);
   (0, import_react.useEffect)(() => {
-    var _a;
-    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+    var _a2;
+    const xverseLib = (_a2 = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a2.BitcoinProvider;
     setHasXverse(!!xverseLib);
   }, []);
   (0, import_react.useEffect)(() => {
@@ -956,41 +948,41 @@ var LaserEyesProvider = ({ children }) => {
       console.error("error", error);
     }
   });
-  const contextValue = {
-    library,
-    accounts,
-    publicKey,
-    address,
-    paymentAddress,
-    paymentPublicKey,
-    provider,
-    balance,
-    network,
-    connected,
-    isConnecting,
-    hasOyl,
-    hasUnisat,
-    hasXverse,
-    hasLeather,
-    //
-    connect,
-    disconnect,
-    requestAccounts,
-    getNetwork,
-    switchNetwork,
-    getPublicKey,
-    getBalance,
-    getInscriptions,
-    getAllBRC20Tokens,
-    sendBTC,
-    signPsbt,
-    pushPsbt,
-    payInscribe,
-    deploy,
-    mint,
-    signMessage
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LaserEyesContext.Provider, { value: contextValue, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    LaserEyesContext.Provider,
+    {
+      value: {
+        library,
+        accounts,
+        publicKey,
+        address,
+        paymentAddress,
+        paymentPublicKey,
+        provider,
+        balance,
+        network,
+        connected,
+        isConnecting,
+        hasOyl,
+        hasUnisat,
+        hasXverse,
+        hasLeather,
+        //
+        connect,
+        disconnect,
+        requestAccounts,
+        getNetwork,
+        switchNetwork,
+        getPublicKey,
+        getBalance,
+        sendBTC,
+        signPsbt,
+        pushPsbt,
+        signMessage
+      },
+      children
+    }
+  );
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
