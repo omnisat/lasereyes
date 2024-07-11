@@ -1,4 +1,4 @@
-import { useLaserEyes } from '@omnisat/lasereyes'
+import { OYL, UNISAT, useLaserEyes, XVERSE } from '@omnisat/lasereyes'
 import {
   Card,
   CardContent,
@@ -14,12 +14,10 @@ import { toast } from 'sonner'
 
 const WalletCard = ({
   walletName,
-  setAddress,
   setSignature,
   setSignedPsbt,
 }: {
   walletName: 'unisat' | 'oyl' | 'xverse' | 'leather'
-  setAddress: (address: string) => void
   setSignature: (signature: string) => void
   setSignedPsbt: (
     signedPsbt: { signedPsbtHex: string; signedPsbtBase64: string } | undefined
@@ -46,11 +44,17 @@ const WalletCard = ({
     xverse: hasXverse,
   }
 
-  useEffect(() => {
-    if (provider === walletName) {
-      setAddress(address)
+  const connectWallet = async (
+    walletName: typeof OYL | typeof UNISAT | typeof XVERSE
+  ) => {
+    try {
+      await connect(walletName)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
     }
-  }, [address])
+  }
 
   const sign = async (walletName: string) => {
     try {
@@ -80,7 +84,9 @@ const WalletCard = ({
               disabled={!hasWallet[walletName]}
               variant={provider === walletName ? 'destructive' : 'default'}
               onClick={() =>
-                provider === walletName ? disconnect() : connect(walletName)
+                provider === walletName
+                  ? disconnect()
+                  : connectWallet(walletName)
               }
             >
               {provider === walletName ? 'disconnect' : 'Connect'}
