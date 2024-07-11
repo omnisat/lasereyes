@@ -1,4 +1,11 @@
-import { LEATHER, OYL, UNISAT, XVERSE } from "../consts/wallets";
+import {
+  MAINNET,
+  OYL,
+  REGTEST,
+  TESTNET,
+  UNISAT,
+  XVERSE,
+} from "../consts/wallets";
 
 export type LaserEyesContextType = {
   hasOyl: boolean;
@@ -16,20 +23,20 @@ export type LaserEyesContextType = {
     unconfirmed: number;
     total: number;
   };
-  network: string;
+  network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
   library: any;
   provider: any;
   accounts: string[];
 
   connect: (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE | typeof LEATHER
+    walletName: typeof OYL | typeof UNISAT | typeof XVERSE
   ) => Promise<void>;
   disconnect: () => void;
   requestAccounts: () => Promise<string[]>;
   getNetwork: () => Promise<string | undefined>;
   switchNetwork: (
-    network: "mainnet" | "testnet"
-  ) => Promise<string | undefined>;
+    network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+  ) => Promise<void>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<string>;
   sendBTC: (to: string, amount: number) => Promise<string>;
@@ -39,13 +46,18 @@ export type LaserEyesContextType = {
     finalize?: boolean,
     broadcast?: boolean
   ) => Promise<
-    string | { signedPsbtHex: string; signedPsbtBase64: string } | undefined
+    | {
+        signedPsbtHex: string | undefined;
+        signedPsbtBase64: string | undefined;
+        txId?: string;
+      }
+    | undefined
   >;
   pushPsbt: (tx: string) => Promise<string | undefined>;
 };
 
 export type Config = {
-  network: string;
+  network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
 
 export interface LeatherRPCResponse {

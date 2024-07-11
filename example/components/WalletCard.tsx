@@ -9,17 +9,20 @@ import {
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { truncateString } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 const WalletCard = ({
   walletName,
   setAddress,
   setSignature,
+  setSignedPsbt,
 }: {
   walletName: 'unisat' | 'oyl' | 'xverse' | 'leather'
   setAddress: (address: string) => void
   setSignature: (signature: string) => void
+  setSignedPsbt: (
+    signedPsbt: { signedPsbtHex: string; signedPsbtBase64: string } | undefined
+  ) => void
 }) => {
   const {
     connect,
@@ -31,6 +34,8 @@ const WalletCard = ({
     hasLeather,
     hasXverse,
     signMessage,
+    signPsbt,
+    switchNetwork,
   } = useLaserEyes()
 
   const hasWallet = {
@@ -55,9 +60,7 @@ const WalletCard = ({
       <CardContent>
         <div className={'flex flex-col gap-4'}>
           <div className={'flex flex-row space-between items-center gap-6'}>
-            <Badge
-              variant={provider === walletName ? 'success' : 'destructive'}
-            >
+            <Badge variant={provider === walletName ? 'success' : 'secondary'}>
               {provider === walletName ? 'Connected' : 'Disconnected'}
             </Badge>
 
@@ -71,10 +74,11 @@ const WalletCard = ({
               {provider === walletName ? 'disconnect' : 'Connect'}
             </Button>
           </div>
-          <div className={'flex flex-row space-between items-center gap-6'}>
+          <div className={'flex flex-col space-between items-center gap-2'}>
             <Button
+              className={'w-full'}
               disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'destructive' : 'default'}
+              variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
                 provider !== walletName
                   ? null
@@ -82,6 +86,18 @@ const WalletCard = ({
               }
             >
               Sign Message
+            </Button>
+            <Button
+              className={'w-full'}
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName
+                  ? null
+                  : signPsbt(walletName).then(setSignedPsbt)
+              }
+            >
+              Sign PSBT
             </Button>
           </div>
         </div>

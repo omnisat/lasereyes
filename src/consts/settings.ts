@@ -1,7 +1,5 @@
-// export const SITE_URL = "https://omnisat.io";
+import { MAINNET } from "./wallets";
 
-import { TESTNET } from './wallets'
+export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 
-export const LOCAL_STORAGE_DEFAULT_WALLET = 'defaultWallet'
-
-export const NETWORK = TESTNET
+export const NETWORK = MAINNET;
