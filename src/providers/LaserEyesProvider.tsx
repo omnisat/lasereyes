@@ -382,6 +382,7 @@ const LaserEyesProvider = ({
   const connect = async (
     walletName: typeof OYL | typeof UNISAT | typeof XVERSE
   ) => {
+    console.log("connecting");
     setIsConnecting(true);
     try {
       if (!walletName) throw new Error("No wallet provided");
@@ -566,19 +567,15 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        new Error("Not implemented");
+        throw new Error("Not implemented");
       } else if (provider === UNISAT) {
         return await library?.signMessage(message);
       } else if (provider === XVERSE) {
-        new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        return await library?.request("signMessage", {
-          message: message,
-          paymentType: P2TR,
-        });
+        throw new Error("Not implemented");
       }
     } catch (error) {
-      console.error("error", error);
+      console.error(error);
+      throw error;
     }
   };
 

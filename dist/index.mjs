@@ -466,6 +466,7 @@ var LaserEyesProvider = ({
     getBasicInfo();
   };
   const connect = (walletName) => __async(void 0, null, function* () {
+    console.log("connecting");
     setIsConnecting(true);
     try {
       if (!walletName)
@@ -644,19 +645,15 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        new Error("Not implemented");
+        throw new Error("Not implemented");
       } else if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === XVERSE) {
-        new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        return yield library == null ? void 0 : library.request("signMessage", {
-          message,
-          paymentType: P2TR
-        });
+        throw new Error("Not implemented");
       }
     } catch (error) {
-      console.error("error", error);
+      console.error(error);
+      throw error;
     }
   });
   const signPsbt = (psbt, finalize = false, broadcast = true) => __async(void 0, null, function* () {

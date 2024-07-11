@@ -10,6 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 const WalletCard = ({
   walletName,
@@ -51,6 +52,17 @@ const WalletCard = ({
     }
   }, [address])
 
+  const sign = async (walletName: string) => {
+    try {
+      const signature = await signMessage(walletName)
+      setSignature(signature)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(error.message)
+      }
+    }
+  }
+
   return (
     <Card className={'grow'}>
       <CardHeader>
@@ -82,7 +94,7 @@ const WalletCard = ({
               onClick={() =>
                 provider !== walletName
                   ? null
-                  : signMessage(walletName).then(setSignature)
+                  : sign(walletName).then(console.log)
               }
             >
               Sign Message
@@ -92,9 +104,7 @@ const WalletCard = ({
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
-                provider !== walletName
-                  ? null
-                  : signPsbt(walletName).then(setSignedPsbt)
+                provider !== walletName ? null : signPsbt(walletName)
               }
             >
               Sign PSBT

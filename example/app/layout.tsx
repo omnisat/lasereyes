@@ -4,7 +4,6 @@ import { Space_Mono } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
-import AppLayout from '@/components/AppLayout'
 
 const inter = Space_Mono({
   subsets: ['latin'],
