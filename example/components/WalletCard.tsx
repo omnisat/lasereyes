@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 const WalletCard = ({
@@ -17,7 +16,7 @@ const WalletCard = ({
   setSignature,
   setSignedPsbt,
 }: {
-  walletName: 'unisat' | 'oyl' | 'xverse' | 'leather'
+  walletName: typeof OYL | typeof UNISAT | typeof XVERSE
   setSignature: (signature: string) => void
   setSignedPsbt: (
     signedPsbt: { signedPsbtHex: string; signedPsbtBase64: string } | undefined
@@ -105,16 +104,16 @@ const WalletCard = ({
             >
               Sign Message
             </Button>
-            <Button
-              className={'w-full'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName ? null : signPsbt(walletName)
-              }
-            >
-              Sign PSBT
-            </Button>
+            {/*<Button*/}
+            {/*  className={'w-full'}*/}
+            {/*  disabled={!hasWallet[walletName] || provider !== walletName}*/}
+            {/*  variant={provider !== walletName ? 'secondary' : 'default'}*/}
+            {/*  onClick={() =>*/}
+            {/*    provider !== walletName ? null : signPsbt(walletName)*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  Sign PSBT*/}
+            {/*</Button>*/}
           </div>
         </div>
       </CardContent>
