@@ -152,7 +152,12 @@ import {
   useState
 } from "react";
 import * as bitcoin2 from "bitcoinjs-lib";
-import { getAddress, signTransaction } from "sats-connect";
+import {
+  getAddress,
+  request,
+  RpcErrorCode,
+  signTransaction
+} from "sats-connect";
 
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
@@ -164,10 +169,11 @@ import { useLocalStorage } from "usehooks-ts";
 
 // src/lib/helpers.ts
 import * as bitcoin from "bitcoinjs-lib";
+import axios from "axios";
 var getBitcoinNetwork = (network) => {
-  if (network === "testnet") {
+  if (network === TESTNET) {
     return bitcoin.networks.testnet;
-  } else if (network === "regtest") {
+  } else if (network === REGTEST) {
     return bitcoin.networks.regtest;
   } else {
     return bitcoin.networks.bitcoin;
@@ -183,6 +189,14 @@ var findPaymentAddress = (addresses) => {
     ({ purpose }) => purpose === "payment"
   );
 };
+var getBTCBalance = (address) => __async(void 0, null, function* () {
+  try {
+    return yield axios.get(`https://blockchain.info/q/addressbalance/${address}`).then((response) => response.data);
+  } catch (error) {
+    console.error("Error fetching BTC balance:", error);
+    throw new Error("Failed to fetch BTC balance");
+  }
+});
 
 // src/providers/LaserEyesProvider.tsx
 import { jsx } from "react/jsx-runtime";
@@ -197,11 +211,7 @@ var initialWalletContext = {
   address: "",
   paymentAddress: "",
   paymentPublicKey: "",
-  balance: {
-    confirmed: 0,
-    unconfirmed: 0,
-    total: 0
-  },
+  balance: void 0,
   network: MAINNET,
   library: null,
   provider: null,
@@ -257,11 +267,7 @@ var LaserEyesProvider = ({
   const [paymentPublicKey, setPaymentPublicKey] = useState("");
   const [address, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
-  const [balance, setBalance] = useState({
-    confirmed: 0,
-    unconfirmed: 0,
-    total: 0
-  });
+  const [balance, setBalance] = useState();
   const [network, setNetwork] = useLocalStorage("network", (_a = config.network) != null ? _a : NETWORK);
   const [library, setLibrary] = useState(null);
   const [provider, setProvider] = useState("");
@@ -293,6 +299,16 @@ var LaserEyesProvider = ({
     const leatherLib = window == null ? void 0 : window.LeatherProvider;
     setHasLeather(!!leatherLib);
   }, []);
+  useEffect(() => {
+    if (provider && address && library) {
+      getBalance().then((balance2) => {
+        setBalance(balance2);
+      });
+      getPublicKey().then((publicKey2) => {
+        setPublicKey(String(publicKey2));
+      });
+    }
+  }, [provider, address, library]);
   const selfRef = useRef({
     accounts: []
   });
@@ -325,6 +341,8 @@ var LaserEyesProvider = ({
       setProvider(UNISAT);
       handleAccountsChanged(result);
       setConnected(true);
+      const balance2 = yield lib == null ? void 0 : lib.getBalance();
+      setBalance(balance2);
       yield getNetwork().then((network2) => {
         const foundNetwork = getNetworkForUnisat(String(network2));
         setNetwork(foundNetwork);
@@ -362,43 +380,6 @@ var LaserEyesProvider = ({
       setConnected(true);
     } catch (error) {
       throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
-    }
-  });
-  const connectLeather = () => __async(void 0, null, function* () {
-    try {
-      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
-      const lib = window.LeatherProvider;
-      const getAddressesResponse = yield lib.request(
-        "getAddresses"
-      );
-      const addressesResponse = getAddressesResponse.result;
-      const addresses = addressesResponse.addresses;
-      const leatherAccountsParsed = addresses.map(
-        (address2) => address2.address
-      );
-      const taprootAddress = addresses.find(
-        (address2) => address2.type === P2TR
-      );
-      const segwitAddress = addresses.find(
-        (address2) => address2.type === P2WPKH
-      );
-      setAccounts(leatherAccountsParsed);
-      setAddress(String(taprootAddress == null ? void 0 : taprootAddress.address));
-      setPaymentAddress(String(segwitAddress == null ? void 0 : segwitAddress.address));
-      setLibrary(lib);
-      setProvider(LEATHER);
-      handleAccountsChanged(leatherAccountsParsed);
-      setConnected(true);
-      yield getNetwork().then((network2) => {
-        if (!network2) {
-          setNetwork(MAINNET);
-        } else {
-          setNetwork(network2);
-        }
-      });
-      setConnected(true);
-    } catch (error) {
-      throw new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
   });
   const handleAccountsChanged = (_accounts) => {
@@ -459,9 +440,6 @@ var LaserEyesProvider = ({
     if (provider === XVERSE) {
       foundNetwork = getNetworkForXverse(network2);
     }
-    if (provider === LEATHER) {
-      foundNetwork = getLeatherNetwork(network2);
-    }
     setNetwork(foundNetwork);
     getBasicInfo();
   };
@@ -477,8 +455,6 @@ var LaserEyesProvider = ({
         yield connectUnisat();
       } else if (walletName === XVERSE) {
         yield connectXverse();
-      } else if (walletName === LEATHER) {
-        yield connectLeather();
       } else {
         throw new Error("Wallet not found!");
       }
@@ -493,10 +469,13 @@ var LaserEyesProvider = ({
   });
   const disconnect = () => {
     setAddress("");
+    setPaymentAddress("");
+    setPublicKey("");
     setAccounts([]);
     setProvider("");
     setLibrary(null);
     setConnected(false);
+    setBalance(void 0);
     localStorage == null ? void 0 : localStorage.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
   };
   const requestAccounts = () => __async(void 0, null, function* () {
@@ -540,16 +519,16 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const unisatNetwork = yield library == null ? void 0 : library.getNetwork();
         const foundNetwork = getNetworkForUnisat(unisatNetwork);
         setNetwork(foundNetwork);
         return foundNetwork;
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -560,13 +539,13 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network2);
         yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
         setNetwork(network2);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -579,14 +558,14 @@ var LaserEyesProvider = ({
       if (provider === OYL) {
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === UNISAT) {
+        console.log("getting pub");
+        const pub = yield library == null ? void 0 : library.getPublicKey();
+        console.log(pub);
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        return publicKey;
       }
     } catch (error) {
-      console.error("error", error);
       throw error;
     }
   });
@@ -595,11 +574,21 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        return yield library.getBalance();
+        const balanceResponse = yield library.getBalance();
+        return {
+          confirmed: balanceResponse.btc.confirmed * 1e8,
+          unconfirmed: balanceResponse.btc.pending * 1e8,
+          total: balanceResponse.btc.total * 1e8
+        };
       } else if (provider === UNISAT) {
         return yield library.getBalance();
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        const totalBalance = yield getBTCBalance(paymentAddress);
+        return {
+          confirmed: totalBalance,
+          unconfirmed: 0,
+          total: totalBalance
+        };
       }
     } catch (error) {
       throw error;
@@ -614,9 +603,9 @@ var LaserEyesProvider = ({
       } else if (provider === UNISAT) {
         return yield library.getInscriptions(0, 10);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -624,20 +613,40 @@ var LaserEyesProvider = ({
   });
   const sendBTC = (to, amount) => __async(void 0, null, function* () {
     try {
+      if (amount <= 0)
+        throw new Error("Amount must be greater than 0");
+      if (!Number.isInteger(amount))
+        throw new Error("Amount must be an integer");
+      if (!library)
+        throw new Error("Library not found");
       if (provider === OYL) {
-        new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        const txId = yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        if (!txId)
+          throw new Error("Transaction failed");
+        return txId;
       } else if (provider === XVERSE) {
-        new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        return yield library == null ? void 0 : library.request("sendTransfer", {
-          address: to,
-          amount: amount.toString()
+        const response = yield request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: Number(amount)
+            }
+          ]
         });
+        if (response.status === "success") {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
-      console.error("error", error);
+      throw error;
     }
   });
   const signMessage = (message) => __async(void 0, null, function* () {
@@ -645,14 +654,25 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        const response = yield request("signMessage", {
+          address,
+          message
+        });
+        if (response.status === "success") {
+          return response.result.signature;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error signing message: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
-      console.error(error);
       throw error;
     }
   });
@@ -661,8 +681,7 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === OYL) {
-        const response = yield library == null ? void 0 : library.signPsbt(psbt);
-        return response;
+        return yield library == null ? void 0 : library.signPsbt(psbt);
       } else if (provider === UNISAT) {
         const txHex = yield library == null ? void 0 : library.signPsbt(psbt, {
           autoFinalized: finalize

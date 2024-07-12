@@ -1,10 +1,10 @@
 'use client'
-import { LaserEyesProvider } from '@omnisat/lasereyes'
+import { LaserEyesProvider, MAINNET } from '@omnisat/lasereyes'
 import App from '@/components/App'
 
 export default function Home() {
   return (
-    <LaserEyesProvider config={{ network: 'testnet' }}>
+    <LaserEyesProvider config={{ network: MAINNET }}>
       <App />
     </LaserEyesProvider>
   )

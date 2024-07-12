@@ -1,15 +1,12 @@
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useLaserEyes } from '@omnisat/lasereyes'
-import { truncateString } from '@/lib/utils'
 
 type SUPPORTED_WALLET_NAMES = 'unisat' | 'oyl' | 'xverse'
 const App = () => {
   const wallets: SUPPORTED_WALLET_NAMES[] = ['unisat', 'oyl', 'xverse']
-
-  const { address } = useLaserEyes()
+  const { address, paymentAddress, publicKey } = useLaserEyes()
 
   const [signature, setSignature] = useState<string>('')
   const [signedPsbt, setSignedPsbt] = useState<
@@ -25,31 +22,59 @@ const App = () => {
   }, [address])
 
   return (
-    <div className={'flex flex-col gap-4'}>
-      <div className={'flex flex-col items-center p-12 border'}>
+    <div className={'flex flex-col gap-4 w-full max-w-5xl px-12'}>
+      <div
+        className={
+          'flex flex-col gap-4 text-center items-center p-12 border text-xl break-all'
+        }
+      >
         <div
           className={
             'flex flex-row items-center gap-4 justify-center space-around'
           }
         >
-          <Avatar className={'border'}>
-            <AvatarImage
-              src={
-                address
-                  ? `https://robohash.org/${address}.png?set=set1/shadcn.png`
-                  : ''
-              }
-            />
-            <AvatarFallback>{address[address.length - 1]}</AvatarFallback>
-          </Avatar>
-          <div className={clsx('text-xl font-black')}>
-            {truncateString(address, 16)}
+          <div className={'flex flex-col items-center'}>
+            <span className={clsx('font-black')}>Address</span>
+            <span className={'text-lg'}>
+              {address?.length > 0 ? address : '--'}
+            </span>
           </div>
         </div>
 
-        <div className={clsx('')}>{signature}</div>
-        <div className={clsx('')}>{signedPsbt?.signedPsbtBase64}</div>
-        <div className={clsx('')}>{signedPsbt?.signedPsbtHex}</div>
+        <div
+          className={
+            'flex flex-row items-center gap-4 justify-center space-around'
+          }
+        >
+          <div className={'flex flex-col items-center'}>
+            <span className={clsx('font-black')}>Payment Address</span>
+            <span className={'text-lg'}>
+              {paymentAddress?.length > 0 ? paymentAddress : '--'}
+            </span>
+          </div>
+        </div>
+
+        <div
+          className={
+            'flex flex-row items-center gap-4 justify-center space-around'
+          }
+        >
+          <div className={'flex flex-col items-center'}>
+            <span className={clsx('font-black')}>Public Key</span>
+            <span className={'text-lg'}>
+              {publicKey?.length > 0 ? publicKey : '--'}
+            </span>
+          </div>
+        </div>
+
+        <div className={'flex flex-col items-center'}>
+          <span className={clsx('font-black')}>Signature</span>{' '}
+          <span className={'text-sm'}>
+            {signature?.length > 0 ? signature : '--'}{' '}
+          </span>
+        </div>
+        <div className={clsx('font-black')}>{signedPsbt?.signedPsbtBase64}</div>
+        <div className={clsx('font-black')}>{signedPsbt?.signedPsbtHex}</div>
       </div>
       <div className={'flex flex-wrap gap-8'}>
         {wallets.map((walletName) => (

@@ -1,5 +1,10 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { MAINNET, REGTEST, TESTNET } from '../../src'
+import {
+  MEMPOOL_SPACE_TESTNET_URL,
+  MEMPOOL_SPACE_URL,
+} from '../../src/consts/settings'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -14,3 +19,13 @@ export function truncateString(str: string, maxLength: number): string {
     return leftHalf + '...' + rightHalf
   }
 }
+
+export const satoshisToBTC = (satoshis: number): string => {
+  if (Number.isNaN(satoshis) || satoshis === undefined) return '--'
+  const btcValue = satoshis / 100000000
+  return btcValue.toFixed(8)
+}
+
+export const getMempoolSpaceUrl = (
+  network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+) => (network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : MEMPOOL_SPACE_URL)

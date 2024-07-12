@@ -10,6 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { satoshisToBTC } from '../../src/lib/helpers'
 
 const WalletCard = ({
   walletName,
@@ -24,16 +25,19 @@ const WalletCard = ({
 }) => {
   const {
     connect,
+    isConnecting,
     disconnect,
     provider,
-    address,
+    paymentAddress,
+    balance,
     hasUnisat,
     hasOyl,
     hasLeather,
     hasXverse,
+    sendBTC,
     signMessage,
     signPsbt,
-    switchNetwork,
+    network,
   } = useLaserEyes()
 
   const hasWallet = {
@@ -55,16 +59,46 @@ const WalletCard = ({
     }
   }
 
+  const send = async () => {
+    try {
+      if (balance?.total < 1500) {
+        throw new Error('Insufficient funds')
+      }
+
+      const txid = await sendBTC(paymentAddress, 1500)
+      toast.success(
+        <span className={'flex flex-col gap-1 items-center justify-center'}>
+          <span className={'font-black'}>View on mempool.space</span>
+          <a
+            target={'_blank'}
+            href={`https://mempool.space/tx/${txid}`}
+            className={'underline text-blue-600 text-xs'}
+          >
+            {txid}
+          </a>
+        </span>
+      )
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
   const sign = async (walletName: string) => {
     try {
       const signature = await signMessage(walletName)
       setSignature(signature)
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${walletName} hasn't implemented signMessage yet`)
+        toast.error(error.message)
       }
     }
   }
+
+  const unconfirmed = satoshisToBTC(balance?.unconfirmed)
+  const confirmed = satoshisToBTC(balance?.confirmed)
+  const total = satoshisToBTC(balance?.total)
 
   return (
     <Card className={'grow'}>
@@ -80,6 +114,7 @@ const WalletCard = ({
             </Badge>
 
             <Button
+              className={'w-full'}
               disabled={!hasWallet[walletName]}
               variant={provider === walletName ? 'destructive' : 'default'}
               onClick={() =>
@@ -88,10 +123,31 @@ const WalletCard = ({
                   : connectWallet(walletName)
               }
             >
-              {provider === walletName ? 'disconnect' : 'Connect'}
+              {provider === walletName ? 'Disconnect' : 'Connect'}
             </Button>
           </div>
+
+          <div
+            className={
+              'font-black text-gray-400 italic self-end flex flex-col gap-1 text-right'
+            }
+          >
+            <span>
+              {provider !== walletName && unconfirmed ? '--' : unconfirmed}{' '}
+              unconfirmed
+            </span>
+            <span>{provider !== walletName ? '--' : confirmed} confirmed</span>
+            <span>{provider !== walletName ? '--' : total} total</span>
+          </div>
           <div className={'flex flex-col space-between items-center gap-2'}>
+            <Button
+              className={'w-full'}
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() => (provider !== walletName ? null : send())}
+            >
+              Send BTC
+            </Button>
             <Button
               className={'w-full'}
               disabled={!hasWallet[walletName] || provider !== walletName}
@@ -104,16 +160,16 @@ const WalletCard = ({
             >
               Sign Message
             </Button>
-            {/*<Button*/}
-            {/*  className={'w-full'}*/}
-            {/*  disabled={!hasWallet[walletName] || provider !== walletName}*/}
-            {/*  variant={provider !== walletName ? 'secondary' : 'default'}*/}
-            {/*  onClick={() =>*/}
-            {/*    provider !== walletName ? null : signPsbt(walletName)*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  Sign PSBT*/}
-            {/*</Button>*/}
+            <Button
+              className={'w-full'}
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName ? null : signPsbt(walletName)
+              }
+            >
+              Sign PSBT
+            </Button>
           </div>
         </div>
       </CardContent>

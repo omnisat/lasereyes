@@ -26,14 +26,20 @@ import {
   XVERSE,
   XVERSE_NETWORK,
 } from "../consts/wallets";
-import { getAddress, GetAddressOptions, signTransaction } from "sats-connect";
+import {
+  getAddress,
+  GetAddressOptions,
+  request,
+  RpcErrorCode,
+  signTransaction,
+} from "sats-connect";
 import {
   Config,
   LaserEyesContextType,
   LeatherAddress,
   LeatherRequestAddressResponse,
-  LeatherRequestSignResponse,
   LeatherRPCResponse,
+  OYLBalanceResponse,
 } from "../types";
 import { LOCAL_STORAGE_DEFAULT_WALLET, NETWORK } from "../consts/settings";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
@@ -42,6 +48,7 @@ import {
   findOrdinalsAddress,
   findPaymentAddress,
   getBitcoinNetwork,
+  getBTCBalance,
 } from "../lib/helpers";
 
 const initialWalletContext = {
@@ -55,11 +62,7 @@ const initialWalletContext = {
   address: "",
   paymentAddress: "",
   paymentPublicKey: "",
-  balance: {
-    confirmed: 0,
-    unconfirmed: 0,
-    total: 0,
-  },
+  balance: undefined,
   network: MAINNET as typeof MAINNET | typeof TESTNET | typeof REGTEST,
   library: null,
   provider: null,
@@ -110,11 +113,14 @@ const LaserEyesProvider = ({
   const [paymentPublicKey, setPaymentPublicKey] = useState<string>("");
   const [address, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
-  const [balance, setBalance] = useState({
-    confirmed: 0,
-    unconfirmed: 0,
-    total: 0,
-  });
+  const [balance, setBalance] = useState<
+    | {
+        confirmed: number;
+        unconfirmed: number;
+        total: number;
+      }
+    | undefined
+  >();
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
@@ -162,6 +168,17 @@ const LaserEyesProvider = ({
     setHasLeather(!!leatherLib);
   }, []);
 
+  useEffect(() => {
+    if (provider && address && library) {
+      getBalance().then((balance) => {
+        setBalance(balance);
+      });
+      getPublicKey().then((publicKey) => {
+        setPublicKey(String(publicKey));
+      });
+    }
+  }, [provider, address, library]);
+
   const selfRef = useRef<{ accounts: string[] }>({
     accounts: [],
   });
@@ -199,6 +216,8 @@ const LaserEyesProvider = ({
       setProvider(UNISAT);
       handleAccountsChanged(result);
       setConnected(true);
+      const balance = await lib?.getBalance();
+      setBalance(balance);
       await getNetwork().then((network) => {
         const foundNetwork = getNetworkForUnisat(String(network));
         setNetwork(foundNetwork);
@@ -225,6 +244,7 @@ const LaserEyesProvider = ({
           setPaymentPublicKey(String(response.addresses[1].publicKey));
           const foundAddress = findOrdinalsAddress(response.addresses);
           const foundPaymentAddress = findPaymentAddress(response.addresses);
+
           if (foundAddress && foundPaymentAddress) {
             setAddress(foundAddress.address);
             setPaymentAddress(foundPaymentAddress.address);
@@ -237,54 +257,6 @@ const LaserEyesProvider = ({
       setConnected(true);
     } catch (error) {
       throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
-    }
-  };
-
-  const connectLeather = async () => {
-    try {
-      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
-
-      const lib = (window as any).LeatherProvider;
-      // @ts-ignore
-      const getAddressesResponse: LeatherRPCResponse = await lib.request(
-        "getAddresses"
-      );
-
-      const addressesResponse =
-        getAddressesResponse.result as LeatherRequestAddressResponse;
-
-      const addresses: LeatherAddress[] = addressesResponse.addresses;
-
-      const leatherAccountsParsed = addresses.map(
-        (address: LeatherAddress) => address.address
-      );
-
-      const taprootAddress = addresses.find(
-        (address: LeatherAddress) => address.type === P2TR
-      );
-
-      const segwitAddress = addresses.find(
-        (address: LeatherAddress) => address.type === P2WPKH
-      );
-
-      setAccounts(leatherAccountsParsed);
-      setAddress(String(taprootAddress?.address));
-      setPaymentAddress(String(segwitAddress?.address));
-      setLibrary(lib);
-      setProvider(LEATHER);
-      handleAccountsChanged(leatherAccountsParsed);
-      setConnected(true);
-      await getNetwork().then((network) => {
-        // const foundNetwork = getNe(String(network))
-        if (!network) {
-          setNetwork(MAINNET);
-        } else {
-          setNetwork(network);
-        }
-      });
-      setConnected(true);
-    } catch (error) {
-      throw new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
   };
 
@@ -372,9 +344,6 @@ const LaserEyesProvider = ({
     if (provider === XVERSE) {
       foundNetwork = getNetworkForXverse(network);
     }
-    if (provider === LEATHER) {
-      foundNetwork = getLeatherNetwork(network);
-    }
     setNetwork(foundNetwork);
     getBasicInfo();
   };
@@ -392,8 +361,6 @@ const LaserEyesProvider = ({
         await connectUnisat();
       } else if (walletName === XVERSE) {
         await connectXverse();
-      } else if (walletName === LEATHER) {
-        await connectLeather();
       } else {
         throw new Error("Wallet not found!");
       }
@@ -409,10 +376,13 @@ const LaserEyesProvider = ({
 
   const disconnect = () => {
     setAddress("");
+    setPaymentAddress("");
+    setPublicKey("");
     setAccounts([]);
     setProvider("");
     setLibrary(null);
     setConnected(false);
+    setBalance(undefined);
     localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
   };
 
@@ -456,7 +426,7 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const unisatNetwork = await library?.getNetwork();
         const foundNetwork = getNetworkForUnisat(unisatNetwork) as
@@ -465,9 +435,9 @@ const LaserEyesProvider = ({
         setNetwork(foundNetwork);
         return foundNetwork;
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -480,13 +450,13 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network);
         await library?.switchNetwork(wantedNetwork);
         setNetwork(network);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -499,14 +469,14 @@ const LaserEyesProvider = ({
       if (provider === OYL) {
         return await library?.getPublicKey();
       } else if (provider === UNISAT) {
+        console.log("getting pub");
+        const pub = await library?.getPublicKey();
+        console.log(pub);
         return await library?.getPublicKey();
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        return publicKey;
       }
     } catch (error) {
-      console.error("error", error);
       throw error;
     }
   };
@@ -515,11 +485,21 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        return await library.getBalance();
+        const balanceResponse: OYLBalanceResponse = await library.getBalance();
+        return {
+          confirmed: balanceResponse.btc.confirmed * 100000000,
+          unconfirmed: balanceResponse.btc.pending * 100000000,
+          total: balanceResponse.btc.total * 100000000,
+        };
       } else if (provider === UNISAT) {
         return await library.getBalance();
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        const totalBalance = await getBTCBalance(paymentAddress);
+        return {
+          confirmed: totalBalance,
+          unconfirmed: 0,
+          total: totalBalance,
+        };
       }
     } catch (error) {
       throw error;
@@ -534,9 +514,9 @@ const LaserEyesProvider = ({
       } else if (provider === UNISAT) {
         return await library.getInscriptions(0, 10);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === LEATHER) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       }
     } catch (error) {
       throw error;
@@ -545,21 +525,37 @@ const LaserEyesProvider = ({
 
   const sendBTC = async (to: string, amount: number) => {
     try {
-      // if (!library) return;
+      if (amount <= 0) throw new Error("Amount must be greater than 0");
+      if (!Number.isInteger(amount))
+        throw new Error("Amount must be an integer");
+      if (!library) throw new Error("Library not found");
       if (provider === OYL) {
-        new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
-        return await library?.sendBitcoin(to, amount);
+        const txId = await library?.sendBitcoin(to, amount);
+        if (!txId) throw new Error("Transaction failed");
+        return txId;
       } else if (provider === XVERSE) {
-        new Error("Not implemented");
-      } else if (provider === LEATHER) {
-        return await library?.request("sendTransfer", {
-          address: to,
-          amount: amount.toString(),
+        const response = await request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: Number(amount),
+            },
+          ],
         });
+        if (response.status === "success") {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
-      console.error("error", error);
+      throw error;
     }
   };
 
@@ -567,14 +563,26 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        throw new Error("Not implemented");
+        throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         return await library?.signMessage(message);
       } else if (provider === XVERSE) {
-        throw new Error("Not implemented");
+        const response = await request("signMessage", {
+          address,
+          message,
+        });
+
+        if (response.status === "success") {
+          return response.result.signature as string;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error signing message: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
-      console.error(error);
       throw error;
     }
   };
@@ -583,11 +591,10 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === OYL) {
-        const response = (await library?.signPsbt(psbt)) as {
+        return (await library?.signPsbt(psbt)) as {
           signedPsbtHex: string;
           signedPsbtBase64: string;
         };
-        return response;
       } else if (provider === UNISAT) {
         const txHex = await library?.signPsbt(psbt, {
           autoFinalized: finalize,

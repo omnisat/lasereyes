@@ -18,11 +18,13 @@ export type LaserEyesContextType = {
   address: string;
   paymentAddress: string;
   paymentPublicKey: string;
-  balance: {
-    confirmed: number;
-    unconfirmed: number;
-    total: number;
-  };
+  balance:
+    | {
+        confirmed: number;
+        unconfirmed: number;
+        total: number;
+      }
+    | undefined;
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
   library: any;
   provider: any;
@@ -59,6 +61,22 @@ export type LaserEyesContextType = {
 export type Config = {
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
+
+export interface OYLBalanceResponse {
+  brc20s: {
+    total: number;
+  };
+  btc: {
+    pending: number;
+    confirmed: number;
+    total: number;
+  };
+  overall: {
+    pending: number;
+    confirmed: number;
+    total: number;
+  };
+}
 
 export interface LeatherRPCResponse {
   jsonrpc: string;
