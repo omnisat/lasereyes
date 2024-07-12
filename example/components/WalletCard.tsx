@@ -125,7 +125,7 @@ const WalletCard = ({
             <Button
               className={'w-full'}
               disabled={!hasWallet[walletName]}
-              variant={provider === walletName ? 'destructive' : 'default'}
+              variant={provider === walletName ? 'ghost' : 'default'}
               onClick={() =>
                 provider === walletName
                   ? disconnect()

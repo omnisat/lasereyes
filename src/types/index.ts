@@ -41,6 +41,7 @@ export type LaserEyesContextType = {
   ) => Promise<void>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<string>;
+  getInscriptions: () => Promise<any[]>;
   sendBTC: (to: string, amount: number) => Promise<string>;
   signMessage: (message: string) => Promise<string>;
   signPsbt: (
@@ -61,6 +62,12 @@ export type LaserEyesContextType = {
 export type Config = {
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
+
+export interface Balance {
+  confirmed: number;
+  unconfirmed: number;
+  total: number;
+}
 
 export interface OYLBalanceResponse {
   brc20s: {

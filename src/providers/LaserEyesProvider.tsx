@@ -30,7 +30,12 @@ import {
   RpcErrorCode,
   signTransaction,
 } from "sats-connect";
-import { Config, LaserEyesContextType, OYLBalanceResponse } from "../types";
+import {
+  Balance,
+  Config,
+  LaserEyesContextType,
+  OYLBalanceResponse,
+} from "../types";
 import { LOCAL_STORAGE_DEFAULT_WALLET, NETWORK } from "../consts/settings";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import { useLocalStorage } from "usehooks-ts";
@@ -68,6 +73,7 @@ const initialWalletContext = {
   ) => {},
   getPublicKey: async () => "",
   getBalance: async () => "",
+  getInscriptions: async () => [],
   sendBTC: async (to: string, amount: number) => "",
   signMessage: async (message: string) => "",
   signPsbt: async (tx: string) => {
@@ -103,14 +109,7 @@ const LaserEyesProvider = ({
   const [paymentPublicKey, setPaymentPublicKey] = useState<string>("");
   const [address, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
-  const [balance, setBalance] = useState<
-    | {
-        confirmed: number;
-        unconfirmed: number;
-        total: number;
-      }
-    | undefined
-  >();
+  const [balance, setBalance] = useState<Balance | undefined>();
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
@@ -739,6 +738,7 @@ const LaserEyesProvider = ({
         switchNetwork,
         getPublicKey,
         getBalance,
+        getInscriptions,
         sendBTC,
         signPsbt,
         pushPsbt,

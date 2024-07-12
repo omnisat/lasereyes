@@ -6,7 +6,7 @@ import { satoshisToBTC } from '../../src/lib/helpers'
 
 type SUPPORTED_WALLET_NAMES = 'unisat' | 'oyl' | 'xverse'
 const App = () => {
-  const wallets: SUPPORTED_WALLET_NAMES[] = ['unisat']
+  const wallets: SUPPORTED_WALLET_NAMES[] = ['unisat', 'oyl']
   const { address, paymentAddress, publicKey, network, provider, balance } =
     useLaserEyes()
 

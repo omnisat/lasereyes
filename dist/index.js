@@ -285,6 +285,9 @@ var initialWalletContext = {
   getBalance: () => __async(void 0, null, function* () {
     return "";
   }),
+  getInscriptions: () => __async(void 0, null, function* () {
+    return [];
+  }),
   sendBTC: (to, amount) => __async(void 0, null, function* () {
     return "";
   }),
@@ -893,6 +896,7 @@ var LaserEyesProvider = ({
         switchNetwork,
         getPublicKey,
         getBalance,
+        getInscriptions,
         sendBTC,
         signPsbt,
         pushPsbt,
