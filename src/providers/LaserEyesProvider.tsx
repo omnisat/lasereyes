@@ -45,6 +45,7 @@ import {
   getBitcoinNetwork,
   getBTCBalance,
 } from "../lib/helpers";
+import { cn } from "../../example/lib/utils";
 
 const initialWalletContext = {
   hasOyl: false,
@@ -135,13 +136,17 @@ const LaserEyesProvider = ({
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
+      console.log(network);
       getNetwork().then((foundNetwork) => {
+        console.log({ foundNetwork });
         if (config.network !== foundNetwork) {
           switchNetwork(network);
+        } else if (network !== foundNetwork) {
+          setNetwork(network);
         }
       });
     }
-  }, [config]);
+  }, [config, library]);
 
   useEffect(() => {
     const oylLib = (window as any)?.oyl;

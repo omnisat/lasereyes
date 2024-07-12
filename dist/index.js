@@ -333,13 +333,17 @@ var LaserEyesProvider = ({
   (0, import_react.useEffect)(() => {
     if (config) {
       setNetwork(config.network);
+      console.log(network);
       getNetwork().then((foundNetwork) => {
+        console.log({ foundNetwork });
         if (config.network !== foundNetwork) {
           switchNetwork(network);
+        } else if (network !== foundNetwork) {
+          setNetwork(network);
         }
       });
     }
-  }, [config]);
+  }, [config, library]);
   (0, import_react.useEffect)(() => {
     const oylLib = window == null ? void 0 : window.oyl;
     setHasOyl(!!oylLib);
