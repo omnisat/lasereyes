@@ -17,7 +17,6 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { satoshisToBTC } from '../../src/lib/helpers'
 
 const WalletCard = ({
   walletName,
@@ -89,6 +88,7 @@ const WalletCard = ({
   }
 
   const sign = async (walletName: string) => {
+    setSignature('')
     try {
       const signature = await signMessage(walletName)
       setSignature(signature)
@@ -108,10 +108,6 @@ const WalletCard = ({
       }
     }
   }
-
-  const unconfirmed = satoshisToBTC(balance?.unconfirmed)
-  const confirmed = satoshisToBTC(balance?.confirmed)
-  const total = satoshisToBTC(balance?.total)
 
   return (
     <Card className={'grow'}>
@@ -140,18 +136,6 @@ const WalletCard = ({
             </Button>
           </div>
 
-          <div
-            className={
-              'font-black text-gray-400 italic self-end flex flex-col gap-1 text-right'
-            }
-          >
-            <span>
-              {provider !== walletName && unconfirmed ? '--' : unconfirmed}{' '}
-              unconfirmed
-            </span>
-            <span>{provider !== walletName ? '--' : confirmed} confirmed</span>
-            <span>{provider !== walletName ? '--' : total} total</span>
-          </div>
           <div className={'flex flex-col space-between items-center gap-2'}>
             <Button
               className={'w-full'}
@@ -193,7 +177,7 @@ const WalletCard = ({
                   : switchNet(network === TESTNET ? MAINNET : TESTNET)
               }
             >
-              Switch to {network === TESTNET ? 'Mainnet' : 'Testnet'}
+              Switch Network
             </Button>
           </div>
         </div>

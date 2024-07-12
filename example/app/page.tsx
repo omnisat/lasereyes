@@ -1,5 +1,5 @@
 'use client'
-import { LaserEyesProvider } from '@omnisat/lasereyes'
+import { LaserEyesProvider, MAINNET, TESTNET } from '@omnisat/lasereyes'
 import App from '@/components/App'
 
 export default function Home() {

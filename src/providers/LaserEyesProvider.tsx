@@ -9,7 +9,6 @@ import {
 } from "react";
 import * as bitcoin from "bitcoinjs-lib";
 import {
-  getLeatherNetwork,
   getNetworkForUnisat,
   getNetworkForXverse,
   getUnisatNetwork,
@@ -17,8 +16,6 @@ import {
   LEATHER,
   MAINNET,
   OYL,
-  P2TR,
-  P2WPKH,
   PHANTOM,
   REGTEST,
   TESTNET,
@@ -117,7 +114,10 @@ const LaserEyesProvider = ({
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
-  >("network", config?.network ?? NETWORK);
+  >("network", MAINNET, {
+    initializeWithValue: false,
+  });
+
   const [library, setLibrary] = useState<any>(null);
   const [provider, setProvider] = useState<
     | typeof OYL
@@ -136,8 +136,11 @@ const LaserEyesProvider = ({
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
-    } else {
-      setNetwork(MAINNET);
+      getNetwork().then((foundNetwork) => {
+        if (config.network !== foundNetwork) {
+          switchNetwork(network);
+        }
+      });
     }
   }, [config]);
 
@@ -162,7 +165,7 @@ const LaserEyesProvider = ({
   }, []);
 
   useEffect(() => {
-    if (provider && address && library) {
+    if (provider && address && library && network) {
       getBalance().then((balance) => {
         setBalance(balance);
       });
@@ -170,7 +173,11 @@ const LaserEyesProvider = ({
         setPublicKey(String(publicKey));
       });
     }
-  }, [provider, address, library]);
+  }, [provider, address, library, network]);
+
+  useEffect(() => {
+    setBalance(undefined);
+  }, [network]);
 
   const selfRef = useRef<{ accounts: string[] }>({
     accounts: [],
@@ -211,10 +218,11 @@ const LaserEyesProvider = ({
       setConnected(true);
       const balance = await lib?.getBalance();
       setBalance(balance);
-      await getNetwork().then((network) => {
-        const foundNetwork = getNetworkForUnisat(String(network));
-        setNetwork(foundNetwork);
-      });
+      // await getNetwork().then((network) => {
+      //   const foundNetwork = getNetworkForUnisat(String(network));
+      //   console.log("setting network", foundNetwork, network);
+      //   setNetwork(foundNetwork);
+      // });
     } catch (error) {
       throw new Error(`Can't lasereyes to ${UNISAT} wallet`);
     }
@@ -406,6 +414,7 @@ const LaserEyesProvider = ({
         throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const unisatNetwork = await library?.getNetwork();
+        console.log({ unisatNetwork });
         const foundNetwork = getNetworkForUnisat(unisatNetwork) as
           | typeof MAINNET
           | typeof TESTNET;
@@ -446,9 +455,7 @@ const LaserEyesProvider = ({
       if (provider === OYL) {
         return await library?.getPublicKey();
       } else if (provider === UNISAT) {
-        console.log("getting pub");
         const pub = await library?.getPublicKey();
-        console.log(pub);
         return await library?.getPublicKey();
       } else if (provider === XVERSE) {
         return publicKey;

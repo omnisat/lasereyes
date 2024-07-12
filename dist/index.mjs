@@ -259,7 +259,6 @@ var LaserEyesProvider = ({
   children,
   config
 }) => {
-  var _a;
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -268,7 +267,9 @@ var LaserEyesProvider = ({
   const [address, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
   const [balance, setBalance] = useState();
-  const [network, setNetwork] = useLocalStorage("network", (_a = config == null ? void 0 : config.network) != null ? _a : NETWORK);
+  const [network, setNetwork] = useLocalStorage("network", MAINNET, {
+    initializeWithValue: false
+  });
   const [library, setLibrary] = useState(null);
   const [provider, setProvider] = useState("");
   const [hasOyl, setHasOyl] = useState(false);
@@ -278,8 +279,11 @@ var LaserEyesProvider = ({
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
-    } else {
-      setNetwork(MAINNET);
+      getNetwork().then((foundNetwork) => {
+        if (config.network !== foundNetwork) {
+          switchNetwork(network);
+        }
+      });
     }
   }, [config]);
   useEffect(() => {
@@ -291,8 +295,8 @@ var LaserEyesProvider = ({
     setHasUnisat(!!unisatLib);
   }, []);
   useEffect(() => {
-    var _a2;
-    const xverseLib = (_a2 = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a2.BitcoinProvider;
+    var _a;
+    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
     setHasXverse(!!xverseLib);
   }, []);
   useEffect(() => {
@@ -300,7 +304,7 @@ var LaserEyesProvider = ({
     setHasLeather(!!leatherLib);
   }, []);
   useEffect(() => {
-    if (provider && address && library) {
+    if (provider && address && library && network) {
       getBalance().then((balance2) => {
         setBalance(balance2);
       });
@@ -308,7 +312,10 @@ var LaserEyesProvider = ({
         setPublicKey(String(publicKey2));
       });
     }
-  }, [provider, address, library]);
+  }, [provider, address, library, network]);
+  useEffect(() => {
+    setBalance(void 0);
+  }, [network]);
   const selfRef = useRef({
     accounts: []
   });
@@ -343,10 +350,6 @@ var LaserEyesProvider = ({
       setConnected(true);
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
       setBalance(balance2);
-      yield getNetwork().then((network2) => {
-        const foundNetwork = getNetworkForUnisat(String(network2));
-        setNetwork(foundNetwork);
-      });
     } catch (error) {
       throw new Error(`Can't lasereyes to ${UNISAT} wallet`);
     }
@@ -523,6 +526,7 @@ var LaserEyesProvider = ({
         throw new Error("Not implemented by provider");
       } else if (provider === UNISAT) {
         const unisatNetwork = yield library == null ? void 0 : library.getNetwork();
+        console.log({ unisatNetwork });
         const foundNetwork = getNetworkForUnisat(unisatNetwork);
         setNetwork(foundNetwork);
         return foundNetwork;
@@ -559,9 +563,7 @@ var LaserEyesProvider = ({
       if (provider === OYL) {
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === UNISAT) {
-        console.log("getting pub");
         const pub = yield library == null ? void 0 : library.getPublicKey();
-        console.log(pub);
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === XVERSE) {
         return publicKey;
