@@ -6,7 +6,7 @@ import { useLaserEyes } from '@omnisat/lasereyes'
 type SUPPORTED_WALLET_NAMES = 'unisat' | 'oyl' | 'xverse'
 const App = () => {
   const wallets: SUPPORTED_WALLET_NAMES[] = ['unisat', 'oyl', 'xverse']
-  const { address, paymentAddress, publicKey } = useLaserEyes()
+  const { address, paymentAddress, publicKey, network } = useLaserEyes()
 
   const [signature, setSignature] = useState<string>('')
   const [signedPsbt, setSignedPsbt] = useState<
@@ -28,6 +28,18 @@ const App = () => {
           'flex flex-col gap-4 text-center items-center p-12 border text-xl break-all'
         }
       >
+        <div
+          className={
+            'flex flex-row items-center gap-4 justify-center space-around'
+          }
+        >
+          <div className={'flex flex-col items-center'}>
+            <span className={clsx('font-black')}>Network</span>
+            <span className={'text-lg'}>
+              {network?.length > 0 ? network : '--'}
+            </span>
+          </div>
+        </div>
         <div
           className={
             'flex flex-row items-center gap-4 justify-center space-around'
@@ -82,7 +94,6 @@ const App = () => {
             key={walletName}
             walletName={walletName}
             setSignature={setSignature}
-            setSignedPsbt={setSignedPsbt}
           />
         ))}
       </div>

@@ -319,7 +319,7 @@ var LaserEyesProvider = ({
   const [address, setAddress] = (0, import_react.useState)("");
   const [paymentAddress, setPaymentAddress] = (0, import_react.useState)("");
   const [balance, setBalance] = (0, import_react.useState)();
-  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (_a = config.network) != null ? _a : NETWORK);
+  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (_a = config == null ? void 0 : config.network) != null ? _a : NETWORK);
   const [library, setLibrary] = (0, import_react.useState)(null);
   const [provider, setProvider] = (0, import_react.useState)("");
   const [hasOyl, setHasOyl] = (0, import_react.useState)(false);
@@ -405,7 +405,7 @@ var LaserEyesProvider = ({
   const connectXverse = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
-      let xverseNetwork = getXverseNetwork(NETWORK);
+      let xverseNetwork = getXverseNetwork(network);
       const getAddressOptions = {
         payload: {
           purposes: ["ordinals", "payment"],
@@ -480,7 +480,8 @@ var LaserEyesProvider = ({
     setBalance(balance2);
     const network2 = yield library == null ? void 0 : library.getNetwork();
     if (network2) {
-      setNetwork(network2);
+      const foundNetwork = getNetworkForUnisat(String(network2));
+      setNetwork(foundNetwork);
     }
   });
   const handleNetworkChanged = (network2) => {

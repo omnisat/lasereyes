@@ -268,7 +268,7 @@ var LaserEyesProvider = ({
   const [address, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
   const [balance, setBalance] = useState();
-  const [network, setNetwork] = useLocalStorage("network", (_a = config.network) != null ? _a : NETWORK);
+  const [network, setNetwork] = useLocalStorage("network", (_a = config == null ? void 0 : config.network) != null ? _a : NETWORK);
   const [library, setLibrary] = useState(null);
   const [provider, setProvider] = useState("");
   const [hasOyl, setHasOyl] = useState(false);
@@ -354,7 +354,7 @@ var LaserEyesProvider = ({
   const connectXverse = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
-      let xverseNetwork = getXverseNetwork(NETWORK);
+      let xverseNetwork = getXverseNetwork(network);
       const getAddressOptions = {
         payload: {
           purposes: ["ordinals", "payment"],
@@ -429,7 +429,8 @@ var LaserEyesProvider = ({
     setBalance(balance2);
     const network2 = yield library == null ? void 0 : library.getNetwork();
     if (network2) {
-      setNetwork(network2);
+      const foundNetwork = getNetworkForUnisat(String(network2));
+      setNetwork(foundNetwork);
     }
   });
   const handleNetworkChanged = (network2) => {

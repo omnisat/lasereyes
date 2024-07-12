@@ -1,10 +1,6 @@
 import * as bitcoin from "bitcoinjs-lib";
 import { MAINNET, REGTEST, TESTNET } from "../consts/wallets";
 import axios from "axios";
-import {
-  MEMPOOL_SPACE_TESTNET_URL,
-  MEMPOOL_SPACE_URL,
-} from "../consts/settings";
 export const getBitcoinNetwork = (
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST
 ) => {
@@ -45,7 +41,3 @@ export const satoshisToBTC = (satoshis: number): string => {
   const btcValue = satoshis / 100000000;
   return btcValue.toFixed(8);
 };
-
-export const getMempoolSpaceUrl = (
-  network: typeof MAINNET | typeof TESTNET | typeof REGTEST
-) => (network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : MEMPOOL_SPACE_URL);

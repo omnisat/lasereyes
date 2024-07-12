@@ -33,14 +33,7 @@ import {
   RpcErrorCode,
   signTransaction,
 } from "sats-connect";
-import {
-  Config,
-  LaserEyesContextType,
-  LeatherAddress,
-  LeatherRequestAddressResponse,
-  LeatherRPCResponse,
-  OYLBalanceResponse,
-} from "../types";
+import { Config, LaserEyesContextType, OYLBalanceResponse } from "../types";
 import { LOCAL_STORAGE_DEFAULT_WALLET, NETWORK } from "../consts/settings";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import { useLocalStorage } from "usehooks-ts";
@@ -104,7 +97,7 @@ const LaserEyesProvider = ({
   config,
 }: {
   children: ReactNode;
-  config: Config;
+  config?: Config;
 }) => {
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -124,7 +117,7 @@ const LaserEyesProvider = ({
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
-  >("network", config.network ?? NETWORK);
+  >("network", config?.network ?? NETWORK);
   const [library, setLibrary] = useState<any>(null);
   const [provider, setProvider] = useState<
     | typeof OYL
@@ -230,7 +223,7 @@ const LaserEyesProvider = ({
   const connectXverse = async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
-      let xverseNetwork = getXverseNetwork(NETWORK);
+      let xverseNetwork = getXverseNetwork(network);
       const getAddressOptions = {
         payload: {
           purposes: ["ordinals", "payment"],
@@ -261,17 +254,14 @@ const LaserEyesProvider = ({
   };
 
   const handleAccountsChanged = (_accounts: string[]) => {
-    // @ts-ignore
     if (self.accounts[0] === _accounts[0]) {
       return;
     }
 
     self.accounts = _accounts;
-    // @ts-ignore
     if (_accounts.length > 0) {
       setAccounts(_accounts);
       setConnected(true);
-      // @ts-ignore
       setAddress(_accounts[0]);
       setPaymentAddress(_accounts[0]);
       getBasicInfo();
@@ -286,18 +276,13 @@ const LaserEyesProvider = ({
       return;
     }
 
-    // @ts-ignore
     library.getAccounts().then((accounts: string[]) => {
       handleAccountsChanged(accounts);
     });
-    // @ts-ignore
     library.on("accountsChanged", handleAccountsChanged);
-    // @ts-ignore
     library.on("networkChanged", handleNetworkChanged);
     return () => {
-      // @ts-ignore
       library.removeListener("accountsChanged", handleAccountsChanged);
-      // @ts-ignore
       library.removeListener("networkChanged", handleNetworkChanged);
     };
   }, [library]);
@@ -312,24 +297,16 @@ const LaserEyesProvider = ({
     }
   }, []);
 
-  // @ts-ignore
   const getBasicInfo = async () => {
     if (provider !== UNISAT) return;
-    // @ts-ignore
-    // const [address] = await library?.getAccounts()
-    // setAddress(address)
-    // @ts-ignore
     const publicKey = await library?.getPublicKey();
     setPublicKey(String(publicKey));
-    // @ts-ignore
     const balance = await library?.getBalance();
-    // @ts-ignore
     setBalance(balance);
-    // @ts-ignore
     const network = await library?.getNetwork();
     if (network) {
-      // @ts-ignore
-      setNetwork(network);
+      const foundNetwork = getNetworkForUnisat(String(network));
+      setNetwork(foundNetwork);
     }
   };
 

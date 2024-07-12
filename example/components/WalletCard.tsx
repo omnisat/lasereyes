@@ -1,4 +1,11 @@
-import { OYL, UNISAT, useLaserEyes, XVERSE } from '@omnisat/lasereyes'
+import {
+  MAINNET,
+  OYL,
+  TESTNET,
+  UNISAT,
+  useLaserEyes,
+  XVERSE,
+} from '@omnisat/lasereyes'
 import {
   Card,
   CardContent,
@@ -15,17 +22,12 @@ import { satoshisToBTC } from '../../src/lib/helpers'
 const WalletCard = ({
   walletName,
   setSignature,
-  setSignedPsbt,
 }: {
   walletName: typeof OYL | typeof UNISAT | typeof XVERSE
   setSignature: (signature: string) => void
-  setSignedPsbt: (
-    signedPsbt: { signedPsbtHex: string; signedPsbtBase64: string } | undefined
-  ) => void
 }) => {
   const {
     connect,
-    isConnecting,
     disconnect,
     provider,
     paymentAddress,
@@ -38,6 +40,7 @@ const WalletCard = ({
     signMessage,
     signPsbt,
     network,
+    switchNetwork,
   } = useLaserEyes()
 
   const hasWallet = {
@@ -89,6 +92,16 @@ const WalletCard = ({
     try {
       const signature = await signMessage(walletName)
       setSignature(signature)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
+  const switchNet = async (desiredNetwork: typeof MAINNET | typeof TESTNET) => {
+    try {
+      await switchNetwork(desiredNetwork)
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -169,6 +182,18 @@ const WalletCard = ({
               }
             >
               Sign PSBT
+            </Button>
+            <Button
+              className={'w-full'}
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName
+                  ? null
+                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
+              }
+            >
+              Switch to {network === TESTNET ? 'Mainnet' : 'Testnet'}
             </Button>
           </div>
         </div>
