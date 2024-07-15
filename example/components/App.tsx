@@ -2,14 +2,14 @@
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { useLaserEyes } from '@omnisat/lasereyes'
+import { useLaserEyes, UNISAT } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
 
-type SUPPORTED_WALLET_NAMES = 'unisat' | 'oyl' | 'xverse'
+type SUPPORTED_WALLET_NAMES = [typeof UNISAT]
 const App = () => {
-  const wallets: SUPPORTED_WALLET_NAMES[] = ['unisat']
+  const wallets: SUPPORTED_WALLET_NAMES = [UNISAT]
   const {
     address,
     paymentAddress,
@@ -36,10 +36,12 @@ const App = () => {
     setUnsignedPsbt(undefined)
   }, [address])
 
+  // @ts-ignore
   const total = satoshisToBTC(balance)
 
   return (
-    <div className={'flex flex-col gap-4 w-full max-w-5xl px-12'}>
+    <div className={'flex flex-col gap-4 w-full max-w-5xl px-12 font-windows'}>
+      <div className={'font-windows'}>LASER EYES</div>
       <div className={'border text-xl pb-8'}>
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />

@@ -386,7 +386,6 @@ var LaserEyesProvider = ({
       LOCAL_STORAGE_DEFAULT_WALLET
     );
     if (defaultWallet && !isConnecting) {
-      console.log("connecting!!!!!!");
       setProvider(defaultWallet);
       connect(defaultWallet);
     }
@@ -410,7 +409,6 @@ var LaserEyesProvider = ({
       setProvider(UNISAT);
       setConnected(true);
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
-      console.log(balance2);
       setBalance(balance2 == null ? void 0 : balance2.total);
     } catch (error) {
       throw new Error(`Can't lasereyes to ${UNISAT} wallet`);
@@ -426,7 +424,6 @@ var LaserEyesProvider = ({
     }
     self.accounts = _accounts;
     if (_accounts.length > 0) {
-      console.log("DOING IT BABY");
       connect(UNISAT);
     } else {
       setConnected(false);
@@ -508,7 +505,6 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         const unisatNetwork = yield library == null ? void 0 : library.getNetwork();
-        console.log({ unisatNetwork });
         const foundNetwork = getNetworkForUnisat(unisatNetwork);
         setNetwork(foundNetwork);
         return foundNetwork;

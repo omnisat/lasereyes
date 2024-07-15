@@ -1,14 +1,18 @@
 import './globals.css'
-import { Space_Mono } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
+import localFont from 'next/font/local'
 
-const inter = Space_Mono({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: 'normal',
+const windows = localFont({
+  src: './Windows_Regular.ttf',
+  variable: '--font-windows',
+})
+
+const pxplus = localFont({
+  src: './PxPlus_IBM_VGA8.ttf',
+  variable: '--font-pxplus',
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -18,7 +22,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={cn(
           'min-h-screen bg-background flex flex-col items-center justify-center font-sans antialiased',
-          inter.className
+          windows.className,
+          pxplus.className
         )}
       >
         {children}
