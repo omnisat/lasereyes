@@ -158,7 +158,7 @@ const WalletCard = ({
   }
 
   return (
-    <Card className={'grow bg-[#1d1d1d]'}>
+    <Card className={'grow bg-[#1d1d1d] rounded-none'}>
       <CardHeader>
         <CardTitle className={'uppercase text-center text-white'}>
           {walletName}
@@ -173,7 +173,7 @@ const WalletCard = ({
             </Badge>
 
             <Button
-              className={'w-full'}
+              className={'w-full rounded-none'}
               disabled={!hasWallet[walletName]}
               variant={provider === walletName ? 'ghost' : 'default'}
               onClick={() =>
@@ -188,7 +188,7 @@ const WalletCard = ({
 
           <div className={'flex flex-col space-between items-center gap-2'}>
             <Button
-              className={'w-full'}
+              className={'w-full rounded-none'}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() => (provider !== walletName ? null : send())}
@@ -196,7 +196,7 @@ const WalletCard = ({
               Send BTC
             </Button>
             <Button
-              className={'w-full'}
+              className={'w-full rounded-none '}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
@@ -208,7 +208,7 @@ const WalletCard = ({
               Sign Message
             </Button>
             <Button
-              className={'w-full'}
+              className={'w-full rounded-none'}
               disabled={
                 !hasWallet[walletName] || provider !== walletName || !unsigned
               }
@@ -220,7 +220,7 @@ const WalletCard = ({
               Sign PSBT
             </Button>
             <Button
-              className={'w-full'}
+              className={'w-full rounded-none'}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>

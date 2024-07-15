@@ -41,7 +41,9 @@ const App = () => {
   const total = satoshisToBTC(balance)
 
   return (
-    <div className={'flex flex-col gap-4 w-full max-w-5xl px-12 font-windows'}>
+    <div
+      className={'flex flex-col gap-4 w-full max-w-[1200px] px-12 font-windows'}
+    >
       <div className={'w-[300px] pt-4'}>
         <Image
           src={
@@ -52,176 +54,178 @@ const App = () => {
           height={300}
         />
       </div>
-      <div className={'flex flex-wrap gap-8'}>
-        {wallets.map((walletName) => (
-          <WalletCard
-            key={walletName}
-            walletName={walletName}
-            setSignature={setSignature}
-            setUnsignedPsbt={setUnsignedPsbt}
-            setSignedPsbt={setSignedPsbt}
-          />
-        ))}
-      </div>
-      <div className={'border text-xl pb-8 text-white'}>
-        <div className={'flex flex-row items-center gap-4 '}>
-          <div className={'grow'} />
-          <div className={'flex flex-col p-4 items-center'}>
-            <span className={'text-md font-black'}>
-              {network?.length > 0 ? network : '--'}
-            </span>
-          </div>
+      <div className={'flex flex-col md:flex-row gap-8'}>
+        <div className={'flex flex-wrap gap-8 md:w-1/3'}>
+          {wallets.map((walletName) => (
+            <WalletCard
+              key={walletName}
+              walletName={walletName}
+              setSignature={setSignature}
+              setUnsignedPsbt={setUnsignedPsbt}
+              setSignedPsbt={setSignedPsbt}
+            />
+          ))}
         </div>
-        <div
-          className={'flex flex-col gap-2 text-center items-center break-all'}
-        >
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Provider</span>
-              <span className={'text-black text-lg'}>
-                {provider?.length > 0 ? provider : '--'}
+        <div className={'border text-xl pb-8 text-white md:w-2/3'}>
+          <div className={'flex flex-row items-center gap-4 '}>
+            <div className={'grow'} />
+            <div className={'flex flex-col p-4 items-center'}>
+              <span className={'text-md font-black'}>
+                {network?.length > 0 ? network : '--'}
               </span>
             </div>
           </div>
           <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
+            className={'flex flex-col gap-2 text-center items-center break-all'}
           >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Address</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {address?.length > 0 ? address : '--'}
-                <ClickToCopy value={address as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Payment Address</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {paymentAddress?.length > 0 ? paymentAddress : '--'}
-                <ClickToCopy value={paymentAddress as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Balance</span>
-              <span className={'text-sm'}>
-                {balance !== undefined ? total : '--'} BTC
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Public Key</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {publicKey?.length > 0 ? publicKey : '--'}
-                <ClickToCopy value={publicKey as string} />
-              </span>
-            </div>
-          </div>
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Payment Public Key</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {paymentPublicKey?.length > 0 ? paymentPublicKey : '--'}
-                <ClickToCopy value={paymentPublicKey as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Unsigned PSBT</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
-                <ClickToCopy value={unsignedPsbt as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Signed PSBT</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {truncateString(
-                  // @ts-ignore
-                  signedPsbt?.signedPsbtHex ? signedPsbt.signedPsbtHex : '--',
-                  24
-                )}
-                {/*@ts-ignore*/}
-                <ClickToCopy value={signedPsbt?.signedPsbtHex as string} />
-              </span>
-            </div>
-          </div>
-
-          <div className={'flex flex-col items-center'}>
-            <span className={clsx('font-black')}>Signature</span>{' '}
-            <span
+            <div
               className={
-                'text-xs flex flex-row gap-2 items-center justify-center'
+                'flex flex-row items-center gap-4 justify-center space-around'
               }
             >
-              {signature?.length > 0 ? signature : '--'}{' '}
-              <ClickToCopy value={signature as string} />
-            </span>
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Provider</span>
+                <span className={'text-white text-lg'}>
+                  {provider?.length > 0 ? provider : '--'}
+                </span>
+              </div>
+            </div>
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Address</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {address?.length > 0 ? address : '--'}
+                  <ClickToCopy value={address as string} />
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Payment Address</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {paymentAddress?.length > 0 ? paymentAddress : '--'}
+                  <ClickToCopy value={paymentAddress as string} />
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Balance</span>
+                <span className={'text-sm'}>
+                  {balance !== undefined ? total : '--'} BTC
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Public Key</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {publicKey?.length > 0 ? publicKey : '--'}
+                  <ClickToCopy value={publicKey as string} />
+                </span>
+              </div>
+            </div>
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Payment Public Key</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {paymentPublicKey?.length > 0 ? paymentPublicKey : '--'}
+                  <ClickToCopy value={paymentPublicKey as string} />
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Unsigned PSBT</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
+                  <ClickToCopy value={unsignedPsbt as string} />
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black')}>Signed PSBT</span>
+                <span
+                  className={
+                    'text-xs flex flex-row gap-2 items-center justify-center'
+                  }
+                >
+                  {truncateString(
+                    // @ts-ignore
+                    signedPsbt?.signedPsbtHex ? signedPsbt.signedPsbtHex : '--',
+                    24
+                  )}
+                  {/*@ts-ignore*/}
+                  <ClickToCopy value={signedPsbt?.signedPsbtHex as string} />
+                </span>
+              </div>
+            </div>
+
+            <div className={'flex flex-col items-center'}>
+              <span className={clsx('font-black')}>Signature</span>{' '}
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
+                {signature?.length > 0 ? signature : '--'}{' '}
+                <ClickToCopy value={signature as string} />
+              </span>
+            </div>
           </div>
         </div>
       </div>

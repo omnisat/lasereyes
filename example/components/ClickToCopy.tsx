@@ -25,9 +25,9 @@ export default function ClickToCopy({ value }: { value: string | undefined }) {
           <TooltipTrigger asChild>
             <Button
               disabled={!value}
-              variant="outline"
               onClick={handleCopy}
               size={'sm'}
+              className="bg-[#1d1d1d]"
             >
               <CopyIcon className="h-3 w-3" />
             </Button>
