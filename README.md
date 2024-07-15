@@ -18,6 +18,9 @@
 
 ---
 
+## Don't Trust, Verify
+[Try It Out](https://demo.lasereyes.build)
+
 ## Documentation
 
 For documentation and guides, visit [Laser Eyes Docs](https://lasereyes.vercel.app/).
