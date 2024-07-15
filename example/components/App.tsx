@@ -1,8 +1,12 @@
+'use client'
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { useLaserEyes } from '@omnisat/lasereyes'
-import { satoshisToBTC } from '../../src/lib/helpers'
+import { MAINNET, TESTNET, useLaserEyes } from '@omnisat/lasereyes'
+import useUtxos from '@/hooks/useUtxos'
+import { createPsbt, satoshisToBTC } from '@/lib/btc'
+import { truncateString } from '@/lib/utils'
+import ClickToCopy from '@/components/ClickToCopy'
 
 type SUPPORTED_WALLET_NAMES = 'unisat' | 'oyl' | 'xverse'
 const App = () => {
@@ -11,7 +15,9 @@ const App = () => {
     useLaserEyes()
 
   const [signature, setSignature] = useState<string>('')
+  const [unsignedPsbt, setUnsignedPsbt] = useState<string | undefined>()
   const [signedPsbt, setSignedPsbt] = useState<
+    | string
     | {
         signedPsbtHex: string
         signedPsbtBase64: string
@@ -60,8 +66,13 @@ const App = () => {
           >
             <div className={'flex flex-col items-center'}>
               <span className={clsx('font-black')}>Address</span>
-              <span className={'text-sm'}>
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
                 {address?.length > 0 ? address : '--'}
+                <ClickToCopy value={address as string} />
               </span>
             </div>
           </div>
@@ -73,8 +84,13 @@ const App = () => {
           >
             <div className={'flex flex-col items-center'}>
               <span className={clsx('font-black')}>Payment Address</span>
-              <span className={'text-sm'}>
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
                 {paymentAddress?.length > 0 ? paymentAddress : '--'}
+                <ClickToCopy value={paymentAddress as string} />
               </span>
             </div>
           </div>
@@ -105,22 +121,69 @@ const App = () => {
           >
             <div className={'flex flex-col items-center'}>
               <span className={clsx('font-black')}>Public Key</span>
-              <span className={'text-sm'}>
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
                 {publicKey?.length > 0 ? publicKey : '--'}
+                <ClickToCopy value={publicKey as string} />
+              </span>
+            </div>
+          </div>
+
+          <div
+            className={
+              'flex flex-row items-center gap-4 justify-center space-around'
+            }
+          >
+            <div className={'flex flex-col items-center'}>
+              <span className={clsx('font-black')}>Unsigned PSBT</span>
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
+                {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
+                <ClickToCopy value={unsignedPsbt as string} />
+              </span>
+            </div>
+          </div>
+
+          <div
+            className={
+              'flex flex-row items-center gap-4 justify-center space-around'
+            }
+          >
+            <div className={'flex flex-col items-center'}>
+              <span className={clsx('font-black')}>Signed PSBT</span>
+              <span
+                className={
+                  'text-xs flex flex-row gap-2 items-center justify-center'
+                }
+              >
+                {truncateString(
+                  // @ts-ignore
+                  signedPsbt?.signedPsbtHex ? signedPsbt.signedPsbtHex : '--',
+                  24
+                )}
+                {/*@ts-ignore*/}
+                <ClickToCopy value={signedPsbt?.signedPsbtHex as string} />
               </span>
             </div>
           </div>
 
           <div className={'flex flex-col items-center'}>
             <span className={clsx('font-black')}>Signature</span>{' '}
-            <span className={'text-sm'}>
+            <span
+              className={
+                'text-xs flex flex-row gap-2 items-center justify-center'
+              }
+            >
               {signature?.length > 0 ? signature : '--'}{' '}
+              <ClickToCopy value={signature as string} />
             </span>
           </div>
-          <div className={clsx('font-black')}>
-            {signedPsbt?.signedPsbtBase64}
-          </div>
-          <div className={clsx('font-black')}>{signedPsbt?.signedPsbtHex}</div>
         </div>
       </div>
       <div className={'flex flex-wrap gap-8'}>
@@ -129,6 +192,8 @@ const App = () => {
             key={walletName}
             walletName={walletName}
             setSignature={setSignature}
+            setUnsignedPsbt={setUnsignedPsbt}
+            setSignedPsbt={setSignedPsbt}
           />
         ))}
       </div>

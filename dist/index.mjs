@@ -197,6 +197,12 @@ var getBTCBalance = (address) => __async(void 0, null, function* () {
     throw new Error("Failed to fetch BTC balance");
   }
 });
+var satoshisToBTC = (satoshis) => {
+  if (Number.isNaN(satoshis) || satoshis === void 0)
+    return "--";
+  const btcValue = satoshis / 1e8;
+  return btcValue.toFixed(8);
+};
 
 // src/providers/LaserEyesProvider.tsx
 import { jsx } from "react/jsx-runtime";
@@ -883,11 +889,16 @@ export {
   XVERSE_NETWORK,
   XVERSE_TESTNET,
   createConfig,
+  findOrdinalsAddress,
+  findPaymentAddress,
+  getBTCBalance,
+  getBitcoinNetwork,
   getLeatherNetwork,
   getNetworkForLeather,
   getNetworkForUnisat,
   getNetworkForXverse,
   getUnisatNetwork,
   getXverseNetwork,
+  satoshisToBTC,
   useLaserEyes
 };

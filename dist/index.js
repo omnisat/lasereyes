@@ -96,12 +96,17 @@ __export(src_exports, {
   XVERSE_NETWORK: () => XVERSE_NETWORK,
   XVERSE_TESTNET: () => XVERSE_TESTNET,
   createConfig: () => createConfig,
+  findOrdinalsAddress: () => findOrdinalsAddress,
+  findPaymentAddress: () => findPaymentAddress,
+  getBTCBalance: () => getBTCBalance,
+  getBitcoinNetwork: () => getBitcoinNetwork,
   getLeatherNetwork: () => getLeatherNetwork,
   getNetworkForLeather: () => getNetworkForLeather,
   getNetworkForUnisat: () => getNetworkForUnisat,
   getNetworkForXverse: () => getNetworkForXverse,
   getUnisatNetwork: () => getUnisatNetwork,
   getXverseNetwork: () => getXverseNetwork,
+  satoshisToBTC: () => satoshisToBTC,
   useLaserEyes: () => useLaserEyes
 });
 module.exports = __toCommonJS(src_exports);
@@ -248,6 +253,12 @@ var getBTCBalance = (address) => __async(void 0, null, function* () {
     throw new Error("Failed to fetch BTC balance");
   }
 });
+var satoshisToBTC = (satoshis) => {
+  if (Number.isNaN(satoshis) || satoshis === void 0)
+    return "--";
+  const btcValue = satoshis / 1e8;
+  return btcValue.toFixed(8);
+};
 
 // src/providers/LaserEyesProvider.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -935,11 +946,16 @@ var LaserEyesProvider = ({
   XVERSE_NETWORK,
   XVERSE_TESTNET,
   createConfig,
+  findOrdinalsAddress,
+  findPaymentAddress,
+  getBTCBalance,
+  getBitcoinNetwork,
   getLeatherNetwork,
   getNetworkForLeather,
   getNetworkForUnisat,
   getNetworkForXverse,
   getUnisatNetwork,
   getXverseNetwork,
+  satoshisToBTC,
   useLaserEyes
 });
