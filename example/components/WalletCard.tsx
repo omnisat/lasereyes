@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
+import { getMempoolSpaceUrl } from '../../src/consts/networks'
 
 const WalletCard = ({
   walletName,
@@ -58,7 +59,10 @@ const WalletCard = ({
   } = useLaserEyes()
 
   const [unsigned, setUnsigned] = useState<string | undefined>()
-  const { utxos, loading, fetch } = useUtxos(paymentAddress)
+  const { utxos, loading, fetch } = useUtxos(
+    paymentAddress,
+    network as typeof MAINNET | typeof TESTNET
+  )
 
   const hasWallet = {
     unisat: hasUnisat,
@@ -79,7 +83,6 @@ const WalletCard = ({
     }
   }
 
-  // build psbt
   useEffect(() => {
     if (utxos.length > 0) {
       const psbt = createPsbt(
@@ -104,7 +107,7 @@ const WalletCard = ({
           <span className={'font-black'}>View on mempool.space</span>
           <a
             target={'_blank'}
-            href={`https://mempool.space/tx/${txid}`}
+            href={`${getMempoolSpaceUrl(network)}/tx/${txid}`}
             className={'underline text-blue-600 text-xs'}
           >
             {txid}

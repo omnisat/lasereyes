@@ -1,38 +1,21 @@
-import {
-  MAINNET,
-  OYL,
-  REGTEST,
-  TESTNET,
-  UNISAT,
-  XVERSE,
-} from "../consts/wallets";
+import { UNISAT } from "../consts/wallets";
+import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
 
 export type LaserEyesContextType = {
-  hasOyl: boolean;
   hasUnisat: boolean;
-  hasLeather: boolean;
-  hasXverse: boolean;
   connected: boolean;
   isConnecting: boolean;
   publicKey: string;
   address: string;
   paymentAddress: string;
   paymentPublicKey: string;
-  balance:
-    | {
-        confirmed: number;
-        unconfirmed: number;
-        total: number;
-      }
-    | undefined;
+  balance: number | undefined;
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
   library: any;
   provider: any;
   accounts: string[];
 
-  connect: (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE
-  ) => Promise<void>;
+  connect: (walletName: typeof UNISAT) => Promise<void>;
   disconnect: () => void;
   requestAccounts: () => Promise<string[]>;
   getNetwork: () => Promise<string | undefined>;
@@ -67,43 +50,4 @@ export interface Balance {
   confirmed: number;
   unconfirmed: number;
   total: number;
-}
-
-export interface OYLBalanceResponse {
-  brc20s: {
-    total: number;
-  };
-  btc: {
-    pending: number;
-    confirmed: number;
-    total: number;
-  };
-  overall: {
-    pending: number;
-    confirmed: number;
-    total: number;
-  };
-}
-
-export interface LeatherRPCResponse {
-  jsonrpc: string;
-  id: string;
-  result: LeatherRequestAddressResponse | LeatherRequestSignResponse;
-}
-
-export interface LeatherRequestAddressResponse {
-  addresses: LeatherAddress[];
-}
-
-export interface LeatherRequestSignResponse {
-  hex: string;
-}
-
-export interface LeatherAddress {
-  symbol: string;
-  type?: string;
-  address: string;
-  publicKey?: string;
-  derivationPath?: string;
-  tweakedPublicKey?: string;
 }

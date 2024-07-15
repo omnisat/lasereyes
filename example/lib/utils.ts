@@ -1,8 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-// import { MAINNET, TESTNET } from '@omnisat/lasereyes'
-// import { Psbt, networks } from 'bitcoinjs-lib'
-// import { IMempoolUtxo } from '@/types/btc'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -17,6 +14,3 @@ export function truncateString(str: string, maxLength: number): string {
     return leftHalf + '...' + rightHalf
   }
 }
-
-// export const getMempoolSpaceUrl = (network: typeof MAINNET | typeof TESTNET) =>
-//   network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : MEMPOOL_SPACE_URL

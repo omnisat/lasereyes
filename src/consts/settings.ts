@@ -1,16 +1,7 @@
-import {
-  LEATHER,
-  MAINNET,
-  OYL,
-  REGTEST,
-  TESTNET,
-  UNISAT,
-  XVERSE,
-} from "./wallets";
+import { LEATHER, OYL, UNISAT, XVERSE } from "./wallets";
+import { MAINNET, REGTEST, TESTNET } from "./networks";
 
 export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
-
-export const NETWORK = MAINNET;
 
 export const initialWalletContext = {
   hasOyl: false,
