@@ -158,9 +158,11 @@ const WalletCard = ({
   }
 
   return (
-    <Card className={'grow'}>
+    <Card className={'grow bg-black'}>
       <CardHeader>
-        <CardTitle className={'uppercase text-center'}>{walletName}</CardTitle>
+        <CardTitle className={'uppercase text-center text-white'}>
+          {walletName}
+        </CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>

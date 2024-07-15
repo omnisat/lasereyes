@@ -6,6 +6,7 @@ import { useLaserEyes, UNISAT } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
+import Image from 'next/image'
 
 type SUPPORTED_WALLET_NAMES = [typeof UNISAT]
 const App = () => {
@@ -41,8 +42,28 @@ const App = () => {
 
   return (
     <div className={'flex flex-col gap-4 w-full max-w-5xl px-12 font-windows'}>
-      <div className={'font-windows'}>LASER EYES</div>
-      <div className={'border text-xl pb-8'}>
+      <div className={'w-[300px] pt-4'}>
+        <Image
+          src={
+            address ? '/lasereyes_connected.svg' : '/lasereyes_disconnected.svg'
+          }
+          alt={address ? 'Laser Eyes Connected' : 'Laser Eyes Disconnected'}
+          width={300}
+          height={300}
+        />
+      </div>
+      <div className={'flex flex-wrap gap-8'}>
+        {wallets.map((walletName) => (
+          <WalletCard
+            key={walletName}
+            walletName={walletName}
+            setSignature={setSignature}
+            setUnsignedPsbt={setUnsignedPsbt}
+            setSignedPsbt={setSignedPsbt}
+          />
+        ))}
+      </div>
+      <div className={'border text-xl pb-8 text-white'}>
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />
           <div className={'flex flex-col p-4 items-center'}>
@@ -203,17 +224,6 @@ const App = () => {
             </span>
           </div>
         </div>
-      </div>
-      <div className={'flex flex-wrap gap-8'}>
-        {wallets.map((walletName) => (
-          <WalletCard
-            key={walletName}
-            walletName={walletName}
-            setSignature={setSignature}
-            setUnsignedPsbt={setUnsignedPsbt}
-            setSignedPsbt={setSignedPsbt}
-          />
-        ))}
       </div>
     </div>
   )
