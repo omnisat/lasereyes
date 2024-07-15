@@ -158,7 +158,7 @@ const WalletCard = ({
   }
 
   return (
-    <Card className={'grow bg-black'}>
+    <Card className={'grow bg-[#1d1d1d]'}>
       <CardHeader>
         <CardTitle className={'uppercase text-center text-white'}>
           {walletName}
