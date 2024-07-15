@@ -17,13 +17,29 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { createPsbt } from '@/lib/btc'
+import useUtxos from '@/hooks/useUtxos'
+import { getMempoolSpaceUrl } from '../../src/consts/networks'
 
 const WalletCard = ({
   walletName,
   setSignature,
+  setUnsignedPsbt,
+  setSignedPsbt,
 }: {
   walletName: typeof OYL | typeof UNISAT | typeof XVERSE
   setSignature: (signature: string) => void
+  setUnsignedPsbt: (psbt: string) => void
+  setSignedPsbt: (
+    psbt:
+      | string
+      | {
+          signedPsbtHex: string
+          signedPsbtBase64: string
+        }
+      | undefined
+  ) => void
 }) => {
   const {
     connect,
@@ -41,6 +57,12 @@ const WalletCard = ({
     network,
     switchNetwork,
   } = useLaserEyes()
+
+  const [unsigned, setUnsigned] = useState<string | undefined>()
+  const { utxos, loading, fetch } = useUtxos(
+    paymentAddress,
+    network as typeof MAINNET | typeof TESTNET
+  )
 
   const hasWallet = {
     unisat: hasUnisat,
@@ -61,6 +83,18 @@ const WalletCard = ({
     }
   }
 
+  useEffect(() => {
+    if (utxos.length > 0) {
+      const psbt = createPsbt(
+        utxos,
+        paymentAddress,
+        network as typeof MAINNET | typeof TESTNET
+      )
+      setUnsignedPsbt(psbt.toHex())
+      setUnsigned(psbt.toHex())
+    }
+  }, [utxos])
+
   const send = async () => {
     try {
       if (balance?.total < 1500) {
@@ -73,7 +107,7 @@ const WalletCard = ({
           <span className={'font-black'}>View on mempool.space</span>
           <a
             target={'_blank'}
-            href={`https://mempool.space/tx/${txid}`}
+            href={`${getMempoolSpaceUrl(network)}/tx/${txid}`}
             className={'underline text-blue-600 text-xs'}
           >
             {txid}
@@ -92,6 +126,20 @@ const WalletCard = ({
     try {
       const signature = await signMessage(walletName)
       setSignature(signature)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
+  const signUnsignedPsbt = async () => {
+    try {
+      if (!unsigned) {
+        throw new Error('No unsigned PSBT')
+      }
+      const signed = await signPsbt(unsigned, true)
+      setSignedPsbt(signed)
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -159,10 +207,12 @@ const WalletCard = ({
             </Button>
             <Button
               className={'w-full'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
+              disabled={
+                !hasWallet[walletName] || provider !== walletName || !unsigned
+              }
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
-                provider !== walletName ? null : signPsbt(walletName)
+                provider !== walletName ? null : signUnsignedPsbt()
               }
             >
               Sign PSBT
