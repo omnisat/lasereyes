@@ -8,6 +8,33 @@ import {
   useState,
 } from "react";
 import * as bitcoin from "bitcoinjs-lib";
+
+import {
+  getAddress,
+  GetAddressOptions,
+  request,
+  RpcErrorCode,
+  signTransaction,
+} from "sats-connect";
+import {
+  initialWalletContext,
+  LOCAL_STORAGE_DEFAULT_WALLET,
+  NETWORK,
+} from "../consts/settings";
+import { fromOutputScript } from "bitcoinjs-lib/src/address";
+import { useLocalStorage } from "usehooks-ts";
+import {
+  Balance,
+  Config,
+  LaserEyesContextType,
+  OYLBalanceResponse,
+} from "../types";
+import {
+  findOrdinalsAddress,
+  findPaymentAddress,
+  getBitcoinNetwork,
+  getBTCBalance,
+} from "../lib/helpers";
 import {
   getNetworkForUnisat,
   getNetworkForXverse,
@@ -23,71 +50,6 @@ import {
   XVERSE,
   XVERSE_NETWORK,
 } from "../consts/wallets";
-import {
-  getAddress,
-  GetAddressOptions,
-  request,
-  RpcErrorCode,
-  signTransaction,
-} from "sats-connect";
-import {
-  Balance,
-  Config,
-  LaserEyesContextType,
-  OYLBalanceResponse,
-} from "../types";
-import { LOCAL_STORAGE_DEFAULT_WALLET, NETWORK } from "../consts/settings";
-import { fromOutputScript } from "bitcoinjs-lib/src/address";
-import { useLocalStorage } from "usehooks-ts";
-import {
-  findOrdinalsAddress,
-  findPaymentAddress,
-  getBitcoinNetwork,
-  getBTCBalance,
-} from "../lib/helpers";
-import { cn } from "../../example/lib/utils";
-
-const initialWalletContext = {
-  hasOyl: false,
-  hasUnisat: false,
-  hasXverse: false,
-  hasLeather: false,
-  connected: false,
-  isConnecting: false,
-  publicKey: "",
-  address: "",
-  paymentAddress: "",
-  paymentPublicKey: "",
-  balance: undefined,
-  network: MAINNET as typeof MAINNET | typeof TESTNET | typeof REGTEST,
-  library: null,
-  provider: null,
-  accounts: [],
-  connect: async (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE | typeof LEATHER
-  ) => {},
-  disconnect: () => {},
-  requestAccounts: async () => [],
-  getNetwork: async () => MAINNET,
-  switchNetwork: async (
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST
-  ) => {},
-  getPublicKey: async () => "",
-  getBalance: async () => "",
-  getInscriptions: async () => [],
-  sendBTC: async (to: string, amount: number) => "",
-  signMessage: async (message: string) => "",
-  signPsbt: async (tx: string) => {
-    return {
-      signedPsbtHex: "",
-      signedPsbtBase64: "",
-      txId: "",
-    };
-  },
-  pushPsbt: async (tx: string) => {
-    return "";
-  },
-};
 
 const LaserEyesContext =
   createContext<LaserEyesContextType>(initialWalletContext);

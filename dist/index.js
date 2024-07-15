@@ -218,50 +218,6 @@ var import_sats_connect = require("sats-connect");
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 var NETWORK = MAINNET;
-
-// src/providers/LaserEyesProvider.tsx
-var import_address = require("bitcoinjs-lib/src/address");
-var import_usehooks_ts = require("usehooks-ts");
-
-// src/lib/helpers.ts
-var bitcoin = __toESM(require("bitcoinjs-lib"));
-var import_axios = __toESM(require("axios"));
-var getBitcoinNetwork = (network) => {
-  if (network === TESTNET) {
-    return bitcoin.networks.testnet;
-  } else if (network === REGTEST) {
-    return bitcoin.networks.regtest;
-  } else {
-    return bitcoin.networks.bitcoin;
-  }
-};
-var findOrdinalsAddress = (addresses) => {
-  return addresses.find(
-    ({ purpose }) => purpose === "ordinals"
-  );
-};
-var findPaymentAddress = (addresses) => {
-  return addresses.find(
-    ({ purpose }) => purpose === "payment"
-  );
-};
-var getBTCBalance = (address) => __async(void 0, null, function* () {
-  try {
-    return yield import_axios.default.get(`https://blockchain.info/q/addressbalance/${address}`).then((response) => response.data);
-  } catch (error) {
-    console.error("Error fetching BTC balance:", error);
-    throw new Error("Failed to fetch BTC balance");
-  }
-});
-var satoshisToBTC = (satoshis) => {
-  if (Number.isNaN(satoshis) || satoshis === void 0)
-    return "--";
-  const btcValue = satoshis / 1e8;
-  return btcValue.toFixed(8);
-};
-
-// src/providers/LaserEyesProvider.tsx
-var import_jsx_runtime = require("react/jsx-runtime");
 var initialWalletContext = {
   hasOyl: false,
   hasUnisat: false,
@@ -316,6 +272,50 @@ var initialWalletContext = {
     return "";
   })
 };
+
+// src/providers/LaserEyesProvider.tsx
+var import_address = require("bitcoinjs-lib/src/address");
+var import_usehooks_ts = require("usehooks-ts");
+
+// src/lib/helpers.ts
+var bitcoin = __toESM(require("bitcoinjs-lib"));
+var import_axios = __toESM(require("axios"));
+var getBitcoinNetwork = (network) => {
+  if (network === TESTNET) {
+    return bitcoin.networks.testnet;
+  } else if (network === REGTEST) {
+    return bitcoin.networks.regtest;
+  } else {
+    return bitcoin.networks.bitcoin;
+  }
+};
+var findOrdinalsAddress = (addresses) => {
+  return addresses.find(
+    ({ purpose }) => purpose === "ordinals"
+  );
+};
+var findPaymentAddress = (addresses) => {
+  return addresses.find(
+    ({ purpose }) => purpose === "payment"
+  );
+};
+var getBTCBalance = (address) => __async(void 0, null, function* () {
+  try {
+    return yield import_axios.default.get(`https://blockchain.info/q/addressbalance/${address}`).then((response) => response.data);
+  } catch (error) {
+    console.error("Error fetching BTC balance:", error);
+    throw new Error("Failed to fetch BTC balance");
+  }
+});
+var satoshisToBTC = (satoshis) => {
+  if (Number.isNaN(satoshis) || satoshis === void 0)
+    return "--";
+  const btcValue = satoshis / 1e8;
+  return btcValue.toFixed(8);
+};
+
+// src/providers/LaserEyesProvider.tsx
+var import_jsx_runtime = require("react/jsx-runtime");
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
