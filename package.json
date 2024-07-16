@@ -1,6 +1,6 @@
 {
   "name": "@omnisat/lasereyes",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "sideEffects": false,
   "private": false,
   "license": "MIT",
