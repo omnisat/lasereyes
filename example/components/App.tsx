@@ -47,7 +47,7 @@ const App = () => {
     <div
       className={'flex flex-col gap-4 w-full max-w-[1200px] px-12 font-windows'}
     >
-      <div className={'w-full flex flex-row justify-center items-center'}>
+      <div className={'w-full flex gap-4 flex-row justify-center items-center'}>
         <Image
           src={
             address ? '/lasereyes_connected.svg' : '/lasereyes_disconnected.svg'
@@ -63,7 +63,16 @@ const App = () => {
             'self-end font-windows text-white hover:text-orange-500 transition-all'
           }
         >
-          view docs
+          docs
+        </Link>
+        <Link
+          href={'https://github.com/omnisat/lasereyes/tree/main/example'}
+          target={'_blank'}
+          className={
+            'self-end font-windows text-white hover:text-orange-500 transition-all'
+          }
+        >
+          view source
         </Link>
       </div>
       <div className={'border border-[#3c393f] w-full text-xl grow pb-8'}>

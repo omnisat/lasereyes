@@ -7,14 +7,13 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@omnisat/lasereyes">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/@omnisat/lasereyes?colorA=21262d&colorB=21262d">
-      <img src="https://img.shields.io/npm/v/@omnisat/lasereyes?colorA=f6f8fa&colorB=f6f8fa" alt="Version">
-    </picture>
-  </a>
-</p>
+# lasereyes
+
+A common wallet interface for building React applications on Bitcoin.
+
+![Version](https://img.shields.io/npm/v/@omnisat/lasereyes)
+![license](https://img.shields.io/github/license/omnisat/lasereyes.svg?style=flat-square)
+
 
 ---
 
