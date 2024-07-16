@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { IMempoolUtxo } from '@/types/btc'
 import { getMempoolSpaceUrl } from '@/lib/urls'
 import { MAINNET, TESTNET } from '@omnisat/lasereyes'
@@ -9,6 +9,7 @@ const useUtxos = (
   network: typeof MAINNET | typeof TESTNET = MAINNET
 ) => {
   const mempoolUrl = `${getMempoolSpaceUrl(network)}/api/address/${address}/utxo`
+  const [utxos, setUtxos] = useState<IMempoolUtxo[]>([])
 
   const fetcher = async (url: string) => {
     const response = await fetch(url)
@@ -18,10 +19,20 @@ const useUtxos = (
     return response.json()
   }
 
-  const { data: utxos, error } = useSWR<IMempoolUtxo[]>(
-    address && mempoolUrl,
+  const { data: utxosData, error } = useSWR<IMempoolUtxo[]>(
+    address && network && mempoolUrl,
     fetcher
   )
+
+  useEffect(() => {
+    setUtxos([])
+  }, [network])
+
+  useEffect(() => {
+    if (utxosData) {
+      setUtxos(utxosData)
+    }
+  }, [utxosData])
 
   useEffect(() => {
     if (error) {
