@@ -20,7 +20,7 @@ import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
-import { getMempoolSpaceUrl } from '../../src/consts/networks'
+import { getMempoolSpaceUrl } from '@/lib/urls'
 
 const WalletCard = ({
   walletName,
@@ -33,10 +33,10 @@ const WalletCard = ({
   setUnsignedPsbt: (psbt: string) => void
   setSignedPsbt: (
     psbt:
-      | string
       | {
           signedPsbtHex: string
           signedPsbtBase64: string
+          txId?: string
         }
       | undefined
   ) => void
@@ -44,7 +44,9 @@ const WalletCard = ({
   const {
     connect,
     disconnect,
+    connected,
     provider,
+    network,
     paymentAddress,
     balance,
     hasUnisat,
@@ -54,11 +56,14 @@ const WalletCard = ({
     sendBTC,
     signMessage,
     signPsbt,
-    network,
+    pushPsbt,
     switchNetwork,
   } = useLaserEyes()
 
+  const [finalize, setFinalize] = useState<boolean>(false)
+  const [broadcast, setBroadcast] = useState<boolean>(false)
   const [unsigned, setUnsigned] = useState<string | undefined>()
+  const [signed, setSigned] = useState<string | undefined>()
   const { utxos, loading, fetch } = useUtxos(
     paymentAddress,
     network as typeof MAINNET | typeof TESTNET
@@ -84,7 +89,7 @@ const WalletCard = ({
   }
 
   useEffect(() => {
-    if (utxos.length > 0) {
+    if (utxos.length > 0 && connected) {
       const psbt = createPsbt(
         utxos,
         paymentAddress,
@@ -93,7 +98,7 @@ const WalletCard = ({
       setUnsignedPsbt(psbt.toHex())
       setUnsigned(psbt.toHex())
     }
-  }, [utxos])
+  }, [utxos, connected])
 
   const send = async () => {
     try {
@@ -107,7 +112,7 @@ const WalletCard = ({
           <span className={'font-black'}>View on mempool.space</span>
           <a
             target={'_blank'}
-            href={`${getMempoolSpaceUrl(network)}/tx/${txid}`}
+            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txid}`}
             className={'underline text-blue-600 text-xs'}
           >
             {txid}
@@ -138,8 +143,40 @@ const WalletCard = ({
       if (!unsigned) {
         throw new Error('No unsigned PSBT')
       }
-      const signed = await signPsbt(unsigned, true)
-      setSignedPsbt(signed)
+
+      const signPsbtResponse = await signPsbt(unsigned, finalize, broadcast)
+
+      // @ts-ignore
+      setSignedPsbt(signPsbtResponse)
+      // @ts-ignore
+      setSigned(signPsbtResponse?.signedPsbtHex)
+      if (!signPsbtResponse) {
+        throw new Error('Failed to sign PSBT')
+      }
+
+      if (typeof signPsbtResponse === 'string') {
+        toast.success('Signed PSBT')
+        return
+      }
+
+      // @ts-ignore
+      if (signPsbtResponse?.txId) {
+        toast.success(
+          <span className={'flex flex-col gap-1 items-center justify-center'}>
+            <span className={'font-black'}>View on mempool.space</span>
+            <a
+              target={'_blank'}
+              // @ts-ignore
+              href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${signPsbtResponse?.txId}`}
+              className={'underline text-blue-600 text-xs'}
+            >
+              {/*@ts-ignore*/}
+              {signPsbtResponse?.txId}
+            </a>
+          </span>
+        )
+        return
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -158,7 +195,7 @@ const WalletCard = ({
   }
 
   return (
-    <Card className={'grow'}>
+    <Card className={'grow shadow-2xl'}>
       <CardHeader>
         <CardTitle className={'uppercase text-center'}>{walletName}</CardTitle>
         <CardDescription></CardDescription>
@@ -173,7 +210,7 @@ const WalletCard = ({
             <Button
               className={'w-full'}
               disabled={!hasWallet[walletName]}
-              variant={provider === walletName ? 'ghost' : 'default'}
+              variant={provider === walletName ? 'secondary' : 'default'}
               onClick={() =>
                 provider === walletName
                   ? disconnect()
@@ -205,17 +242,53 @@ const WalletCard = ({
             >
               Sign Message
             </Button>
+            <span
+              className={
+                'w-full flex flex-row items-center justify-center gap-4'
+              }
+            >
+              <Button
+                className={'w-full'}
+                disabled={
+                  !hasWallet[walletName] || provider !== walletName || !unsigned
+                }
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() =>
+                  provider !== walletName ? null : signUnsignedPsbt()
+                }
+              >
+                Sign PSBT
+              </Button>
+              <Button
+                className={'shrink'}
+                disabled={!hasWallet[walletName] || provider !== walletName}
+                variant={finalize ? 'default' : 'secondary'}
+                onClick={() => setFinalize(!finalize)}
+              >
+                Finalize
+              </Button>
+              <Button
+                className={'shrink'}
+                disabled={
+                  !hasWallet[walletName] || provider !== walletName || !finalize
+                }
+                variant={broadcast ? 'destructive' : 'secondary'}
+                onClick={() => setBroadcast(!broadcast)}
+              >
+                Broadcast
+              </Button>
+            </span>
             <Button
               className={'w-full'}
               disabled={
-                !hasWallet[walletName] || provider !== walletName || !unsigned
+                !hasWallet[walletName] || provider !== walletName || !signed
               }
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
-                provider !== walletName ? null : signUnsignedPsbt()
+                provider !== walletName ? null : pushPsbt(signed!)
               }
             >
-              Sign PSBT
+              Push PSBT
             </Button>
             <Button
               className={'w-full'}

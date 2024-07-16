@@ -6,6 +6,9 @@ import { useLaserEyes, UNISAT } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
+import PollCard from '@/components/PollCard'
+import Image from 'next/image'
+import Link from 'next/link'
 
 type SUPPORTED_WALLET_NAMES = [typeof UNISAT]
 const App = () => {
@@ -34,15 +37,36 @@ const App = () => {
   useEffect(() => {
     setSignature('')
     setUnsignedPsbt(undefined)
+    setSignedPsbt(undefined)
   }, [address])
 
   // @ts-ignore
   const total = satoshisToBTC(balance)
 
   return (
-    <div className={'flex flex-col gap-4 w-full max-w-5xl px-12 font-windows'}>
-      <div className={'font-windows'}>LASER EYES</div>
-      <div className={'border text-xl pb-8'}>
+    <div
+      className={'flex flex-col gap-4 w-full max-w-[1200px] px-12 font-windows'}
+    >
+      <div className={'w-full flex flex-row justify-center items-center'}>
+        <Image
+          src={
+            address ? '/lasereyes_connected.svg' : '/lasereyes_disconnected.svg'
+          }
+          alt={address ? 'Laser Eyes Connected' : 'Laser Eyes Disconnected'}
+          width={300}
+          height={300}
+        />
+        <div className={'grow'} />
+        <Link
+          href={'https://www.lasereyes.build/docs/getting-started'}
+          className={
+            'self-end font-windows hover:text-orange-500 transition-all'
+          }
+        >
+          view docs
+        </Link>
+      </div>
+      <div className={'border w-full text-xl grow pb-8'}>
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />
           <div className={'flex flex-col p-4 items-center'}>
@@ -60,27 +84,117 @@ const App = () => {
             }
           >
             <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Provider</span>
-              <span className={'text-black text-lg'}>
+              <span className={clsx('font-black text-orange-500')}>
+                Provider
+              </span>
+              <span
+                className={clsx(
+                  'text-lg flex flex-row gap-2 items-center justify-center',
+                  provider?.length > 0 ? 'text-white' : 'text-gray-500'
+                )}
+              >
                 {provider?.length > 0 ? provider : '--'}
               </span>
             </div>
           </div>
           <div
             className={
-              'flex flex-row items-center gap-4 justify-center space-around'
+              'flex flex-row items-center gap-6 justify-center space-around'
             }
           >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Address</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {address?.length > 0 ? address : '--'}
-                <ClickToCopy value={address as string} />
-              </span>
+            <div className={'flex flex-row gap-2'}>
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Address
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    address?.length > 0 ? 'text-white' : 'text-gray-500'
+                  )}
+                >
+                  {address?.length > 0 && (
+                    <ClickToCopy value={address as string} />
+                  )}
+                  {address?.length > 0 ? truncateString(address, 24) : '--'}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Payment Address
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    paymentAddress?.length > 0 ? 'text-white' : 'text-gray-500'
+                  )}
+                >
+                  {paymentAddress?.length > 0
+                    ? truncateString(paymentAddress, 24)
+                    : '--'}
+                  {paymentAddress?.length > 0 && (
+                    <ClickToCopy value={paymentAddress as string} />
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className={'flex flex-row gap-6'}>
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Public Key
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
+                  )}
+                >
+                  {publicKey?.length > 0 && (
+                    <ClickToCopy value={publicKey as string} />
+                  )}
+                  {publicKey?.length > 0 ? truncateString(publicKey, 24) : '--'}
+                </span>
+              </div>
+            </div>
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Payment Public Key
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    paymentPublicKey?.length > 0
+                      ? 'text-white'
+                      : 'text-gray-500'
+                  )}
+                >
+                  {paymentPublicKey?.length > 0
+                    ? truncateString(paymentPublicKey, 24)
+                    : '--'}
+                  {paymentPublicKey?.length > 0 && (
+                    <ClickToCopy value={paymentPublicKey as string} />
+                  )}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -90,117 +204,93 @@ const App = () => {
             }
           >
             <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Payment Address</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {paymentAddress?.length > 0 ? paymentAddress : '--'}
-                <ClickToCopy value={paymentAddress as string} />
+              <span className={clsx('font-black text-orange-500')}>
+                Balance
               </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Balance</span>
-              <span className={'text-sm'}>
+              <span
+                className={clsx(
+                  'text-lg flex flex-row gap-2 items-center justify-center',
+                  publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
+                )}
+              >
                 {balance !== undefined ? total : '--'} BTC
               </span>
             </div>
           </div>
 
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Public Key</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {publicKey?.length > 0 ? publicKey : '--'}
-                <ClickToCopy value={publicKey as string} />
-              </span>
-            </div>
-          </div>
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Payment Public Key</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {paymentPublicKey?.length > 0 ? paymentPublicKey : '--'}
-                <ClickToCopy value={paymentPublicKey as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Unsigned PSBT</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
-                <ClickToCopy value={unsignedPsbt as string} />
-              </span>
-            </div>
-          </div>
-
-          <div
-            className={
-              'flex flex-row items-center gap-4 justify-center space-around'
-            }
-          >
-            <div className={'flex flex-col items-center'}>
-              <span className={clsx('font-black')}>Signed PSBT</span>
-              <span
-                className={
-                  'text-xs flex flex-row gap-2 items-center justify-center'
-                }
-              >
-                {truncateString(
-                  // @ts-ignore
-                  signedPsbt?.signedPsbtHex ? signedPsbt.signedPsbtHex : '--',
-                  24
-                )}
-                {/*@ts-ignore*/}
-                <ClickToCopy value={signedPsbt?.signedPsbtHex as string} />
-              </span>
-            </div>
-          </div>
-
           <div className={'flex flex-col items-center'}>
-            <span className={clsx('font-black')}>Signature</span>{' '}
+            <span className={clsx('font-black text-orange-500')}>
+              Signature
+            </span>{' '}
             <span
+              className={clsx(
+                'text-md flex flex-row gap-2 items-center justify-center',
+                signature?.length > 0 ? 'text-white' : 'text-gray-500'
+              )}
+            >
+              {signature?.length > 0 ? truncateString(signature, 24) : '--'}{' '}
+              {signature?.length > 0 && (
+                <ClickToCopy value={signature as string} />
+              )}
+            </span>
+          </div>
+          <div
+            className={
+              'flex flex-row items-center gap-6 justify-center space-around'
+            }
+          >
+            <div
               className={
-                'text-xs flex flex-row gap-2 items-center justify-center'
+                'flex flex-row items-center gap-4 justify-center space-around'
               }
             >
-              {signature?.length > 0 ? signature : '--'}{' '}
-              <ClickToCopy value={signature as string} />
-            </span>
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Unsigned PSBT
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    unsignedPsbt ? 'text-white' : 'text-gray-500'
+                  )}
+                >
+                  {unsignedPsbt && (
+                    <ClickToCopy value={unsignedPsbt as string} />
+                  )}
+                  {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className={
+                'flex flex-row items-center gap-4 justify-center space-around'
+              }
+            >
+              <div className={'flex flex-col items-center'}>
+                <span className={clsx('font-black text-orange-500')}>
+                  Signed PSBT
+                </span>
+                <span
+                  className={clsx(
+                    'text-lg flex flex-row gap-2 items-center justify-center',
+                    // @ts-ignore
+                    signedPsbt?.signedPsbtHex ? 'text-white' : 'text-gray-500'
+                  )}
+                >
+                  {truncateString(
+                    // @ts-ignore
+                    signedPsbt?.signedPsbtHex ? signedPsbt.signedPsbtHex : '--',
+                    24
+                  )}
+                  {/*@ts-ignore*/}
+                  {signedPsbt?.signedPsbtHex && (
+                    //@ts-ignore
+                    <ClickToCopy value={signedPsbt?.signedPsbtHex as string} />
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -214,6 +304,7 @@ const App = () => {
             setSignedPsbt={setSignedPsbt}
           />
         ))}
+        <PollCard />
       </div>
     </div>
   )

@@ -21,9 +21,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head />
       <body
         className={cn(
-          'min-h-screen bg-background flex flex-col items-center justify-center font-sans antialiased',
-          windows.className,
-          pxplus.className
+          'min-h-screen flex flex-col items-center justify-center text-white',
+          windows.className
         )}
       >
         {children}
