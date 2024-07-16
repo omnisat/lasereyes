@@ -35,8 +35,6 @@ export async function POST(request: Request) {
           status: 400,
         })
       }
-
-      return NextResponse.json(data)
     } else {
       const { data, error } = await supabase
         .from('wallet_poll')
@@ -47,9 +45,22 @@ export async function POST(request: Request) {
           status: 400,
         })
       }
-
-      return NextResponse.json(data)
     }
+
+    // Fetch updated poll results
+    const { data: pollResults, error: fetchResultsError } =
+      await supabase.rpc('get_poll_results')
+
+    if (fetchResultsError) {
+      return NextResponse.json(
+        { error: fetchResultsError.message },
+        {
+          status: 400,
+        }
+      )
+    }
+
+    return NextResponse.json(pollResults)
   } catch (e) {
     return NextResponse.json('there was an error fetching your utxos', {
       status: 400,

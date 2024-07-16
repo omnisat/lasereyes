@@ -3,3 +3,4 @@ yarn.lock
 .idea
 .DS_Store
 src/.DS_Store
+example/.env

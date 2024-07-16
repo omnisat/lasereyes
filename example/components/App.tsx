@@ -60,17 +60,17 @@ const App = () => {
         <Link
           href={'https://www.lasereyes.build/docs/getting-started'}
           className={
-            'self-end font-windows hover:text-orange-500 transition-all'
+            'self-end font-windows text-white hover:text-orange-500 transition-all'
           }
         >
           view docs
         </Link>
       </div>
-      <div className={'border w-full text-xl grow pb-8'}>
+      <div className={'border border-[#3c393f] w-full text-xl grow pb-8'}>
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />
           <div className={'flex flex-col p-4 items-center'}>
-            <span className={'text-md font-black'}>
+            <span className={'text-md text-white font-black'}>
               {network?.length > 0 ? network : '--'}
             </span>
           </div>

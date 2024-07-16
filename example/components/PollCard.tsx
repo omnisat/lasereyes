@@ -1,22 +1,23 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
 import { useLaserEyes } from '@omnisat/lasereyes'
 import { Button } from '@/components/ui/button'
+import { PollResults } from '@/components/PollResults'
 
 const PollCard = () => {
   const { address } = useLaserEyes()
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [pollResults, setPollResults] = useState<any[]>([])
 
   const wallets = ['OYL', 'XVERSE', 'LEATHER', 'WIZ', 'MAGIC EDEN', 'PHANTOM']
+
+  useEffect(() => {
+    setSelectedWallet(null)
+    setPollResults([])
+    setSubmitted(false)
+  }, [address])
 
   const handleSubmit = async () => {
     if (selectedWallet) {
@@ -30,6 +31,8 @@ const PollCard = () => {
         })
 
         if (response.ok) {
+          const data = await response.json()
+          setPollResults(data)
           setSubmitted(true)
         } else {
           const errorData = await response.json()
@@ -43,39 +46,52 @@ const PollCard = () => {
     }
   }
 
+  console.log({ pollResults })
+
   return (
-    <Card className="flex flex-col shrink items-center p-6 space-y-4 ">
+    <Card className="flex flex-col shrink shadow-xl items-center p-6 space-y-4 bg-[#323035] text-[#fff] border-[#3c393f]">
       <CardHeader>
-        <CardTitle className={'break-words max-w-[200px] text-center'}>
-          which wallet should we support next?
+        <CardTitle
+          className={'break-words max-w-[200px] text-center text-white'}
+        >
+          Which wallet should we support next?
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center space-y-2">
-        {wallets.map((wallet) => (
-          <div key={wallet}>
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="wallet"
-                value={wallet}
-                onChange={() => setSelectedWallet(wallet)}
-              />
-              <span>{wallet}</span>
-            </label>
+      <CardContent className="flex flex-col items-center h-full space-y-2">
+        {!submitted && pollResults.length === 0 ? (
+          <>
+            {wallets.map((wallet) => (
+              <div key={wallet}>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="wallet"
+                    value={wallet}
+                    onChange={() => setSelectedWallet(wallet)}
+                  />
+                  <span>{wallet}</span>
+                </label>
+              </div>
+            ))}
+            <Button
+              className={'w-full bg-[#232225]'}
+              disabled={submitted || !address || !selectedWallet}
+              variant={!address ? 'secondary' : 'default'}
+              onClick={handleSubmit}
+            >
+              {submitted
+                ? 'Thank You!'
+                : !address
+                  ? 'Connect To Vote'
+                  : 'Submit'}
+            </Button>
+            {error && <p className="text-red-500">{error}</p>}
+          </>
+        ) : (
+          <div className={'h-full w-full'}>
+            <PollResults pollResults={pollResults} />
           </div>
-        ))}
-        <Button
-          className={'w-full'}
-          disabled={submitted || address.length === 0 || !selectedWallet}
-          variant={address.length === 0 ? 'secondary' : 'default'}
-          onClick={handleSubmit}
-        >
-          {submitted
-            ? 'Thank You!'
-            : address.length === 0
-              ? 'Connect To Vote'
-              : 'Submit'}
-        </Button>
+        )}
       </CardContent>
     </Card>
   )
