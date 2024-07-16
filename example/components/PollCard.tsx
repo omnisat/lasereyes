@@ -49,7 +49,7 @@ const PollCard = () => {
   console.log({ pollResults })
 
   return (
-    <Card className="flex flex-col shrink shadow-xl items-center p-6 space-y-4 bg-[#323035] text-[#a7a7a8] border-[#3c393f]">
+    <Card className="flex flex-col shrink shadow-xl items-center p-6 space-y-4 bg-[#323035] text-[#fff] border-[#3c393f]">
       <CardHeader>
         <CardTitle
           className={'break-words max-w-[200px] text-center text-white'}
@@ -74,7 +74,7 @@ const PollCard = () => {
               </div>
             ))}
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225]'}
               disabled={submitted || !address || !selectedWallet}
               variant={!address ? 'secondary' : 'default'}
               onClick={handleSubmit}

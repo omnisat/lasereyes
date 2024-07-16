@@ -46,12 +46,15 @@ export function PollResults({ pollResults }: { pollResults: any[] }) {
   }))
 
   return (
-    <ChartContainer config={chartConfig} className={'w-[200px] h-[200px]'}>
+    <ChartContainer
+      config={chartConfig}
+      className={'w-[200px] text-white h-[200px]'}
+    >
       <BarChart
         accessibilityLayer
         data={chartData}
         layout="vertical"
-        className={'h-full'}
+        className={'h-full text-white'}
         margin={{}}
       >
         <YAxis
@@ -60,8 +63,9 @@ export function PollResults({ pollResults }: { pollResults: any[] }) {
           tickLine={false}
           fontSize={12}
           tickMargin={10}
+          color={'#FFFFFF'}
           axisLine={false}
-          className={'font-black'}
+          className={'font-black text-white'}
           tickFormatter={(value) =>
             chartConfig[value as keyof typeof chartConfig]?.label
           }

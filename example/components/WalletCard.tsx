@@ -264,7 +264,7 @@ const WalletCard = ({
                 Sign PSBT
               </Button>
               <Button
-                className={'shrink bg-[#232225]'}
+                className={'shrink bg-[#232225] disabled:text-gray-500'}
                 disabled={!hasWallet[walletName] || provider !== walletName}
                 variant={finalize ? 'outline' : 'default'}
                 onClick={() => setFinalize(!finalize)}
