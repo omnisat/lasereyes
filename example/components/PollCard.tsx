@@ -46,8 +46,6 @@ const PollCard = () => {
     }
   }
 
-  console.log({ pollResults })
-
   return (
     <Card className="flex flex-col shrink shadow-xl items-center p-6 space-y-4 bg-[#323035] text-[#fff] border-[#3c393f]">
       <CardHeader>

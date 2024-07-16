@@ -23,14 +23,17 @@ export function createPsbt(
   outputAddress: string,
   network: typeof MAINNET | typeof TESTNET
 ) {
-  const psbt = new Psbt({
-    network: getBtcJsNetwork(network),
-  })
   const utxoWithMostValue = inputs.reduce((acc, utxo) => {
     if (utxo.value > acc.value) {
       return utxo
     }
     return acc
+  })
+
+  const btcNetwork = getBtcJsNetwork(network)
+
+  const psbt = new Psbt({
+    network: btcNetwork,
   })
 
   psbt.addInput({
@@ -39,7 +42,9 @@ export function createPsbt(
     sequence: 0xffffffff,
     witnessUtxo: {
       script: Buffer.from(
-        bitcoin.address.toOutputScript(outputAddress).toString('hex'),
+        bitcoin.address
+          .toOutputScript(outputAddress, btcNetwork)
+          .toString('hex'),
         'hex'
       ),
       value: utxoWithMostValue.value,

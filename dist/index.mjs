@@ -282,6 +282,7 @@ var LaserEyesProvider = ({
   const [network, setNetwork] = useLocalStorage("network", MAINNET, {
     initializeWithValue: false
   });
+  const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(LOCAL_STORAGE_DEFAULT_WALLET);
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
@@ -316,9 +317,6 @@ var LaserEyesProvider = ({
     };
   }, [library]);
   useEffect(() => {
-    const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
-      LOCAL_STORAGE_DEFAULT_WALLET
-    );
     if (defaultWallet && !isConnecting) {
       setProvider(defaultWallet);
       connect(defaultWallet);

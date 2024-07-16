@@ -96,10 +96,16 @@ const WalletCard = ({
         paymentAddress,
         network as typeof MAINNET | typeof TESTNET
       )
-      setUnsignedPsbt(psbt.toHex())
-      setUnsigned(psbt.toHex())
+      if (psbt) {
+        setUnsignedPsbt(psbt.toHex())
+        setUnsigned(psbt.toHex())
+      }
     }
   }, [utxos, connected])
+
+  useEffect(() => {
+    setUnsigned(undefined)
+  }, [network])
 
   const send = async () => {
     try {
@@ -185,6 +191,36 @@ const WalletCard = ({
     }
   }
 
+  const push = async () => {
+    try {
+      if (!signed) {
+        throw new Error('No signed PSBT')
+      }
+      const txid = await pushPsbt(signed)
+      setUnsigned(undefined)
+      setSignedPsbt(undefined)
+      toast.success(
+        <span className={'flex flex-col gap-1 items-center justify-center'}>
+          <span className={'font-black'}>View on mempool.space</span>
+          <a
+            target={'_blank'}
+            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txid}`}
+            className={'underline text-blue-600 text-xs'}
+          >
+            {txid}
+          </a>
+        </span>
+      )
+    } catch (error) {
+      setSignedPsbt(undefined)
+      // @ts-ignore
+      if (error?.message!) {
+        // @ts-ignore
+        toast.error(error.message!)
+      }
+    }
+  }
+
   const switchNet = async (desiredNetwork: typeof MAINNET | typeof TESTNET) => {
     try {
       await switchNetwork(desiredNetwork)
@@ -222,11 +258,27 @@ const WalletCard = ({
                   : connectWallet(walletName)
               }
             >
-              {provider === walletName ? 'Disconnect' : 'Connect'}
+              {!hasWallet[walletName]
+                ? 'Missing Wallet'
+                : provider === walletName
+                  ? 'Disconnect'
+                  : 'Connect'}
             </Button>
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
+            <Button
+              className={'w-full bg-[#232225]'}
+              disabled={!hasWallet[walletName] || provider !== walletName}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName
+                  ? null
+                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
+              }
+            >
+              Switch Network
+            </Button>
             <Button
               className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
@@ -300,23 +352,9 @@ const WalletCard = ({
                 !hasWallet[walletName] || provider !== walletName || !signed
               }
               variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName ? null : pushPsbt(signed!)
-              }
+              onClick={() => (provider !== walletName ? null : push())}
             >
               Push PSBT
-            </Button>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName
-                  ? null
-                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
-              }
-            >
-              Switch Network
             </Button>
           </div>
         </div>
