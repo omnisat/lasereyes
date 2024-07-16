@@ -90,7 +90,7 @@ const App = () => {
               <span
                 className={clsx(
                   'text-lg flex flex-row gap-2 items-center justify-center',
-                  provider?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
+                  provider?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
                 {provider?.length > 0 ? provider : '--'}
@@ -110,7 +110,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    address?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
+                    address?.length > 0 ? 'text-white' : 'text-gray-500'
                   )}
                 >
                   {address?.length > 0 && (
@@ -133,9 +133,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    paymentAddress?.length > 0
-                      ? 'text-[#a7a7a8]'
-                      : 'text-gray-500'
+                    paymentAddress?.length > 0 ? 'text-white' : 'text-gray-500'
                   )}
                 >
                   {paymentAddress?.length > 0
@@ -162,7 +160,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    publicKey?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
+                    publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
                   )}
                 >
                   {publicKey?.length > 0 && (
@@ -185,7 +183,7 @@ const App = () => {
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
                     paymentPublicKey?.length > 0
-                      ? 'text-[#a7a7a8]'
+                      ? 'text-white'
                       : 'text-gray-500'
                   )}
                 >
@@ -212,7 +210,7 @@ const App = () => {
               <span
                 className={clsx(
                   'text-lg flex flex-row gap-2 items-center justify-center',
-                  publicKey?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
+                  publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
                 {balance !== undefined ? total : '--'} BTC
@@ -227,7 +225,7 @@ const App = () => {
             <span
               className={clsx(
                 'text-md flex flex-row gap-2 items-center justify-center',
-                signature?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
+                signature?.length > 0 ? 'text-white' : 'text-gray-500'
               )}
             >
               {signature?.length > 0 ? truncateString(signature, 24) : '--'}{' '}
@@ -253,7 +251,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    unsignedPsbt ? 'text-[#a7a7a8]' : 'text-gray-500'
+                    unsignedPsbt ? 'text-white' : 'text-gray-500'
                   )}
                 >
                   {unsignedPsbt && (
@@ -277,9 +275,7 @@ const App = () => {
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
                     // @ts-ignore
-                    signedPsbt?.signedPsbtHex
-                      ? 'text-[#a7a7a8]'
-                      : 'text-gray-500'
+                    signedPsbt?.signedPsbtHex ? 'text-white' : 'text-gray-500'
                   )}
                 >
                   {truncateString(
