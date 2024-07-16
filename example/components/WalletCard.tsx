@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
 import { getMempoolSpaceUrl } from '@/lib/urls'
+import { clsx } from 'clsx'
 
 const WalletCard = ({
   walletName,
@@ -264,19 +265,30 @@ const WalletCard = ({
                 Sign PSBT
               </Button>
               <Button
-                className={'shrink bg-[#232225] disabled:text-gray-500'}
+                className={clsx(
+                  'shrink bg-[#232225] disabled:text-gray-500',
+                  finalize ? 'text-white' : 'bg-[#232225]'
+                )}
                 disabled={!hasWallet[walletName] || provider !== walletName}
                 variant={finalize ? 'outline' : 'default'}
-                onClick={() => setFinalize(!finalize)}
+                onClick={() => {
+                  setFinalize(!finalize)
+                  setBroadcast(false)
+                }}
               >
                 Finalize
               </Button>
               <Button
-                className={'shrink '}
+                className={clsx(
+                  finalize ? 'text-white' : 'bg-[#232225]',
+                  'shrink'
+                )}
                 disabled={
                   !hasWallet[walletName] || provider !== walletName || !finalize
                 }
-                variant={broadcast ? 'destructive' : 'default'}
+                variant={
+                  broadcast ? 'destructive' : finalize ? 'ghost' : 'default'
+                }
                 onClick={() => setBroadcast(!broadcast)}
               >
                 Broadcast
