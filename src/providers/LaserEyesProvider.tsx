@@ -60,10 +60,6 @@ const LaserEyesProvider = ({
     initializeWithValue: false,
   });
 
-  const defaultWallet = localStorage?.getItem(LOCAL_STORAGE_DEFAULT_WALLET) as
-    | typeof UNISAT
-    | undefined;
-
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
@@ -103,6 +99,9 @@ const LaserEyesProvider = ({
   }, [library]);
 
   useEffect(() => {
+    const defaultWallet = localStorage?.getItem(
+      LOCAL_STORAGE_DEFAULT_WALLET
+    ) as typeof UNISAT | undefined;
     if (defaultWallet && !isConnecting) {
       setProvider(defaultWallet);
       connect(defaultWallet);
