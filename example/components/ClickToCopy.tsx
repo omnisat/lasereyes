@@ -27,7 +27,7 @@ export default function ClickToCopy({ value }: { value: string | undefined }) {
               disabled={!value}
               variant="outline"
               onClick={handleCopy}
-              className={'bg-transparent'}
+              className={'bg-transparent border-[#3c393f]'}
               size={'sm'}
             >
               <CopyIcon className="h-3 w-3" />

@@ -195,9 +195,13 @@ const WalletCard = ({
   }
 
   return (
-    <Card className={'grow shadow-2xl'}>
+    <Card
+      className={'grow shadow-xl bg-[#323035] text-[#a7a7a8] border-[#3c393f]'}
+    >
       <CardHeader>
-        <CardTitle className={'uppercase text-center'}>{walletName}</CardTitle>
+        <CardTitle className={'uppercase text-white text-center'}>
+          {walletName}
+        </CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
@@ -208,9 +212,9 @@ const WalletCard = ({
             </Badge>
 
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225] '}
               disabled={!hasWallet[walletName]}
-              variant={provider === walletName ? 'secondary' : 'default'}
+              variant={'default'}
               onClick={() =>
                 provider === walletName
                   ? disconnect()
@@ -223,7 +227,7 @@ const WalletCard = ({
 
           <div className={'flex flex-col space-between items-center gap-2'}>
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() => (provider !== walletName ? null : send())}
@@ -231,7 +235,7 @@ const WalletCard = ({
               Send BTC
             </Button>
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
@@ -248,7 +252,7 @@ const WalletCard = ({
               }
             >
               <Button
-                className={'w-full'}
+                className={'w-full bg-[#232225]'}
                 disabled={
                   !hasWallet[walletName] || provider !== walletName || !unsigned
                 }
@@ -260,26 +264,26 @@ const WalletCard = ({
                 Sign PSBT
               </Button>
               <Button
-                className={'shrink'}
+                className={'shrink bg-[#232225]'}
                 disabled={!hasWallet[walletName] || provider !== walletName}
-                variant={finalize ? 'default' : 'secondary'}
+                variant={finalize ? 'outline' : 'default'}
                 onClick={() => setFinalize(!finalize)}
               >
                 Finalize
               </Button>
               <Button
-                className={'shrink'}
+                className={'shrink '}
                 disabled={
                   !hasWallet[walletName] || provider !== walletName || !finalize
                 }
-                variant={broadcast ? 'destructive' : 'secondary'}
+                variant={broadcast ? 'destructive' : 'default'}
                 onClick={() => setBroadcast(!broadcast)}
               >
                 Broadcast
               </Button>
             </span>
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225]'}
               disabled={
                 !hasWallet[walletName] || provider !== walletName || !signed
               }
@@ -291,7 +295,7 @@ const WalletCard = ({
               Push PSBT
             </Button>
             <Button
-              className={'w-full'}
+              className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>

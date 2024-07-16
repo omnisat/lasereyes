@@ -60,17 +60,17 @@ const App = () => {
         <Link
           href={'https://www.lasereyes.build/docs/getting-started'}
           className={
-            'self-end font-windows hover:text-orange-500 transition-all'
+            'self-end font-windows text-white hover:text-orange-500 transition-all'
           }
         >
           view docs
         </Link>
       </div>
-      <div className={'border w-full text-xl grow pb-8'}>
+      <div className={'border border-[#3c393f] w-full text-xl grow pb-8'}>
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />
           <div className={'flex flex-col p-4 items-center'}>
-            <span className={'text-md font-black'}>
+            <span className={'text-md text-white font-black'}>
               {network?.length > 0 ? network : '--'}
             </span>
           </div>
@@ -90,7 +90,7 @@ const App = () => {
               <span
                 className={clsx(
                   'text-lg flex flex-row gap-2 items-center justify-center',
-                  provider?.length > 0 ? 'text-white' : 'text-gray-500'
+                  provider?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
                 )}
               >
                 {provider?.length > 0 ? provider : '--'}
@@ -110,7 +110,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    address?.length > 0 ? 'text-white' : 'text-gray-500'
+                    address?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
                   )}
                 >
                   {address?.length > 0 && (
@@ -133,7 +133,9 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    paymentAddress?.length > 0 ? 'text-white' : 'text-gray-500'
+                    paymentAddress?.length > 0
+                      ? 'text-[#a7a7a8]'
+                      : 'text-gray-500'
                   )}
                 >
                   {paymentAddress?.length > 0
@@ -160,7 +162,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
+                    publicKey?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
                   )}
                 >
                   {publicKey?.length > 0 && (
@@ -183,7 +185,7 @@ const App = () => {
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
                     paymentPublicKey?.length > 0
-                      ? 'text-white'
+                      ? 'text-[#a7a7a8]'
                       : 'text-gray-500'
                   )}
                 >
@@ -210,7 +212,7 @@ const App = () => {
               <span
                 className={clsx(
                   'text-lg flex flex-row gap-2 items-center justify-center',
-                  publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
+                  publicKey?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
                 )}
               >
                 {balance !== undefined ? total : '--'} BTC
@@ -225,7 +227,7 @@ const App = () => {
             <span
               className={clsx(
                 'text-md flex flex-row gap-2 items-center justify-center',
-                signature?.length > 0 ? 'text-white' : 'text-gray-500'
+                signature?.length > 0 ? 'text-[#a7a7a8]' : 'text-gray-500'
               )}
             >
               {signature?.length > 0 ? truncateString(signature, 24) : '--'}{' '}
@@ -251,7 +253,7 @@ const App = () => {
                 <span
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
-                    unsignedPsbt ? 'text-white' : 'text-gray-500'
+                    unsignedPsbt ? 'text-[#a7a7a8]' : 'text-gray-500'
                   )}
                 >
                   {unsignedPsbt && (
@@ -275,7 +277,9 @@ const App = () => {
                   className={clsx(
                     'text-lg flex flex-row gap-2 items-center justify-center',
                     // @ts-ignore
-                    signedPsbt?.signedPsbtHex ? 'text-white' : 'text-gray-500'
+                    signedPsbt?.signedPsbtHex
+                      ? 'text-[#a7a7a8]'
+                      : 'text-gray-500'
                   )}
                 >
                   {truncateString(
