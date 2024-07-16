@@ -345,7 +345,7 @@ var LaserEyesProvider = ({
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
       setBalance(balance2 == null ? void 0 : balance2.total);
     } catch (error) {
-      throw new Error(`Can't lasereyes to ${UNISAT} wallet`);
+      throw error;
     }
   });
   const handleAccountsChanged = (_accounts) => {
@@ -363,19 +363,6 @@ var LaserEyesProvider = ({
       setConnected(false);
     }
   };
-  const getBasicInfo = () => __async(void 0, null, function* () {
-    if (provider !== UNISAT)
-      return;
-    const publicKey2 = yield library == null ? void 0 : library.getPublicKey();
-    setPublicKey(String(publicKey2));
-    const balance2 = yield library == null ? void 0 : library.getBalance();
-    setBalance(balance2);
-    const network2 = yield library == null ? void 0 : library.getNetwork();
-    if (network2) {
-      const foundNetwork = getNetworkForUnisat(String(network2));
-      setNetwork(foundNetwork);
-    }
-  });
   const handleNetworkChanged = (network2) => {
     try {
       let foundNetwork = MAINNET;
@@ -413,6 +400,7 @@ var LaserEyesProvider = ({
     setAddress("");
     setPaymentAddress("");
     setPublicKey("");
+    setPaymentPublicKey("");
     setAccounts([]);
     setProvider(void 0);
     setLibrary(null);
@@ -537,7 +525,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const signPsbt = (psbt, finalize = false, broadcast = true) => __async(void 0, null, function* () {
+  const signPsbt = (psbt, finalize = false, broadcast = false) => __async(void 0, null, function* () {
     try {
       let psbtHex, psbtBase64;
       if (!library)
@@ -555,17 +543,19 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
-        if (broadcast) {
+        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
+        if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
-            signedPsbtHex: signedPsbt.toHex(),
-            signedPsbtBase64: signedPsbt.toBase64(),
+            signedPsbtHex: psbtSignedPsbt.toHex(),
+            signedPsbtBase64: psbtSignedPsbt.toBase64(),
             txId
           };
         }
         return {
-          signedPsbtHex: signedPsbt.toHex(),
-          signedPsbtBase64: signedPsbt.toBase64()
+          signedPsbtHex: psbtSignedPsbt.toHex(),
+          signedPsbtBase64: psbtSignedPsbt.toBase64(),
+          txId: void 0
         };
       } else {
         throw new Error("Unsupported wallet");

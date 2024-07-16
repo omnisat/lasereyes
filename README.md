@@ -23,7 +23,7 @@
 
 ## Documentation
 
-For documentation and guides, visit [Laser Eyes Docs](https://lasereyes.vercel.app/).
+For documentation and guides, visit [Laser Eyes Docs](https://lasereyes.build/).
 
 ## Community
 
