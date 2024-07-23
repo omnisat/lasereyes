@@ -74,10 +74,9 @@ const WalletCard = ({
     xverse: hasXverse,
   }
 
-  const connectWallet = async (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE
-  ) => {
+  const connectWallet = async (walletName: typeof UNISAT | typeof XVERSE) => {
     try {
+      // @ts-ignore
       await connect(walletName)
     } catch (error) {
       if (error instanceof Error) {
@@ -107,7 +106,7 @@ const WalletCard = ({
 
   const send = async () => {
     try {
-      if (balance < 1500) {
+      if (balance! < 1500) {
         throw new Error('Insufficient funds')
       }
 
@@ -149,7 +148,7 @@ const WalletCard = ({
         throw new Error('No unsigned PSBT')
       }
 
-      if (broadcast && balance < 1500) {
+      if (broadcast && balance! < 1500) {
         throw new Error('Insufficient funds')
       }
 

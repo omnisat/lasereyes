@@ -20,6 +20,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["."],
+  "include": ["src/**/*"],
   "exclude": ["dist", "build", "node_modules","example"]
 }

@@ -1,4 +1,4 @@
-import { UNISAT } from "../consts/wallets";
+import { UNISAT, XVERSE } from "../consts/wallets";
 import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
 
 export type LaserEyesContextType = {
@@ -16,7 +16,7 @@ export type LaserEyesContextType = {
   hasUnisat: boolean;
   hasXverse: boolean;
 
-  connect: (walletName: typeof UNISAT) => Promise<void>;
+  connect: (walletName: typeof UNISAT | typeof XVERSE) => Promise<void>;
   disconnect: () => void;
   requestAccounts: () => Promise<string[]>;
   getNetwork: () => Promise<string | undefined>;
@@ -46,9 +46,3 @@ export type LaserEyesContextType = {
 export type Config = {
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
-
-export interface Balance {
-  confirmed: number;
-  unconfirmed: number;
-  total: number;
-}

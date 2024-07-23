@@ -1,1 +1,0 @@
-{"version":3,"file":"LaserEyesProvider.d.ts","sourceRoot":"","sources":["LaserEyesProvider.tsx"],"names":[],"mappings":"AACA,OAAO,EAEL,SAAS,EAKV,MAAM,OAAO,CAAC;AAmBf,OAAO,EACL,MAAM,EACN,oBAAoB,EAKrB,MAAM,UAAU,CAAC;AA+ClB,QAAA,MAAM,YAAY,QAAO,oBAExB,CAAC;AAEF,QAAA,MAAM,iBAAiB;cAIX,SAAS;YACX,MAAM;6CA0xBf,CAAC;AAEF,OAAO,EAAE,iBAAiB,EAAE,YAAY,EAAE,CAAC"}
