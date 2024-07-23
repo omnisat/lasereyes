@@ -363,7 +363,10 @@ const WalletCard = ({
               <Button
                 className={'w-full bg-[#232225]'}
                 disabled={
-                  !hasWallet[walletName] || provider !== walletName || !signed
+                  !hasWallet[walletName] ||
+                  provider !== walletName ||
+                  !signed ||
+                  !unsigned
                 }
                 variant={provider !== walletName ? 'secondary' : 'default'}
                 onClick={() => (provider !== walletName ? null : push())}
