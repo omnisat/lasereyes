@@ -2,17 +2,17 @@
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { useLaserEyes, UNISAT } from '@omnisat/lasereyes'
+import { useLaserEyes, UNISAT, XVERSE } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
 import PollCard from '@/components/PollCard'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SUPPORTED_WALLET_NAMES } from '@/types/wallet'
 
-type SUPPORTED_WALLET_NAMES = [typeof UNISAT]
 const App = () => {
-  const wallets: SUPPORTED_WALLET_NAMES = [UNISAT]
+  const wallets: SUPPORTED_WALLET_NAMES = [UNISAT, XVERSE]
   const {
     address,
     paymentAddress,

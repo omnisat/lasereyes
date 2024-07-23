@@ -218,10 +218,8 @@ var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 var initialWalletContext = {
-  hasOyl: false,
   hasUnisat: false,
   hasXverse: false,
-  hasLeather: false,
   connected: false,
   isConnecting: false,
   publicKey: "",
@@ -321,6 +319,7 @@ var isHex = (str) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
+var import_sats_connect = require("sats-connect");
 var import_jsx_runtime = require("react/jsx-runtime");
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
@@ -345,6 +344,7 @@ var LaserEyesProvider = ({
   const [paymentAddress, setPaymentAddress] = (0, import_react.useState)("");
   const [balance, setBalance] = (0, import_react.useState)();
   const [hasUnisat, setHasUnisat] = (0, import_react.useState)(false);
+  const [hasXverse, setHasXverse] = (0, import_react.useState)(false);
   const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", MAINNET, {
     initializeWithValue: false
   });
@@ -363,6 +363,11 @@ var LaserEyesProvider = ({
   (0, import_react.useEffect)(() => {
     const unisatLib = window == null ? void 0 : window.unisat;
     setHasUnisat(!!unisatLib);
+  }, []);
+  (0, import_react.useEffect)(() => {
+    var _a;
+    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+    setHasXverse(!!xverseLib);
   }, []);
   (0, import_react.useEffect)(() => {
     setBalance(void 0);
@@ -385,7 +390,7 @@ var LaserEyesProvider = ({
     const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
       LOCAL_STORAGE_DEFAULT_WALLET
     );
-    if (defaultWallet && !isConnecting) {
+    if (defaultWallet) {
       setProvider(defaultWallet);
       connect(defaultWallet);
     }
@@ -414,6 +419,44 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
+  const connectXverse = () => __async(void 0, null, function* () {
+    try {
+      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
+      let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
+      console.log({ xverseNetwork });
+      const getAddressOptions = {
+        payload: {
+          purposes: ["ordinals", "payment"],
+          message: "Address for receiving Ordinals and payments",
+          network: {
+            type: xverseNetwork
+          }
+        },
+        onFinish: (response) => {
+          setPublicKey(String(response.addresses[0].publicKey));
+          setPaymentPublicKey(String(response.addresses[1].publicKey));
+          const foundAddress = findOrdinalsAddress(response.addresses);
+          const foundPaymentAddress = findPaymentAddress(response.addresses);
+          if (foundAddress && foundPaymentAddress) {
+            setAddress(foundAddress.address);
+            setPaymentAddress(foundPaymentAddress.address);
+            setProvider(XVERSE);
+            setLibrary(window.BitcoinProvider);
+          }
+        },
+        onCancel: () => {
+          throw new Error(`User canceled lasereyes to ${XVERSE} wallet`);
+        },
+        onError: (error) => {
+          throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
+        }
+      };
+      yield (0, import_sats_connect.getAddress)(getAddressOptions);
+      setConnected(true);
+    } catch (error) {
+      throw error;
+    }
+  });
   const handleAccountsChanged = (_accounts) => {
     if (!_accounts.length) {
       disconnect();
@@ -422,6 +465,7 @@ var LaserEyesProvider = ({
     if (self.accounts[0] === _accounts[0]) {
       return;
     }
+    console.log("acct changed", _accounts[0]);
     self.accounts = _accounts;
     if (_accounts.length > 0) {
       connect(UNISAT);
@@ -436,8 +480,10 @@ var LaserEyesProvider = ({
         foundNetwork = getNetworkForUnisat(network2);
         setNetwork(foundNetwork);
         connect(provider);
+      } else if (provider === XVERSE) {
+        throw new Error("Not implemented");
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -450,14 +496,16 @@ var LaserEyesProvider = ({
         throw new Error("No wallet provided");
       if (walletName === UNISAT) {
         yield connectUnisat();
+      } else if (walletName === XVERSE) {
+        yield connectXverse();
       } else {
-        throw new Error("Unsupported wallet!");
+        throw new Error("The connected wallet doesn't support this method..!");
       }
       setConnected(true);
     } catch (error) {
       setIsConnecting(false);
       disconnect();
-      throw new Error("Can't lasereyes to wallet");
+      throw error;
     } finally {
       setIsConnecting(false);
     }
@@ -480,14 +528,38 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         return yield library.requestAccounts();
+      } else if (provider === XVERSE) {
+        const getAddressOptions = {
+          payload: {
+            // @ts-ignore
+            purposes: ["ordinals", "payment"],
+            message: "Address for receiving Ordinals and payments",
+            network: {
+              type: XVERSE_NETWORK
+            }
+          },
+          onFinish: (response) => __async(void 0, null, function* () {
+            const foundAddress = findOrdinalsAddress(response.addresses);
+            setAddress(foundAddress.address);
+            const foundPaymentAddress = findPaymentAddress(response.addresses);
+            setPaymentAddress(foundPaymentAddress);
+            setPublicKey(String(response.addresses[0].publicKey));
+            setPaymentPublicKey(String(response.addresses[1].publicKey));
+          }),
+          onCancel: () => {
+            console.log("CANCELLED");
+          }
+        };
+        return [address];
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
     }
   });
   const getNetwork = () => __async(void 0, null, function* () {
+    var _a;
     try {
       if (!library)
         return;
@@ -496,9 +568,13 @@ var LaserEyesProvider = ({
         const foundNetwork = getNetworkForUnisat(unisatNetwork);
         setNetwork(foundNetwork);
         return foundNetwork;
-      } else {
-        throw new Error("Unsupported wallet");
+      } else if (provider === XVERSE) {
+        if (address.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
       }
+      return (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET;
     } catch (error) {
       throw error;
     }
@@ -512,7 +588,7 @@ var LaserEyesProvider = ({
         yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
         setNetwork(network2);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -526,7 +602,7 @@ var LaserEyesProvider = ({
         const pub = yield library == null ? void 0 : library.getPublicKey();
         return yield library == null ? void 0 : library.getPublicKey();
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -539,7 +615,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library.getBalance();
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -552,7 +628,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library.getInscriptions(0, 10);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -572,7 +648,7 @@ var LaserEyesProvider = ({
           throw new Error("Transaction failed");
         return txId;
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -585,7 +661,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -624,7 +700,7 @@ var LaserEyesProvider = ({
           txId: void 0
         };
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -637,7 +713,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -659,6 +735,7 @@ var LaserEyesProvider = ({
         connected,
         isConnecting,
         hasUnisat,
+        hasXverse,
         // functions
         connect,
         disconnect,

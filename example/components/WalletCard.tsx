@@ -321,7 +321,9 @@ const WalletCard = ({
                   'shrink bg-[#232225] disabled:text-gray-500',
                   finalize ? 'text-white' : 'bg-[#232225]'
                 )}
-                disabled={!hasWallet[walletName] || provider !== walletName}
+                disabled={
+                  !hasWallet[walletName] || provider !== walletName || !unsigned
+                }
                 variant={finalize ? 'outline' : 'default'}
                 onClick={() => {
                   setFinalize(!finalize)
@@ -333,10 +335,13 @@ const WalletCard = ({
               <Button
                 className={clsx(
                   finalize ? 'text-white' : 'bg-[#232225]',
-                  'shrink'
+                  'shrink disabled:text-gray-500'
                 )}
                 disabled={
-                  !hasWallet[walletName] || provider !== walletName || !finalize
+                  !hasWallet[walletName] ||
+                  provider !== walletName ||
+                  !finalize ||
+                  !unsigned
                 }
                 variant={
                   broadcast ? 'destructive' : finalize ? 'ghost' : 'default'

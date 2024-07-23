@@ -2,7 +2,6 @@ import { UNISAT } from "../consts/wallets";
 import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
 
 export type LaserEyesContextType = {
-  hasUnisat: boolean;
   connected: boolean;
   isConnecting: boolean;
   publicKey: string;
@@ -14,6 +13,8 @@ export type LaserEyesContextType = {
   library: any;
   provider: any;
   accounts: string[];
+  hasUnisat: boolean;
+  hasXverse: boolean;
 
   connect: (walletName: typeof UNISAT) => Promise<void>;
   disconnect: () => void;

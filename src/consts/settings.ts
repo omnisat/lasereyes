@@ -4,10 +4,8 @@ import { MAINNET, REGTEST, TESTNET } from "./networks";
 export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 
 export const initialWalletContext = {
-  hasOyl: false,
   hasUnisat: false,
   hasXverse: false,
-  hasLeather: false,
   connected: false,
   isConnecting: false,
   publicKey: "",
