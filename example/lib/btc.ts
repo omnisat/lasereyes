@@ -3,9 +3,8 @@ import { MAINNET, TESTNET } from '@omnisat/lasereyes'
 import * as bitcoin from 'bitcoinjs-lib'
 import { Psbt } from 'bitcoinjs-lib'
 import * as ecc2 from '@bitcoinerlab/secp256k1'
-import { REGTEST } from '../../src/consts/networks'
-import { getAddressType, getBitcoinNetwork } from '../../src/lib/helpers'
-import { P2PKH } from '../../src'
+import { P2PKH } from '@omnisat/lasereyes'
+import { P2TR, P2WPKH, P2WSH } from '@omnisat/lasereyes'
 
 bitcoin.initEccLib(ecc2)
 
@@ -71,7 +70,7 @@ export function createPsbt(
 
 export function getRedeemScript(
   paymentPublicKey: string,
-  network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+  network: typeof MAINNET | typeof TESTNET
 ) {
   const p2wpkh = bitcoin.payments.p2wpkh({
     pubkey: Buffer.from(paymentPublicKey, 'hex'),
@@ -83,4 +82,39 @@ export function getRedeemScript(
     network: getBitcoinNetwork(network),
   })
   return p2sh?.redeem?.output
+}
+
+export function getAddressType(address: string) {
+  try {
+    bitcoin.address.fromBase58Check(address)
+    return P2PKH
+  } catch (e) {}
+
+  try {
+    bitcoin.address.fromBase58Check(address)
+    return 'p2psh'
+  } catch (e) {}
+
+  try {
+    const { version, data } = bitcoin.address.fromBech32(address)
+    if (version === 0) {
+      if (data.length === 20) {
+        return P2WPKH
+      } else if (data.length === 32) {
+        return P2WSH
+      }
+    } else if (version === 1 && data.length === 32) {
+      return P2TR
+    }
+  } catch (e) {}
+
+  throw new Error('Invalid address')
+}
+
+export const getBitcoinNetwork = (network: typeof MAINNET | typeof TESTNET) => {
+  if (network === TESTNET) {
+    return bitcoin.networks.testnet
+  } else {
+    return bitcoin.networks.bitcoin
+  }
 }

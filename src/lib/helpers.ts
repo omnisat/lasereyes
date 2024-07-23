@@ -2,7 +2,6 @@ import * as bitcoin from "bitcoinjs-lib";
 import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
 import axios from "axios";
 import { P2PKH, P2PSH, P2TR, P2WPKH, P2WSH } from "../consts/wallets";
-
 export const getBitcoinNetwork = (
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST
 ) => {
