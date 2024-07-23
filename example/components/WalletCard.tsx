@@ -248,7 +248,6 @@ const WalletCard = ({
             <Badge variant={provider === walletName ? 'success' : 'secondary'}>
               {provider === walletName ? 'Connected' : 'Disconnected'}
             </Badge>
-
             <Button
               className={'w-full bg-[#232225] '}
               disabled={!hasWallet[walletName]}
@@ -317,33 +316,39 @@ const WalletCard = ({
                   provider !== walletName ? null : signUnsignedPsbt()
                 }
               >
-                Sign PSBT
+                Sign{broadcast ? ' & Send' : ''} PSBT
               </Button>
+              {provider === UNISAT && (
+                <Button
+                  className={clsx(
+                    'shrink bg-[#232225] disabled:text-gray-500',
+                    finalize ? 'text-white' : 'bg-[#232225]'
+                  )}
+                  disabled={
+                    !hasWallet[walletName] ||
+                    provider !== walletName ||
+                    !unsigned
+                  }
+                  variant={finalize ? 'outline' : 'default'}
+                  onClick={() => {
+                    setFinalize(!finalize)
+                    setBroadcast(false)
+                  }}
+                >
+                  Finalize
+                </Button>
+              )}
               <Button
                 className={clsx(
-                  'shrink bg-[#232225] disabled:text-gray-500',
-                  finalize ? 'text-white' : 'bg-[#232225]'
-                )}
-                disabled={
-                  !hasWallet[walletName] || provider !== walletName || !unsigned
-                }
-                variant={finalize ? 'outline' : 'default'}
-                onClick={() => {
-                  setFinalize(!finalize)
-                  setBroadcast(false)
-                }}
-              >
-                Finalize
-              </Button>
-              <Button
-                className={clsx(
-                  finalize ? 'text-white' : 'bg-[#232225]',
+                  finalize || provider !== UNISAT
+                    ? 'text-white'
+                    : 'bg-[#232225]',
                   'shrink disabled:text-gray-500'
                 )}
                 disabled={
                   !hasWallet[walletName] ||
                   provider !== walletName ||
-                  !finalize ||
+                  (!finalize && provider === UNISAT) ||
                   !unsigned
                 }
                 variant={
@@ -354,16 +359,18 @@ const WalletCard = ({
                 Broadcast
               </Button>
             </span>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={
-                !hasWallet[walletName] || provider !== walletName || !signed
-              }
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() => (provider !== walletName ? null : push())}
-            >
-              Push PSBT
-            </Button>
+            {provider === UNISAT && (
+              <Button
+                className={'w-full bg-[#232225]'}
+                disabled={
+                  !hasWallet[walletName] || provider !== walletName || !signed
+                }
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() => (provider !== walletName ? null : push())}
+              >
+                Push PSBT
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
