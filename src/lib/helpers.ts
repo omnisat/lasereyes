@@ -1,6 +1,7 @@
 import * as bitcoin from "bitcoinjs-lib";
 import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
 import axios from "axios";
+import { P2PKH, P2PSH, P2TR, P2WPKH, P2WSH } from "../consts/wallets";
 export const getBitcoinNetwork = (
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST
 ) => {
@@ -62,3 +63,30 @@ const detectEncoding = (str: string): "base64" | "hex" | "unknown" => {
   }
   return "unknown";
 };
+
+export function getAddressType(address: string) {
+  try {
+    bitcoin.address.fromBase58Check(address);
+    return P2PKH;
+  } catch (e) {}
+
+  try {
+    bitcoin.address.fromBase58Check(address);
+    return P2PSH;
+  } catch (e) {}
+
+  try {
+    const { version, data } = bitcoin.address.fromBech32(address);
+    if (version === 0) {
+      if (data.length === 20) {
+        return P2WPKH;
+      } else if (data.length === 32) {
+        return P2WSH;
+      }
+    } else if (version === 1 && data.length === 32) {
+      return P2TR;
+    }
+  } catch (e) {}
+
+  throw new Error("Invalid address");
+}

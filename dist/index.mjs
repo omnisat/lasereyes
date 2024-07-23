@@ -34,6 +34,15 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
+var __forAwait = (obj, it, method) => {
+  it = obj[Symbol.asyncIterator];
+  method = (key, fn) => (fn = obj[key]) && (it[key] = (arg) => new Promise((resolve, reject, done) => {
+    arg = fn.call(obj, arg);
+    done = arg.done;
+    return Promise.resolve(arg.value).then((value) => resolve({ value, done }), reject);
+  }));
+  return it ? it.call(obj) : (obj = obj[Symbol.iterator](), it = {}, method("next"), method("return"), it);
+};
 
 // src/consts/networks.ts
 var XVERSE_NETWORK = "Mainnet";
@@ -101,6 +110,7 @@ var LEATHER = "leather";
 var P2TR = "p2tr";
 var P2PKH = "p2pkh";
 var P2WPKH = "p2wpkh";
+var P2PSH = "p2psh";
 var P2WSH = "p2wsh";
 var P2SH = "p2sh";
 var WALLETS = {
@@ -152,10 +162,8 @@ import * as bitcoin2 from "bitcoinjs-lib";
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 var initialWalletContext = {
-  hasOyl: false,
   hasUnisat: false,
   hasXverse: false,
-  hasLeather: false,
   connected: false,
   isConnecting: false,
   publicKey: "",
@@ -231,9 +239,9 @@ var findPaymentAddress = (addresses) => {
     ({ purpose }) => purpose === "payment"
   );
 };
-var getBTCBalance = (address) => __async(void 0, null, function* () {
+var getBTCBalance = (address2) => __async(void 0, null, function* () {
   try {
-    return yield axios.get(`https://blockchain.info/q/addressbalance/${address}`).then((response) => response.data);
+    return yield axios.get(`https://blockchain.info/q/addressbalance/${address2}`).then((response) => response.data);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
@@ -253,8 +261,41 @@ var isHex = (str) => {
   const hexRegex = /^[a-fA-F0-9]+$/;
   return hexRegex.test(str);
 };
+function getAddressType(address2) {
+  try {
+    bitcoin.address.fromBase58Check(address2);
+    return P2PKH;
+  } catch (e) {
+  }
+  try {
+    bitcoin.address.fromBase58Check(address2);
+    return P2PSH;
+  } catch (e) {
+  }
+  try {
+    const { version, data } = bitcoin.address.fromBech32(address2);
+    if (version === 0) {
+      if (data.length === 20) {
+        return P2WPKH;
+      } else if (data.length === 32) {
+        return P2WSH;
+      }
+    } else if (version === 1 && data.length === 32) {
+      return P2TR;
+    }
+  } catch (e) {
+  }
+  throw new Error("Invalid address");
+}
 
 // src/providers/LaserEyesProvider.tsx
+import {
+  getAddress,
+  request,
+  RpcErrorCode,
+  signTransaction
+} from "sats-connect";
+import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import { jsx } from "react/jsx-runtime";
 var LaserEyesContext = createContext(initialWalletContext);
 var useLaserEyes = () => {
@@ -275,10 +316,11 @@ var LaserEyesProvider = ({
   const [accounts, setAccounts] = useState([]);
   const [publicKey, setPublicKey] = useState("");
   const [paymentPublicKey, setPaymentPublicKey] = useState("");
-  const [address, setAddress] = useState("");
+  const [address2, setAddress] = useState("");
   const [paymentAddress, setPaymentAddress] = useState("");
   const [balance, setBalance] = useState();
   const [hasUnisat, setHasUnisat] = useState(false);
+  const [hasXverse, setHasXverse] = useState(false);
   const [network, setNetwork] = useLocalStorage("network", MAINNET, {
     initializeWithValue: false
   });
@@ -297,6 +339,11 @@ var LaserEyesProvider = ({
   useEffect(() => {
     const unisatLib = window == null ? void 0 : window.unisat;
     setHasUnisat(!!unisatLib);
+  }, []);
+  useEffect(() => {
+    var _a;
+    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+    setHasXverse(!!xverseLib);
   }, []);
   useEffect(() => {
     setBalance(void 0);
@@ -319,7 +366,7 @@ var LaserEyesProvider = ({
     const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
       LOCAL_STORAGE_DEFAULT_WALLET
     );
-    if (defaultWallet && !isConnecting) {
+    if (defaultWallet) {
       setProvider(defaultWallet);
       connect(defaultWallet);
     }
@@ -348,6 +395,48 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
+  const connectXverse = () => __async(void 0, null, function* () {
+    try {
+      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
+      let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
+      console.log({ xverseNetwork });
+      const getAddressOptions = {
+        payload: {
+          purposes: ["ordinals", "payment"],
+          message: "Address for receiving Ordinals and payments",
+          network: {
+            type: xverseNetwork
+          }
+        },
+        onFinish: (response) => {
+          setPublicKey(String(response.addresses[0].publicKey));
+          setPaymentPublicKey(String(response.addresses[1].publicKey));
+          const foundAddress = findOrdinalsAddress(response.addresses);
+          const foundPaymentAddress = findPaymentAddress(response.addresses);
+          if (foundAddress && foundPaymentAddress) {
+            setAddress(foundAddress.address);
+            setPaymentAddress(foundPaymentAddress.address);
+            setProvider(XVERSE);
+            setLibrary(window.BitcoinProvider);
+          }
+          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+            console.log({ totalBalance });
+            setBalance(totalBalance);
+          });
+        },
+        onCancel: () => {
+          throw new Error(`User canceled lasereyes to ${XVERSE} wallet`);
+        },
+        onError: (error) => {
+          throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
+        }
+      };
+      yield getAddress(getAddressOptions);
+      setConnected(true);
+    } catch (error) {
+      throw error;
+    }
+  });
   const handleAccountsChanged = (_accounts) => {
     if (!_accounts.length) {
       disconnect();
@@ -356,6 +445,7 @@ var LaserEyesProvider = ({
     if (self.accounts[0] === _accounts[0]) {
       return;
     }
+    console.log("acct changed", _accounts[0]);
     self.accounts = _accounts;
     if (_accounts.length > 0) {
       connect(UNISAT);
@@ -370,8 +460,10 @@ var LaserEyesProvider = ({
         foundNetwork = getNetworkForUnisat(network2);
         setNetwork(foundNetwork);
         connect(provider);
+      } else if (provider === XVERSE) {
+        throw new Error("Not implemented");
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -384,14 +476,16 @@ var LaserEyesProvider = ({
         throw new Error("No wallet provided");
       if (walletName === UNISAT) {
         yield connectUnisat();
+      } else if (walletName === XVERSE) {
+        yield connectXverse();
       } else {
-        throw new Error("Unsupported wallet!");
+        throw new Error("The connected wallet doesn't support this method..!");
       }
       setConnected(true);
     } catch (error) {
       setIsConnecting(false);
       disconnect();
-      throw new Error("Can't lasereyes to wallet");
+      throw error;
     } finally {
       setIsConnecting(false);
     }
@@ -414,14 +508,38 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         return yield library.requestAccounts();
+      } else if (provider === XVERSE) {
+        const getAddressOptions = {
+          payload: {
+            // @ts-ignore
+            purposes: ["ordinals", "payment"],
+            message: "Address for receiving Ordinals and payments",
+            network: {
+              type: XVERSE_NETWORK
+            }
+          },
+          onFinish: (response) => __async(void 0, null, function* () {
+            const foundAddress = findOrdinalsAddress(response.addresses);
+            setAddress(foundAddress.address);
+            const foundPaymentAddress = findPaymentAddress(response.addresses);
+            setPaymentAddress(foundPaymentAddress);
+            setPublicKey(String(response.addresses[0].publicKey));
+            setPaymentPublicKey(String(response.addresses[1].publicKey));
+          }),
+          onCancel: () => {
+            console.log("CANCELLED");
+          }
+        };
+        return [address2];
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
     }
   });
   const getNetwork = () => __async(void 0, null, function* () {
+    var _a;
     try {
       if (!library)
         return;
@@ -430,9 +548,13 @@ var LaserEyesProvider = ({
         const foundNetwork = getNetworkForUnisat(unisatNetwork);
         setNetwork(foundNetwork);
         return foundNetwork;
-      } else {
-        throw new Error("Unsupported wallet");
+      } else if (provider === XVERSE) {
+        if (address2.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
       }
+      return (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET;
     } catch (error) {
       throw error;
     }
@@ -446,7 +568,7 @@ var LaserEyesProvider = ({
         yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
         setNetwork(network2);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -460,7 +582,7 @@ var LaserEyesProvider = ({
         const pub = yield library == null ? void 0 : library.getPublicKey();
         return yield library == null ? void 0 : library.getPublicKey();
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -472,8 +594,8 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         return yield library.getBalance();
-      } else {
-        throw new Error("Unsupported wallet");
+      } else if (provider === XVERSE) {
+        return yield getBTCBalance(paymentAddress);
       }
     } catch (error) {
       throw error;
@@ -486,7 +608,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library.getInscriptions(0, 10);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -505,8 +627,24 @@ var LaserEyesProvider = ({
         if (!txId)
           throw new Error("Transaction failed");
         return txId;
-      } else {
-        throw new Error("Unsupported wallet");
+      } else if (provider === XVERSE) {
+        const response = yield request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: Number(amount)
+            }
+          ]
+        });
+        if (response.status === "success") {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
       throw error;
@@ -518,8 +656,20 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
-      } else {
-        throw new Error("Unsupported wallet");
+      } else if (provider === XVERSE) {
+        const response = yield request("signMessage", {
+          address: address2,
+          message
+        });
+        if (response.status === "success") {
+          return response.result.signature;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error signing message: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
       throw error;
@@ -557,11 +707,91 @@ var LaserEyesProvider = ({
           signedPsbtBase64: psbtSignedPsbt.toBase64(),
           txId: void 0
         };
+      } else if (provider === XVERSE) {
+        const toSignPsbt = bitcoin2.Psbt.fromBase64(String(psbtBase64), {
+          network: getBitcoinNetwork(network)
+        });
+        const inputs = toSignPsbt.data.inputs;
+        const inputsToSign = [];
+        const ordinalAddressData = {
+          address: address2,
+          signingIndexes: []
+        };
+        const paymentsAddressData = {
+          address: paymentAddress,
+          signingIndexes: []
+        };
+        let counter = 0;
+        try {
+          for (var iter = __forAwait(inputs), more, temp, error; more = !(temp = yield iter.next()).done; more = false) {
+            let input = temp.value;
+            const { script } = input.witnessUtxo;
+            const addressFromScript = fromOutputScript(
+              script,
+              getBitcoinNetwork(network)
+            );
+            if (addressFromScript === paymentAddress) {
+              paymentsAddressData.signingIndexes.push(Number(counter));
+            } else if (addressFromScript === address2) {
+              ordinalAddressData.signingIndexes.push(Number(counter));
+            }
+            counter++;
+          }
+        } catch (temp) {
+          error = [temp];
+        } finally {
+          try {
+            more && (temp = iter.return) && (yield temp.call(iter));
+          } finally {
+            if (error)
+              throw error[0];
+          }
+        }
+        if (ordinalAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(ordinalAddressData);
+        }
+        if (paymentsAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(paymentsAddressData);
+        }
+        let txId, signedPsbtHex, signedPsbtBase64;
+        const xverseNetwork = getXverseNetwork(network);
+        const signPsbtOptions = {
+          payload: {
+            network: {
+              type: xverseNetwork
+            },
+            message: "Sign Transaction",
+            psbtBase64: toSignPsbt.toBase64(),
+            broadcast,
+            inputsToSign
+          },
+          onFinish: (response) => {
+            if (response.txId) {
+              txId = response.txId;
+            } else if (response.psbtBase64) {
+              const signedPsbt = bitcoin2.Psbt.fromBase64(
+                String(response.psbtBase64),
+                {
+                  network: getBitcoinNetwork(network)
+                }
+              );
+              signedPsbtHex = signedPsbt.toHex();
+              signedPsbtBase64 = signedPsbt.toBase64();
+            }
+          },
+          onCancel: () => console.log("Canceled")
+        };
+        yield signTransaction(signPsbtOptions);
+        return {
+          signedPsbtHex,
+          signedPsbtBase64,
+          txId
+        };
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
-    } catch (error) {
-      throw error;
+    } catch (error2) {
+      throw error2;
     }
   });
   const pushPsbt = (psbt) => __async(void 0, null, function* () {
@@ -571,7 +801,7 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else {
-        throw new Error("Unsupported wallet");
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -584,7 +814,7 @@ var LaserEyesProvider = ({
         library,
         accounts,
         publicKey,
-        address,
+        address: address2,
         paymentAddress,
         paymentPublicKey,
         provider,
@@ -593,6 +823,7 @@ var LaserEyesProvider = ({
         connected,
         isConnecting,
         hasUnisat,
+        hasXverse,
         // functions
         connect,
         disconnect,
@@ -621,6 +852,7 @@ export {
   MEMPOOL_SPACE_URL,
   OYL,
   P2PKH,
+  P2PSH,
   P2SH,
   P2TR,
   P2WPKH,
@@ -639,6 +871,7 @@ export {
   createConfig,
   findOrdinalsAddress,
   findPaymentAddress,
+  getAddressType,
   getBTCBalance,
   getBitcoinNetwork,
   getLeatherNetwork,

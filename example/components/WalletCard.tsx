@@ -29,7 +29,7 @@ const WalletCard = ({
   setUnsignedPsbt,
   setSignedPsbt,
 }: {
-  walletName: typeof OYL | typeof UNISAT | typeof XVERSE
+  walletName: typeof UNISAT | typeof XVERSE
   setSignature: (signature: string) => void
   setUnsignedPsbt: (psbt: string) => void
   setSignedPsbt: (
@@ -49,10 +49,9 @@ const WalletCard = ({
     provider,
     network,
     paymentAddress,
+    paymentPublicKey,
     balance,
     hasUnisat,
-    hasOyl,
-    hasLeather,
     hasXverse,
     sendBTC,
     signMessage,
@@ -72,15 +71,12 @@ const WalletCard = ({
 
   const hasWallet = {
     unisat: hasUnisat,
-    oyl: hasOyl,
-    leather: hasLeather,
     xverse: hasXverse,
   }
 
-  const connectWallet = async (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE
-  ) => {
+  const connectWallet = async (walletName: typeof UNISAT | typeof XVERSE) => {
     try {
+      // @ts-ignore
       await connect(walletName)
     } catch (error) {
       if (error instanceof Error) {
@@ -94,6 +90,7 @@ const WalletCard = ({
       const psbt = createPsbt(
         utxos,
         paymentAddress,
+        paymentPublicKey,
         network as typeof MAINNET | typeof TESTNET
       )
       if (psbt) {
@@ -109,7 +106,7 @@ const WalletCard = ({
 
   const send = async () => {
     try {
-      if (balance?.total < 1500) {
+      if (balance! < 1500) {
         throw new Error('Insufficient funds')
       }
 
@@ -133,10 +130,10 @@ const WalletCard = ({
     }
   }
 
-  const sign = async (walletName: string) => {
+  const sign = async (message: string) => {
     setSignature('')
     try {
-      const signature = await signMessage(walletName)
+      const signature = await signMessage(message)
       setSignature(signature)
     } catch (error) {
       if (error instanceof Error) {
@@ -149,6 +146,10 @@ const WalletCard = ({
     try {
       if (!unsigned) {
         throw new Error('No unsigned PSBT')
+      }
+
+      if (broadcast && balance! < 1500) {
+        throw new Error('Insufficient funds')
       }
 
       const signPsbtResponse = await signPsbt(unsigned, finalize, broadcast)
@@ -247,7 +248,6 @@ const WalletCard = ({
             <Badge variant={provider === walletName ? 'success' : 'secondary'}>
               {provider === walletName ? 'Connected' : 'Disconnected'}
             </Badge>
-
             <Button
               className={'w-full bg-[#232225] '}
               disabled={!hasWallet[walletName]}
@@ -267,18 +267,20 @@ const WalletCard = ({
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName
-                  ? null
-                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
-              }
-            >
-              Switch Network
-            </Button>
+            {provider !== XVERSE && (
+              <Button
+                className={'w-full bg-[#232225]'}
+                disabled={!hasWallet[walletName] || provider !== walletName}
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() =>
+                  provider !== walletName
+                    ? null
+                    : switchNet(network === TESTNET ? MAINNET : TESTNET)
+                }
+              >
+                Switch Network
+              </Button>
+            )}
             <Button
               className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
@@ -294,7 +296,7 @@ const WalletCard = ({
               onClick={() =>
                 provider !== walletName
                   ? null
-                  : sign(walletName).then(console.log)
+                  : sign('Laser Eyes - Test Message').then(console.log)
               }
             >
               Sign Message
@@ -314,29 +316,40 @@ const WalletCard = ({
                   provider !== walletName ? null : signUnsignedPsbt()
                 }
               >
-                Sign PSBT
+                Sign{broadcast ? ' & Send' : ''} PSBT
               </Button>
+              {provider !== XVERSE && (
+                <Button
+                  className={clsx(
+                    'shrink bg-[#232225] disabled:text-gray-500',
+                    finalize ? 'text-white' : 'bg-[#232225]'
+                  )}
+                  disabled={
+                    !hasWallet[walletName] ||
+                    provider !== walletName ||
+                    !unsigned
+                  }
+                  variant={finalize ? 'outline' : 'default'}
+                  onClick={() => {
+                    setFinalize(!finalize)
+                    setBroadcast(false)
+                  }}
+                >
+                  Finalize
+                </Button>
+              )}
               <Button
                 className={clsx(
-                  'shrink bg-[#232225] disabled:text-gray-500',
-                  finalize ? 'text-white' : 'bg-[#232225]'
-                )}
-                disabled={!hasWallet[walletName] || provider !== walletName}
-                variant={finalize ? 'outline' : 'default'}
-                onClick={() => {
-                  setFinalize(!finalize)
-                  setBroadcast(false)
-                }}
-              >
-                Finalize
-              </Button>
-              <Button
-                className={clsx(
-                  finalize ? 'text-white' : 'bg-[#232225]',
-                  'shrink'
+                  finalize || provider !== UNISAT
+                    ? 'text-white'
+                    : 'bg-[#232225]',
+                  'shrink disabled:text-gray-500'
                 )}
                 disabled={
-                  !hasWallet[walletName] || provider !== walletName || !finalize
+                  !hasWallet[walletName] ||
+                  provider !== walletName ||
+                  (!finalize && provider !== XVERSE) ||
+                  !unsigned
                 }
                 variant={
                   broadcast ? 'destructive' : finalize ? 'ghost' : 'default'
@@ -346,16 +359,18 @@ const WalletCard = ({
                 Broadcast
               </Button>
             </span>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={
-                !hasWallet[walletName] || provider !== walletName || !signed
-              }
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() => (provider !== walletName ? null : push())}
-            >
-              Push PSBT
-            </Button>
+            {provider !== XVERSE && (
+              <Button
+                className={'w-full bg-[#232225]'}
+                disabled={
+                  !hasWallet[walletName] || provider !== walletName || !signed
+                }
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() => (provider !== walletName ? null : push())}
+              >
+                Push PSBT
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
