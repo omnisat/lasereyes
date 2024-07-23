@@ -130,10 +130,10 @@ const WalletCard = ({
     }
   }
 
-  const sign = async (walletName: string) => {
+  const sign = async (message: string) => {
     setSignature('')
     try {
-      const signature = await signMessage(walletName)
+      const signature = await signMessage(message)
       setSignature(signature)
     } catch (error) {
       if (error instanceof Error) {
@@ -295,7 +295,7 @@ const WalletCard = ({
               onClick={() =>
                 provider !== walletName
                   ? null
-                  : sign(walletName).then(console.log)
+                  : sign('Laser Eyes - Test Message').then(console.log)
               }
             >
               Sign Message
