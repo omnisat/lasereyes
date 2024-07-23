@@ -268,18 +268,20 @@ const WalletCard = ({
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName
-                  ? null
-                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
-              }
-            >
-              Switch Network
-            </Button>
+            {provider === UNISAT && (
+              <Button
+                className={'w-full bg-[#232225]'}
+                disabled={!hasWallet[walletName] || provider !== walletName}
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() =>
+                  provider !== walletName
+                    ? null
+                    : switchNet(network === TESTNET ? MAINNET : TESTNET)
+                }
+              >
+                Switch Network
+              </Button>
+            )}
             <Button
               className={'w-full bg-[#232225]'}
               disabled={!hasWallet[walletName] || provider !== walletName}
