@@ -267,7 +267,7 @@ const WalletCard = ({
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
-            {provider === UNISAT && (
+            {provider !== XVERSE && (
               <Button
                 className={'w-full bg-[#232225]'}
                 disabled={!hasWallet[walletName] || provider !== walletName}
@@ -318,7 +318,7 @@ const WalletCard = ({
               >
                 Sign{broadcast ? ' & Send' : ''} PSBT
               </Button>
-              {provider === UNISAT && (
+              {provider !== XVERSE && (
                 <Button
                   className={clsx(
                     'shrink bg-[#232225] disabled:text-gray-500',
@@ -348,7 +348,7 @@ const WalletCard = ({
                 disabled={
                   !hasWallet[walletName] ||
                   provider !== walletName ||
-                  (!finalize && provider === UNISAT) ||
+                  (!finalize && provider !== XVERSE) ||
                   !unsigned
                 }
                 variant={
@@ -359,7 +359,7 @@ const WalletCard = ({
                 Broadcast
               </Button>
             </span>
-            {provider === UNISAT && (
+            {provider !== XVERSE && (
               <Button
                 className={'w-full bg-[#232225]'}
                 disabled={
