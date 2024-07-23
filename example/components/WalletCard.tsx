@@ -29,7 +29,7 @@ const WalletCard = ({
   setUnsignedPsbt,
   setSignedPsbt,
 }: {
-  walletName: typeof OYL | typeof UNISAT | typeof XVERSE
+  walletName: typeof UNISAT | typeof XVERSE
   setSignature: (signature: string) => void
   setUnsignedPsbt: (psbt: string) => void
   setSignedPsbt: (
@@ -49,10 +49,9 @@ const WalletCard = ({
     provider,
     network,
     paymentAddress,
+    paymentPublicKey,
     balance,
     hasUnisat,
-    hasOyl,
-    hasLeather,
     hasXverse,
     sendBTC,
     signMessage,
@@ -72,8 +71,6 @@ const WalletCard = ({
 
   const hasWallet = {
     unisat: hasUnisat,
-    oyl: hasOyl,
-    leather: hasLeather,
     xverse: hasXverse,
   }
 
@@ -94,6 +91,7 @@ const WalletCard = ({
       const psbt = createPsbt(
         utxos,
         paymentAddress,
+        paymentPublicKey,
         network as typeof MAINNET | typeof TESTNET
       )
       if (psbt) {
@@ -109,7 +107,7 @@ const WalletCard = ({
 
   const send = async () => {
     try {
-      if (balance?.total < 1500) {
+      if (balance < 1500) {
         throw new Error('Insufficient funds')
       }
 
@@ -149,6 +147,10 @@ const WalletCard = ({
     try {
       if (!unsigned) {
         throw new Error('No unsigned PSBT')
+      }
+
+      if (broadcast && balance < 1500) {
+        throw new Error('Insufficient funds')
       }
 
       const signPsbtResponse = await signPsbt(unsigned, finalize, broadcast)

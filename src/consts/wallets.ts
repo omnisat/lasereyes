@@ -7,6 +7,7 @@ export const LEATHER = "leather";
 export const P2TR = "p2tr";
 export const P2PKH = "p2pkh";
 export const P2WPKH = "p2wpkh";
+export const P2PSH = "p2psh";
 export const P2WSH = "p2wsh";
 export const P2SH = "p2sh";
 
