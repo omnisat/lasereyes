@@ -13,7 +13,7 @@ import {
 } from "../consts/settings";
 import { useLocalStorage } from "usehooks-ts";
 import { Config, LaserEyesContextType } from "../types";
-import { UNISAT, XVERSE } from "../consts/wallets";
+import { OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
   getNetworkForUnisat,
   getUnisatNetwork,
@@ -400,8 +400,24 @@ const LaserEyesProvider = ({
         const txId = await library?.sendBitcoin(to, amount);
         if (!txId) throw new Error("Transaction failed");
         return txId;
-      } else {
-        throw new Error("The connected wallet doesn't support this method..");
+      } else if (provider === XVERSE) {
+        const response = await request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: Number(amount),
+            },
+          ],
+        });
+        if (response.status === "success") {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
       throw error;

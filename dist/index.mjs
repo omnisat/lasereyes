@@ -627,8 +627,24 @@ var LaserEyesProvider = ({
         if (!txId)
           throw new Error("Transaction failed");
         return txId;
-      } else {
-        throw new Error("The connected wallet doesn't support this method..");
+      } else if (provider === XVERSE) {
+        const response = yield request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: Number(amount)
+            }
+          ]
+        });
+        if (response.status === "success") {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
       }
     } catch (error) {
       throw error;
