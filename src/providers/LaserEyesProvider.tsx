@@ -13,7 +13,7 @@ import {
 } from "../consts/settings";
 import { useLocalStorage } from "usehooks-ts";
 import { Config, LaserEyesContextType } from "../types";
-import { UNISAT, XVERSE } from "../consts/wallets";
+import { OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
   getNetworkForUnisat,
   getUnisatNetwork,
@@ -26,6 +26,7 @@ import {
 import {
   findOrdinalsAddress,
   findPaymentAddress,
+  getBTCBalance,
   isBase64,
   isHex,
 } from "../lib/helpers";
@@ -172,6 +173,11 @@ const LaserEyesProvider = ({
             setProvider(XVERSE);
             setLibrary((window as any).BitcoinProvider);
           }
+
+          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+            console.log({ totalBalance });
+            setBalance(totalBalance);
+          });
         },
         onCancel: () => {
           throw new Error(`User canceled lasereyes to ${XVERSE} wallet`);
@@ -355,8 +361,13 @@ const LaserEyesProvider = ({
       if (!library) return;
       if (provider === UNISAT) {
         return await library.getBalance();
-      } else {
-        throw new Error("The connected wallet doesn't support this method..");
+      } else if (provider === XVERSE) {
+        const totalBalance = await getBTCBalance(paymentAddress);
+        return {
+          confirmed: totalBalance,
+          unconfirmed: 0,
+          total: totalBalance,
+        };
       }
     } catch (error) {
       throw error;
