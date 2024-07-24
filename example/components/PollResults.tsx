@@ -13,8 +13,8 @@ const chartConfig = {
     label: 'OYL',
     color: 'hsl(var(--chart-5))',
   },
-  xverse: {
-    label: 'XVERSE',
+  'orange-wallet': {
+    label: 'ORANGE WALLET',
     color: 'hsl(var(--chart-1))',
   },
   leather: {
@@ -26,7 +26,7 @@ const chartConfig = {
     color: 'hsl(var(--chart-3))',
   },
   'magic-eden': {
-    label: 'ME',
+    label: 'MAGIC EDEN',
     color: 'hsl(var(--chart-4))',
   },
   phantom: {
@@ -36,14 +36,15 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function PollResults({ pollResults }: { pollResults: any[] }) {
-  // Format the poll results for the chart
-  const chartData = pollResults.map((result) => ({
-    wallet: result.wallet.toLowerCase().replace(' ', '-'),
-    votes: result.votes,
-    //@ts-ignore
-    fill: chartConfig[result.wallet.toLowerCase().replace(' ', '-')]
-      .color as string,
-  }))
+  const chartData = pollResults
+    .filter((res) => chartConfig[res.wallet.toLowerCase().replace(' ', '-')])
+    .map((result) => ({
+      wallet: result.wallet.toLowerCase().replace(' ', '-'),
+      votes: result.votes,
+      //@ts-ignore
+      fill: chartConfig[result.wallet.toLowerCase().replace(' ', '-')]
+        ?.color as string,
+    }))
 
   return (
     <ChartContainer
