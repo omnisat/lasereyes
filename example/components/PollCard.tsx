@@ -11,7 +11,14 @@ const PollCard = () => {
   const [error, setError] = useState<string | null>(null)
   const [pollResults, setPollResults] = useState<any[]>([])
 
-  const wallets = ['OYL', 'LEATHER', 'WIZ', 'MAGIC EDEN', 'PHANTOM']
+  const wallets = [
+    'OYL',
+    'LEATHER',
+    'WIZ',
+    'MAGIC EDEN',
+    'PHANTOM',
+    'ORANGE WALLET',
+  ]
 
   useEffect(() => {
     setSelectedWallet(null)
