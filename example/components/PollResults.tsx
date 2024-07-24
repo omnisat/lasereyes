@@ -37,6 +37,7 @@ const chartConfig = {
 
 export function PollResults({ pollResults }: { pollResults: any[] }) {
   const chartData = pollResults
+    // @ts-ignore
     .filter((res) => chartConfig[res.wallet.toLowerCase().replace(' ', '-')])
     .map((result) => ({
       wallet: result.wallet.toLowerCase().replace(' ', '-'),
