@@ -316,7 +316,7 @@ const App = () => {
         {wallets.map((walletName) => (
           <WalletCard
             key={walletName}
-            walletName={walletName}
+            walletName={walletName as typeof UNISAT | typeof XVERSE}
             setSignature={setSignature}
             setUnsignedPsbt={setUnsignedPsbt}
             setSignedPsbt={setSignedPsbt}
