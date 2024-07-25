@@ -578,7 +578,6 @@ var LaserEyesProvider = ({
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
-      console.log({ xverseNetwork });
       const getAddressOptions = {
         payload: {
           purposes: ["ordinals", "payment"],
@@ -599,7 +598,6 @@ var LaserEyesProvider = ({
             setLibrary(window.BitcoinProvider);
           }
           getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
-            console.log({ totalBalance });
             setBalance(totalBalance);
           });
         },
