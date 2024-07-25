@@ -1,3 +1,3 @@
-import { UNISAT, XVERSE } from '@omnisat/lasereyes'
+import { OYL, UNISAT, XVERSE } from '@omnisat/lasereyes'
 
-export type SUPPORTED_WALLET_NAMES = [typeof UNISAT, typeof XVERSE]
+export type SUPPORTED_WALLET_NAMES = [typeof UNISAT, typeof XVERSE, typeof OYL]

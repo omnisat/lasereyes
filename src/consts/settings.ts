@@ -6,6 +6,7 @@ export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 export const initialWalletContext = {
   hasUnisat: false,
   hasXverse: false,
+  hasOyl: false,
   connected: false,
   isConnecting: false,
   publicKey: "",

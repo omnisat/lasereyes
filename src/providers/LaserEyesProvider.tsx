@@ -12,7 +12,7 @@ import {
   LOCAL_STORAGE_DEFAULT_WALLET,
 } from "../consts/settings";
 import { useLocalStorage } from "usehooks-ts";
-import { Config, LaserEyesContextType } from "../types";
+import { Config, LaserEyesContextType, OYLBalanceResponse } from "../types";
 import { OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
   getNetworkForUnisat,
@@ -24,6 +24,7 @@ import {
   XVERSE_NETWORK,
 } from "../consts/networks";
 import {
+  createSendBtcPsbt,
   findOrdinalsAddress,
   findPaymentAddress,
   getBitcoinNetwork,
@@ -61,7 +62,7 @@ const LaserEyesProvider = ({
 
   const [library, setLibrary] = useState<any>(null);
   const [provider, setProvider] = useState<
-    typeof UNISAT | typeof XVERSE | undefined
+    typeof UNISAT | typeof XVERSE | typeof OYL | undefined
   >();
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -72,8 +73,9 @@ const LaserEyesProvider = ({
   const [paymentAddress, setPaymentAddress] = useState("");
   const [balance, setBalance] = useState<number | undefined>();
 
-  const [hasUnisat, setHasUnisat] = useState(false);
-  const [hasXverse, setHasXverse] = useState(false);
+  const [hasUnisat, setHasUnisat] = useState<boolean>(false);
+  const [hasXverse, setHasXverse] = useState<boolean>(false);
+  const [hasOyl, setHasOyl] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
@@ -105,6 +107,11 @@ const LaserEyesProvider = ({
   }, []);
 
   useEffect(() => {
+    const oylLib = (window as any)?.oyl;
+    setHasOyl(!!oylLib);
+  }, []);
+
+  useEffect(() => {
     setBalance(undefined);
   }, [network]);
 
@@ -127,7 +134,7 @@ const LaserEyesProvider = ({
   useEffect(() => {
     const defaultWallet = localStorage?.getItem(
       LOCAL_STORAGE_DEFAULT_WALLET
-    ) as typeof UNISAT | typeof XVERSE | undefined;
+    ) as typeof UNISAT | typeof XVERSE | typeof OYL | undefined;
     if (defaultWallet) {
       setProvider(defaultWallet);
       connect(defaultWallet);
@@ -201,7 +208,69 @@ const LaserEyesProvider = ({
     }
   };
 
+  const connectOyl = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
+      const lib = (window as any).oyl;
+      const result = await lib.requestAccounts();
+      const oylPubKey = await lib.getPublicKey();
+
+      setPaymentPublicKey(oylPubKey);
+
+      setAccounts(result);
+      setAddress(result[0]);
+      setPaymentAddress(result[1]);
+      setLibrary(lib);
+      setProvider(OYL);
+      handleAccountsChanged(result);
+      setConnected(true);
+    } catch (error) {
+      throw new Error(`Can't lasereyes to ${OYL} wallet`);
+    }
+  };
+
+  const connect = async (
+    walletName: typeof UNISAT | typeof XVERSE | typeof OYL
+  ) => {
+    setIsConnecting(true);
+    try {
+      if (!walletName) throw new Error("No wallet provided");
+      if (walletName === UNISAT) {
+        console.log("connectin unisat");
+        await connectUnisat();
+      } else if (walletName === XVERSE) {
+        await connectXverse();
+      } else if (walletName === OYL) {
+        console.log("connectin oyl");
+        await connectOyl();
+      } else {
+        throw new Error("Unsupported wallet..");
+      }
+      setConnected(true);
+    } catch (error) {
+      setIsConnecting(false);
+      disconnect();
+      throw error;
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const disconnect = () => {
+    setAddress("");
+    setPaymentAddress("");
+    setPublicKey("");
+    setPaymentPublicKey("");
+    setAccounts([]);
+    setProvider(undefined);
+    setLibrary(null);
+    setConnected(false);
+    setBalance(undefined);
+    localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
+  };
+
   const handleAccountsChanged = (_accounts: string[]) => {
+    if (provider !== UNISAT) return;
     if (!_accounts.length) {
       disconnect();
       return;
@@ -241,40 +310,6 @@ const LaserEyesProvider = ({
     }
   };
 
-  const connect = async (walletName: typeof UNISAT | typeof XVERSE) => {
-    setIsConnecting(true);
-    try {
-      if (!walletName) throw new Error("No wallet provided");
-      if (walletName === UNISAT) {
-        await connectUnisat();
-      } else if (walletName === XVERSE) {
-        await connectXverse();
-      } else {
-        throw new Error("The connected wallet doesn't support this method..!");
-      }
-      setConnected(true);
-    } catch (error) {
-      setIsConnecting(false);
-      disconnect();
-      throw error;
-    } finally {
-      setIsConnecting(false);
-    }
-  };
-
-  const disconnect = () => {
-    setAddress("");
-    setPaymentAddress("");
-    setPublicKey("");
-    setPaymentPublicKey("");
-    setAccounts([]);
-    setProvider(undefined);
-    setLibrary(null);
-    setConnected(false);
-    setBalance(undefined);
-    localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
-  };
-
   const requestAccounts = async () => {
     try {
       if (!library) return;
@@ -303,6 +338,8 @@ const LaserEyesProvider = ({
           },
         };
         return [address];
+      } else if (provider === OYL) {
+        return await library.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -322,6 +359,11 @@ const LaserEyesProvider = ({
         setNetwork(foundNetwork);
         return foundNetwork;
       } else if (provider === XVERSE) {
+        if (address.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
+      } else if (provider === OYL) {
         if (address.slice(0, 1) === "t") {
           return TESTNET;
         }
@@ -354,7 +396,8 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        const pub = await library?.getPublicKey();
+        return await library?.getPublicKey();
+      } else if (provider === OYL) {
         return await library?.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
@@ -371,6 +414,9 @@ const LaserEyesProvider = ({
         return await library.getBalance();
       } else if (provider === XVERSE) {
         return await getBTCBalance(paymentAddress);
+      } else if (provider === OYL) {
+        const balanceResponse: OYLBalanceResponse = await library.getBalance();
+        return balanceResponse.btc.total * 100000000;
       }
     } catch (error) {
       throw error;
@@ -381,6 +427,8 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
+        return await library.getInscriptions(0, 10);
+      } else if (provider === OYL) {
         return await library.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
@@ -405,7 +453,7 @@ const LaserEyesProvider = ({
           recipients: [
             {
               address: to,
-              amount: Number(amount),
+              amount: amount,
             },
           ],
         });
@@ -418,6 +466,21 @@ const LaserEyesProvider = ({
             throw new Error("Error sending BTC: " + response.error.message);
           }
         }
+      } else if (provider === OYL) {
+        const { psbtHex, psbtBase64 } = await createSendBtcPsbt(
+          address,
+          paymentAddress,
+          to,
+          amount,
+          paymentPublicKey,
+          //@ts-ignore
+          network,
+          7
+        );
+        const psbt = await signPsbt(psbtBase64, true, true);
+        if (!psbt) throw new Error("Error sending BTC");
+        // @ts-ignore
+        return psbt.txId;
       }
     } catch (error) {
       throw error;
@@ -568,6 +631,28 @@ const LaserEyesProvider = ({
           signedPsbtBase64,
           txId,
         };
+      } else if (provider === OYL) {
+        const signedPsbt = await library?.signPsbt(psbtHex, true, true);
+        console.log({ signedPsbt });
+        const psbtSignedPsbt = bitcoin.Psbt.fromHex(signedPsbt);
+
+        console.log("psbtSignedPsbt", psbtSignedPsbt.toBase64());
+
+        if (broadcast) {
+          console.log("broadcastin");
+          const txId = await pushPsbt(psbtSignedPsbt.toHex());
+          return {
+            signedPsbtHex: psbtSignedPsbt.toHex(),
+            signedPsbtBase64: psbtSignedPsbt.toBase64(),
+            txId,
+          };
+        } else {
+          return {
+            signedPsbtHex: psbtSignedPsbt.toHex(),
+            signedPsbtBase64: psbtSignedPsbt.toBase64(),
+            txId: undefined,
+          };
+        }
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -581,6 +666,8 @@ const LaserEyesProvider = ({
       if (!library) return;
       if (provider === UNISAT) {
         return await library?.pushPsbt(psbt);
+      } else if (provider === OYL) {
+        return (await library?.pushPsbt(psbt)) as string;
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -605,6 +692,7 @@ const LaserEyesProvider = ({
         isConnecting,
         hasUnisat,
         hasXverse,
+        hasOyl,
 
         // functions
         connect,

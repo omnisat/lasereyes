@@ -76,6 +76,7 @@ type LaserEyesContextType = {
     accounts: string[];
     hasUnisat: boolean;
     hasXverse: boolean;
+    hasOyl: boolean;
     connect: (walletName: typeof UNISAT | typeof XVERSE) => Promise<void>;
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
@@ -96,6 +97,16 @@ type LaserEyesContextType = {
 type Config = {
     network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
+interface BlockchainInfoUTXO {
+    tx_hash_big_endian: string;
+    tx_hash: string;
+    tx_output_n: number;
+    script: string;
+    value: number;
+    value_hex: string;
+    confirmations: number;
+    tx_index: number;
+}
 
 declare const createConfig: (config: Config) => Config;
 
@@ -109,9 +120,16 @@ declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typ
 declare const findOrdinalsAddress: (addresses: any) => any;
 declare const findPaymentAddress: (addresses: any) => any;
 declare const getBTCBalance: (address: string) => Promise<number>;
+declare const getAddressUtxos: (address: string) => Promise<BlockchainInfoUTXO[]>;
 declare const satoshisToBTC: (satoshis: number) => string;
 declare const isBase64: (str: string) => boolean;
 declare const isHex: (str: string) => boolean;
 declare function getAddressType(address: string): "p2tr" | "p2pkh" | "p2wpkh" | "p2psh" | "p2wsh";
+declare function estimateTxSize(taprootInputCount: number, nonTaprootInputCount: number, outputCount: number): number;
+declare function createSendBtcPsbt(address: string, paymentAddress: string, recipientAddress: string, amount: number, paymentPublicKey: string, network: typeof MAINNET | typeof TESTNET, feeRate?: number): Promise<{
+    psbtBase64: string;
+    psbtHex: string;
+}>;
+declare function getRedeemScript(paymentPublicKey: string, network: typeof MAINNET | typeof TESTNET): Buffer | undefined;
 
-export { LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAINNET, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, findOrdinalsAddress, findPaymentAddress, getAddressType, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForUnisat, getNetworkForXverse, getUnisatNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };
+export { LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAINNET, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, createSendBtcPsbt, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressType, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForUnisat, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };
