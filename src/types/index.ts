@@ -15,6 +15,7 @@ export type LaserEyesContextType = {
   accounts: string[];
   hasUnisat: boolean;
   hasXverse: boolean;
+  hasOyl: boolean;
 
   connect: (walletName: typeof UNISAT | typeof XVERSE) => Promise<void>;
   disconnect: () => void;
@@ -46,3 +47,47 @@ export type LaserEyesContextType = {
 export type Config = {
   network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
 };
+
+export interface OYLBalanceResponse {
+  brc20s: {
+    total: number;
+  };
+  btc: {
+    pending: number;
+    confirmed: number;
+    total: number;
+  };
+  overall: {
+    pending: number;
+    confirmed: number;
+    total: number;
+  };
+}
+
+export interface BlockchainInfoResponse {
+  notice: string;
+  unspent_outputs: BlockchainInfoUTXO[];
+}
+
+export interface BlockchainInfoUTXO {
+  tx_hash_big_endian: string;
+  tx_hash: string;
+  tx_output_n: number;
+  script: string;
+  value: number;
+  value_hex: string;
+  confirmations: number;
+  tx_index: number;
+}
+
+export interface MempoolUtxo {
+  txid: string;
+  vout: number;
+  status: {
+    confirmed: boolean;
+    block_height: number;
+    block_hash: string;
+    block_time: number;
+  };
+  value: number;
+}

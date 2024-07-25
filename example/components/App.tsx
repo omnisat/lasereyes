@@ -2,17 +2,17 @@
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { useLaserEyes, UNISAT, XVERSE } from '@omnisat/lasereyes'
+import { useLaserEyes, UNISAT, XVERSE, OYL } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
 import PollCard from '@/components/PollCard'
 import Image from 'next/image'
 import Link from 'next/link'
-import { SUPPORTED_WALLET_NAMES } from '@/types/wallet'
+import { Input } from '@/components/ui/input'
 
 const App = () => {
-  const wallets: SUPPORTED_WALLET_NAMES = [UNISAT, XVERSE]
+  const wallets = [UNISAT, XVERSE]
   const {
     address,
     paymentAddress,
@@ -266,7 +266,16 @@ const App = () => {
                   {unsignedPsbt && (
                     <ClickToCopy value={unsignedPsbt as string} />
                   )}
-                  {truncateString(unsignedPsbt ? unsignedPsbt : '--', 24)}
+                  <Input
+                    type="text"
+                    className={'bg-transparent text-center border-none'}
+                    placeholder="Tx Hex"
+                    value={truncateString(
+                      unsignedPsbt ? unsignedPsbt : '--',
+                      24
+                    )}
+                    onChange={(e) => setUnsignedPsbt(e.target.value)}
+                  />
                 </span>
               </div>
             </div>
@@ -307,7 +316,7 @@ const App = () => {
         {wallets.map((walletName) => (
           <WalletCard
             key={walletName}
-            walletName={walletName}
+            walletName={walletName as typeof UNISAT | typeof XVERSE}
             setSignature={setSignature}
             setUnsignedPsbt={setUnsignedPsbt}
             setSignedPsbt={setSignedPsbt}

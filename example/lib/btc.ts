@@ -1,10 +1,15 @@
 import { IMempoolUtxo } from '@/types/btc'
-import { MAINNET, TESTNET } from '@omnisat/lasereyes'
+import {
+  MAINNET,
+  P2PKH,
+  P2TR,
+  P2WPKH,
+  P2WSH,
+  TESTNET,
+} from '@omnisat/lasereyes'
 import * as bitcoin from 'bitcoinjs-lib'
 import { Psbt } from 'bitcoinjs-lib'
 import * as ecc2 from '@bitcoinerlab/secp256k1'
-import { P2PKH } from '@omnisat/lasereyes'
-import { P2TR, P2WPKH, P2WSH } from '@omnisat/lasereyes'
 
 bitcoin.initEccLib(ecc2)
 
@@ -33,13 +38,10 @@ export function createPsbt(
     }
     return acc
   })
-
   const btcNetwork = getBtcJsNetwork(network)
-
   const psbt = new Psbt({
     network: btcNetwork,
   })
-
   psbt.addInput({
     hash: utxoWithMostValue.txid,
     index: utxoWithMostValue.vout,
@@ -54,12 +56,10 @@ export function createPsbt(
       value: utxoWithMostValue.value,
     },
   })
-
   if (getAddressType(outputAddress) === P2PKH) {
     let redeemScript = getRedeemScript(paymentPublicKey, network)
     psbt.updateInput(0, { redeemScript })
   }
-
   psbt.addOutput({
     address: outputAddress,
     value: utxoWithMostValue.value - 1000,
@@ -82,6 +82,22 @@ export function getRedeemScript(
     network: getBitcoinNetwork(network),
   })
   return p2sh?.redeem?.output
+}
+
+export function estimateTxSize(
+  taprootInputCount: number,
+  nonTaprootInputCount: number,
+  outputCount: number
+): number {
+  const baseTxSize = 10
+  const taprootInputSize = 57
+  const nonTaprootInputSize = 41
+  const outputSize = 34
+  const totalInputSize =
+    taprootInputCount * taprootInputSize +
+    nonTaprootInputCount * nonTaprootInputSize
+  const totalOutputSize = outputCount * outputSize
+  return baseTxSize + totalInputSize + totalOutputSize
 }
 
 export function getAddressType(address: string) {

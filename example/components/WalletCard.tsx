@@ -29,7 +29,7 @@ const WalletCard = ({
   setUnsignedPsbt,
   setSignedPsbt,
 }: {
-  walletName: typeof UNISAT | typeof XVERSE
+  walletName: typeof UNISAT | typeof XVERSE | typeof OYL
   setSignature: (signature: string) => void
   setUnsignedPsbt: (psbt: string) => void
   setSignedPsbt: (
@@ -53,6 +53,7 @@ const WalletCard = ({
     balance,
     hasUnisat,
     hasXverse,
+    hasOyl,
     sendBTC,
     signMessage,
     signPsbt,
@@ -72,9 +73,12 @@ const WalletCard = ({
   const hasWallet = {
     unisat: hasUnisat,
     xverse: hasXverse,
+    oyl: hasOyl,
   }
 
-  const connectWallet = async (walletName: typeof UNISAT | typeof XVERSE) => {
+  const connectWallet = async (
+    walletName: typeof UNISAT | typeof XVERSE | typeof OYL
+  ) => {
     try {
       // @ts-ignore
       await connect(walletName)
@@ -267,7 +271,7 @@ const WalletCard = ({
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
-            {provider !== XVERSE && (
+            {provider !== XVERSE && provider !== OYL && (
               <Button
                 className={'w-full bg-[#232225]'}
                 disabled={!hasWallet[walletName] || provider !== walletName}
@@ -289,18 +293,20 @@ const WalletCard = ({
             >
               Send BTC
             </Button>
-            <Button
-              className={'w-full bg-[#232225]'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName
-                  ? null
-                  : sign('Laser Eyes - Test Message').then(console.log)
-              }
-            >
-              Sign Message
-            </Button>
+            {provider !== OYL && (
+              <Button
+                className={'w-full bg-[#232225]'}
+                disabled={!hasWallet[walletName] || provider !== walletName}
+                variant={provider !== walletName ? 'secondary' : 'default'}
+                onClick={() =>
+                  provider !== walletName
+                    ? null
+                    : sign('Laser Eyes - Test Message').then(console.log)
+                }
+              >
+                Sign Message
+              </Button>
+            )}
             <span
               className={
                 'w-full flex flex-row items-center justify-center gap-4'
