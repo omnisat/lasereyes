@@ -318,6 +318,7 @@ const App = () => {
             key={walletName}
             walletName={walletName as typeof UNISAT | typeof XVERSE}
             setSignature={setSignature}
+            unsignedPsbt={unsignedPsbt}
             setUnsignedPsbt={setUnsignedPsbt}
             setSignedPsbt={setSignedPsbt}
           />

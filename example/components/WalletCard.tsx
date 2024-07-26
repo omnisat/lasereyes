@@ -26,11 +26,13 @@ import { clsx } from 'clsx'
 const WalletCard = ({
   walletName,
   setSignature,
+  unsignedPsbt,
   setUnsignedPsbt,
   setSignedPsbt,
 }: {
   walletName: typeof UNISAT | typeof XVERSE | typeof OYL
   setSignature: (signature: string) => void
+  unsignedPsbt: string | undefined
   setUnsignedPsbt: (psbt: string) => void
   setSignedPsbt: (
     psbt:
@@ -156,7 +158,11 @@ const WalletCard = ({
         throw new Error('Insufficient funds')
       }
 
-      const signPsbtResponse = await signPsbt(unsigned, finalize, broadcast)
+      const signPsbtResponse = await signPsbt(
+        unsignedPsbt!,
+        finalize,
+        broadcast
+      )
 
       // @ts-ignore
       setSignedPsbt(signPsbtResponse)
