@@ -9,6 +9,7 @@ import {
   useLaserEyes,
   WIZZ,
   XVERSE,
+  LEATHER,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -26,7 +27,6 @@ import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
 import { getMempoolSpaceUrl } from '@/lib/urls'
 import { clsx } from 'clsx'
-import { LEATHER } from '../../src'
 
 const WalletCard = ({
   walletName,
