@@ -6,9 +6,16 @@ export const UNISAT_TESTNET = "testnet";
 export const XVERSE_MAINNET = "Mainnet";
 export const XVERSE_TESTNET = "Testnet";
 
+export const OKX_MAINNET = "livenet";
+export const OKX_TESTNET = "testnet";
+
+export const WIZZ_MAINNET = "livenet";
+export const WIZZ_TESTNET = "testnet";
+
 export const LEATHER_MAINNET = "mainnet";
 export const LEATHER_TESTNET = "testnet";
 export const MAINNET = "mainnet";
+export const SIGNET = "signet";
 export const TESTNET = "testnet";
 export const REGTEST = "regtest";
 
@@ -30,6 +37,12 @@ export const getUnisatNetwork = (network: string) => {
   return UNISAT_MAINNET;
 };
 
+export const getWizzNetwork = (network: string) => {
+  if (network === MAINNET) return WIZZ_MAINNET;
+  if (network === TESTNET) return WIZZ_TESTNET;
+  return WIZZ_MAINNET;
+};
+
 export const getNetworkForUnisat = (network: string) => {
   if (network === UNISAT_MAINNET) return MAINNET;
   if (network === UNISAT_TESTNET) return TESTNET;
@@ -45,6 +58,18 @@ export const getNetworkForXverse = (network: string) => {
 export const getNetworkForLeather = (network: string) => {
   if (network === LEATHER_MAINNET) return MAINNET;
   if (network === LEATHER_TESTNET) return TESTNET;
+  return MAINNET;
+};
+
+export const getNetworkForOkx = (network: string) => {
+  if (network === OKX_MAINNET) return MAINNET;
+  if (network === OKX_TESTNET) return TESTNET;
+  return MAINNET;
+};
+
+export const getNetworkForWizz = (network: string) => {
+  if (network === WIZZ_MAINNET) return MAINNET;
+  if (network === WIZZ_TESTNET) return TESTNET;
   return MAINNET;
 };
 

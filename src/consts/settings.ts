@@ -1,4 +1,4 @@
-import { LEATHER, OYL, UNISAT, XVERSE } from "./wallets";
+import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "./wallets";
 import { MAINNET, REGTEST, TESTNET } from "./networks";
 
 export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
@@ -7,6 +7,11 @@ export const initialWalletContext = {
   hasUnisat: false,
   hasXverse: false,
   hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
   connected: false,
   isConnecting: false,
   publicKey: "",
@@ -19,7 +24,12 @@ export const initialWalletContext = {
   provider: null,
   accounts: [],
   connect: async (
-    walletName: typeof OYL | typeof UNISAT | typeof XVERSE | typeof LEATHER
+    walletName:
+      | typeof OYL
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof LEATHER
+      | typeof MAGIC_EDEN
   ) => {},
   disconnect: () => {},
   requestAccounts: async () => [],

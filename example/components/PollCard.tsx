@@ -11,14 +11,7 @@ const PollCard = () => {
   const [error, setError] = useState<string | null>(null)
   const [pollResults, setPollResults] = useState<any[]>([])
 
-  const wallets = [
-    'OYL',
-    'LEATHER',
-    'WIZ',
-    'MAGIC EDEN',
-    'PHANTOM',
-    'ORANGE WALLET',
-  ]
+  const wallets = ['WIZ', 'ORANGE WALLET']
 
   useEffect(() => {
     setSelectedWallet(null)
@@ -54,7 +47,7 @@ const PollCard = () => {
   }
 
   return (
-    <Card className="flex flex-col shrink shadow-xl items-center p-6 space-y-4 bg-[#323035] text-[#fff] border-[#3c393f]">
+    <Card className="flex flex-col shrink shadow-xl w-full max-w-[346px] items-center p-6 space-y-4 bg-[#323035] text-[#fff] border-[#3c393f]">
       <CardHeader>
         <CardTitle
           className={'break-words max-w-[200px] text-center text-white'}
