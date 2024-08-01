@@ -1295,7 +1295,8 @@ var LaserEyesProvider = ({
           }
         }
       } else if (provider === MAGIC_EDEN) {
-        return yield (0, import_sats_connect.signMessage)({
+        let signedMessage;
+        yield (0, import_sats_connect.signMessage)({
           getProvider: () => __async(void 0, null, function* () {
             return window.magicEden.bitcoin;
           }),
@@ -1304,15 +1305,16 @@ var LaserEyesProvider = ({
               type: import_sats_connect.BitcoinNetworkType.Mainnet
             },
             address: address2,
-            message: "Hello World. Welcome to Laser Eyes Wallet Connect Lib!"
+            message
           },
           onFinish: (response) => {
-            alert(`Successfully signed message: ${response}`);
+            signedMessage = response;
           },
           onCancel: () => {
             alert("Request canceled");
           }
         });
+        return signedMessage;
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === LEATHER) {
