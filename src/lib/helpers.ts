@@ -168,7 +168,7 @@ export async function createSendBtcPsbt(
       },
     });
 
-    if (isTaprootOnly) {
+    if (!isTaprootOnly) {
       const redeemScript = getRedeemScript(paymentPublicKey, network);
       psbt.updateInput(counter, { redeemScript });
     }

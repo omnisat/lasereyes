@@ -1,10 +1,15 @@
 import {
+  MAGIC_EDEN,
   MAINNET,
+  OKX,
   OYL,
+  PHANTOM,
   TESTNET,
   UNISAT,
   useLaserEyes,
+  WIZZ,
   XVERSE,
+  LEATHER,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -30,7 +35,15 @@ const WalletCard = ({
   setUnsignedPsbt,
   setSignedPsbt,
 }: {
-  walletName: typeof UNISAT | typeof XVERSE | typeof OYL
+  walletName:
+    | typeof UNISAT
+    | typeof XVERSE
+    | typeof OYL
+    | typeof MAGIC_EDEN
+    | typeof OKX
+    | typeof LEATHER
+    | typeof PHANTOM
+    | typeof WIZZ
   setSignature: (signature: string) => void
   unsignedPsbt: string | undefined
   setUnsignedPsbt: (psbt: string) => void
@@ -56,6 +69,11 @@ const WalletCard = ({
     hasUnisat,
     hasXverse,
     hasOyl,
+    hasMagicEden,
+    hasOkx,
+    hasLeather,
+    hasPhantom,
+    hasWizz,
     sendBTC,
     signMessage,
     signPsbt,
@@ -76,10 +94,23 @@ const WalletCard = ({
     unisat: hasUnisat,
     xverse: hasXverse,
     oyl: hasOyl,
+    [MAGIC_EDEN]: hasMagicEden,
+    okx: hasOkx,
+    leather: hasLeather,
+    phantom: hasPhantom,
+    wizz: hasWizz,
   }
 
   const connectWallet = async (
-    walletName: typeof UNISAT | typeof XVERSE | typeof OYL
+    walletName:
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof OYL
+      | typeof MAGIC_EDEN
+      | typeof OKX
+      | typeof LEATHER
+      | typeof PHANTOM
+      | typeof WIZZ
   ) => {
     try {
       // @ts-ignore
@@ -165,12 +196,13 @@ const WalletCard = ({
       )
 
       // @ts-ignore
-      setSignedPsbt(signPsbtResponse)
-      // @ts-ignore
       setSigned(signPsbtResponse?.signedPsbtHex)
       if (!signPsbtResponse) {
         throw new Error('Failed to sign PSBT')
       }
+
+      //@ts-ignore
+      setSignedPsbt(signPsbtResponse)
 
       if (typeof signPsbtResponse === 'string') {
         toast.success('Signed PSBT')
@@ -179,6 +211,7 @@ const WalletCard = ({
 
       // @ts-ignore
       if (signPsbtResponse?.txId) {
+        setSignedPsbt(undefined)
         toast.success(
           <span className={'flex flex-col gap-1 items-center justify-center'}>
             <span className={'font-black'}>View on mempool.space</span>
@@ -244,11 +277,13 @@ const WalletCard = ({
 
   return (
     <Card
-      className={'grow shadow-xl bg-[#323035] text-[#a7a7a8] border-[#3c393f]'}
+      className={
+        'grow max-w-[346px] w-[346px] shadow-xl bg-[#323035] text-[#a7a7a8] border-[#3c393f]'
+      }
     >
       <CardHeader>
         <CardTitle className={'uppercase text-white text-center'}>
-          {walletName}
+          {walletName.replace('-', ' ')}
         </CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>

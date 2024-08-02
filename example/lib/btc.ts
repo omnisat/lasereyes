@@ -56,6 +56,7 @@ export function createPsbt(
       value: utxoWithMostValue.value,
     },
   })
+
   if (getAddressType(outputAddress) === P2PKH) {
     let redeemScript = getRedeemScript(paymentPublicKey, network)
     psbt.updateInput(0, { redeemScript })

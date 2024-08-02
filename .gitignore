@@ -4,3 +4,5 @@ yarn.lock
 .DS_Store
 src/.DS_Store
 example/.env
+example/package-lock.json
+package-lock.json

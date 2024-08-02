@@ -2,7 +2,17 @@
 import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
-import { useLaserEyes, UNISAT, XVERSE, OYL } from '@omnisat/lasereyes'
+import {
+  useLaserEyes,
+  UNISAT,
+  XVERSE,
+  OYL,
+  MAGIC_EDEN,
+  OKX,
+  LEATHER,
+  PHANTOM,
+  WIZZ,
+} from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
@@ -12,7 +22,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 
 const App = () => {
-  const wallets = [UNISAT, XVERSE]
+  const wallets = [UNISAT, XVERSE, MAGIC_EDEN]
   const {
     address,
     paymentAddress,
@@ -45,7 +55,9 @@ const App = () => {
 
   return (
     <div
-      className={'flex flex-col gap-4 w-full max-w-[1200px] px-12 font-windows'}
+      className={
+        'flex flex-col gap-4 w-full mt-12 mb-24 max-w-[1200px] px-12 font-windows'
+      }
     >
       <div className={'w-full flex gap-4 flex-row justify-center items-center'}>
         <Image
@@ -312,18 +324,30 @@ const App = () => {
           </div>
         </div>
       </div>
-      <div className={'flex flex-wrap gap-8'}>
+      <div className={'flex flex-wrap justify-center gap-8'}>
         {wallets.map((walletName) => (
           <WalletCard
             key={walletName}
-            walletName={walletName as typeof UNISAT | typeof XVERSE}
+            walletName={
+              walletName as
+                | typeof UNISAT
+                | typeof XVERSE
+                | typeof OYL
+                | typeof MAGIC_EDEN
+                | typeof OKX
+                | typeof LEATHER
+                | typeof PHANTOM
+                | typeof WIZZ
+            }
             setSignature={setSignature}
             unsignedPsbt={unsignedPsbt}
             setUnsignedPsbt={setUnsignedPsbt}
             setSignedPsbt={setSignedPsbt}
           />
         ))}
-        <PollCard />
+
+        {/*<PollCard />*/}
+        {/*<div className={'grow'} />*/}
       </div>
     </div>
   )

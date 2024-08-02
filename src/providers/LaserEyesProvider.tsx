@@ -12,11 +12,35 @@ import {
   LOCAL_STORAGE_DEFAULT_WALLET,
 } from "../consts/settings";
 import { useLocalStorage } from "usehooks-ts";
-import { Config, LaserEyesContextType, OYLBalanceResponse } from "../types";
-import { OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
+  Config,
+  LaserEyesContextType,
+  LeatherAddress,
+  LeatherRequestAddressResponse,
+  LeatherRequestSignResponse,
+  LeatherRPCResponse,
+  OYLBalanceResponse,
+  PhantomBtcAccount,
+  WizzBalanceResponse,
+} from "../types";
+import {
+  LEATHER,
+  MAGIC_EDEN,
+  OKX,
+  OYL,
+  P2TR,
+  P2WPKH,
+  PHANTOM,
+  UNISAT,
+  WIZZ,
+  XVERSE,
+} from "../consts/wallets";
+import {
+  getNetworkForOkx,
   getNetworkForUnisat,
+  getNetworkForWizz,
   getUnisatNetwork,
+  getWizzNetwork,
   getXverseNetwork,
   MAINNET,
   REGTEST,
@@ -33,13 +57,16 @@ import {
   isHex,
 } from "../lib/helpers";
 import {
+  BitcoinNetworkType,
   getAddress,
   GetAddressOptions,
   request,
   RpcErrorCode,
   signTransaction,
+  signMessage as signMessageSatsConnect,
 } from "sats-connect";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
+import axios from "axios";
 
 const LaserEyesContext =
   createContext<LaserEyesContextType>(initialWalletContext);
@@ -62,7 +89,15 @@ const LaserEyesProvider = ({
 
   const [library, setLibrary] = useState<any>(null);
   const [provider, setProvider] = useState<
-    typeof UNISAT | typeof XVERSE | typeof OYL | undefined
+    | typeof UNISAT
+    | typeof XVERSE
+    | typeof OYL
+    | typeof MAGIC_EDEN
+    | typeof OKX
+    | typeof LEATHER
+    | typeof PHANTOM
+    | typeof WIZZ
+    | undefined
   >();
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -76,6 +111,11 @@ const LaserEyesProvider = ({
   const [hasUnisat, setHasUnisat] = useState<boolean>(false);
   const [hasXverse, setHasXverse] = useState<boolean>(false);
   const [hasOyl, setHasOyl] = useState<boolean>(false);
+  const [hasMagicEden, setHasMagicEden] = useState<boolean>(false);
+  const [hasOkx, setHasOkx] = useState<boolean>(false);
+  const [hasLeather, setHasLeather] = useState<boolean>(false);
+  const [hasPhantom, setHasPhantom] = useState<boolean>(false);
+  const [hasWizz, setHasWizz] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
     typeof MAINNET | typeof TESTNET | typeof REGTEST
@@ -112,11 +152,47 @@ const LaserEyesProvider = ({
   }, []);
 
   useEffect(() => {
+    const magicEdenLib = (window as any)?.magicEden;
+    setHasMagicEden(!!magicEdenLib);
+  }, []);
+
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    let foundOkx;
+    if (network === TESTNET) {
+      foundOkx = (window as any).okxwallet?.bitcoinTestnet;
+    } else if (network === MAINNET) {
+      foundOkx = (window as any).okxwallet?.bitcoin;
+    }
+    setHasOkx(!!foundOkx);
+  }, []);
+
+  useEffect(() => {
+    const leatherLib = (window as any)?.LeatherProvider;
+    setHasLeather(!!leatherLib);
+  }, []);
+
+  useEffect(() => {
+    const phantomLib = (window as any)?.phantom?.bitcoin;
+    if (phantomLib && phantomLib.isPhantom) {
+      setHasPhantom(!!phantomLib);
+    } else {
+      setHasPhantom(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const wissLib = (window as any)?.wizz;
+    setHasWizz(!!wissLib);
+  }, []);
+
+  useEffect(() => {
     setBalance(undefined);
   }, [network]);
 
   useEffect(() => {
-    if (provider !== UNISAT) {
+    if (provider !== UNISAT && provider !== WIZZ) {
       return;
     }
 
@@ -134,7 +210,16 @@ const LaserEyesProvider = ({
   useEffect(() => {
     const defaultWallet = localStorage?.getItem(
       LOCAL_STORAGE_DEFAULT_WALLET
-    ) as typeof UNISAT | typeof XVERSE | typeof OYL | undefined;
+    ) as
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof OYL
+      | typeof MAGIC_EDEN
+      | typeof OKX
+      | typeof LEATHER
+      | typeof PHANTOM
+      | typeof WIZZ
+      | undefined;
     if (defaultWallet) {
       setProvider(defaultWallet);
       connect(defaultWallet);
@@ -222,25 +307,223 @@ const LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
+      getBTCBalance(result[1]).then((totalBalance) => {
+        setBalance(totalBalance);
+      });
     } catch (error) {
       throw new Error(`Can't lasereyes to ${OYL} wallet`);
     }
   };
 
+  const connectMagicEden = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, MAGIC_EDEN);
+      let xverseNetwork = getXverseNetwork(config?.network || MAINNET);
+
+      const getAddressOptions = {
+        getProvider: async () => (window as any).magicEden.bitcoin,
+        payload: {
+          purposes: ["ordinals", "payment"],
+          message: "Address for receiving Ordinals and payments",
+          network: {
+            type: xverseNetwork,
+          },
+        },
+        onFinish: (response: any) => {
+          setPublicKey(String(response.addresses[0].publicKey));
+          setPaymentPublicKey(String(response.addresses[1].publicKey));
+          const foundAddress = findOrdinalsAddress(response.addresses);
+          const foundPaymentAddress = findPaymentAddress(response.addresses);
+          if (foundAddress && foundPaymentAddress) {
+            setAddress(foundAddress.address);
+            setPaymentAddress(foundPaymentAddress.address);
+            setProvider(MAGIC_EDEN);
+            setLibrary((window as any).magicEden.bitcoin);
+          }
+
+          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+            setBalance(totalBalance);
+          });
+        },
+        onCancel: () => {
+          throw new Error(`User canceled lasereyes to ${MAGIC_EDEN} wallet`);
+        },
+        onError: (error: any) => {
+          throw new Error(`Can't lasereyes to ${MAGIC_EDEN} wallet`);
+        },
+      };
+      console.log(JSON.stringify(getAddressOptions));
+      await getAddress(getAddressOptions as GetAddressOptions);
+      setConnected(true);
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  };
+
+  const connectOkx = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
+      const lib =
+        network === TESTNET
+          ? (window as any).okxwallet.bitcoinTestnet
+          : (window as any).okxwallet.bitcoin;
+      const okxAccounts = await lib.requestAccounts();
+      if (!okxAccounts) throw new Error("No accounts found");
+      const okxPubKey = await lib.getPublicKey();
+      if (!okxPubKey) throw new Error("No public key found");
+      setAccounts(okxAccounts);
+      setAddress(okxAccounts[0]);
+      setPaymentAddress(okxAccounts[0]);
+      setPublicKey(okxPubKey);
+      setPaymentPublicKey(okxPubKey);
+      setLibrary(lib);
+      setProvider(OKX);
+      setConnected(true);
+      const balance = await lib?.getBalance();
+      setBalance(balance?.total);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const connectLeather = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
+
+      const lib = (window as any).LeatherProvider;
+      // @ts-ignore
+      const getAddressesResponse: LeatherRPCResponse = await lib.request(
+        "getAddresses"
+      );
+
+      const addressesResponse =
+        getAddressesResponse.result as LeatherRequestAddressResponse;
+
+      const addresses: LeatherAddress[] = addressesResponse.addresses;
+
+      const leatherAccountsParsed = addresses.map(
+        (address: LeatherAddress) => address.address
+      );
+
+      const taprootAddress = addresses.find(
+        (address: LeatherAddress) => address.type === P2TR
+      );
+
+      const segwitAddress = addresses.find(
+        (address: LeatherAddress) => address.type === P2WPKH
+      );
+
+      setAccounts(leatherAccountsParsed);
+      setAddress(String(taprootAddress?.address));
+      setPublicKey(String(taprootAddress?.publicKey));
+      setPaymentAddress(String(segwitAddress?.address));
+      setPaymentPublicKey(String(segwitAddress?.publicKey));
+      setLibrary(lib);
+      setProvider(LEATHER);
+      const balance = await getBTCBalance(String(segwitAddress?.address));
+      setBalance(balance);
+      handleAccountsChanged(leatherAccountsParsed);
+      setConnected(true);
+      await getNetwork().then((network) => {
+        if (!network) {
+          setNetwork(MAINNET);
+        } else {
+          setNetwork(network);
+        }
+      });
+      setConnected(true);
+    } catch (error) {
+      new Error(`Can't lasereyes to ${LEATHER} wallet`);
+    }
+  };
+
+  const connectPhantom = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, PHANTOM);
+      const lib = (window as any).phantom.bitcoin;
+      const phantomAccounts =
+        (await lib.requestAccounts()) as PhantomBtcAccount[];
+      const phantomAccountsParsed = phantomAccounts.map(
+        (account: PhantomBtcAccount) => account.address
+      );
+      setAccounts(phantomAccountsParsed);
+
+      const ordinalsAccount = phantomAccounts.find(
+        (account: PhantomBtcAccount) => account.purpose === "ordinals"
+      );
+
+      const paymentAccount = phantomAccounts.find(
+        (account: PhantomBtcAccount) => account.purpose === "payment"
+      );
+
+      setAddress(ordinalsAccount?.address!);
+      setPublicKey(ordinalsAccount?.publicKey!);
+      setPaymentAddress(paymentAccount?.address!);
+      setPaymentPublicKey(paymentAccount?.publicKey!);
+      setLibrary(lib);
+      setProvider(PHANTOM);
+      const balance = await getBTCBalance(String(paymentAccount?.address!));
+      setBalance(balance);
+      setConnected(true);
+    } catch (error) {
+      throw new Error(`Can't lasereyes to ${PHANTOM} wallet`);
+    }
+  };
+
+  const connectWizz = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, WIZZ);
+      const lib = (window as any).wizz;
+      const wizzAccounts = await lib.requestAccounts();
+      if (!wizzAccounts) throw new Error("No accounts found");
+      const wizzPubKey = await lib.getPublicKey();
+      if (!wizzPubKey) throw new Error("No public key found");
+      setAccounts(wizzAccounts);
+      setAddress(wizzAccounts[0]);
+      setPaymentAddress(wizzAccounts[0]);
+      setPublicKey(wizzPubKey);
+      setPaymentPublicKey(wizzPubKey);
+      setLibrary(lib);
+      setProvider(WIZZ);
+      setConnected(true);
+      const balance = await lib?.getBalance();
+      setBalance(balance?.total);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const connect = async (
-    walletName: typeof UNISAT | typeof XVERSE | typeof OYL
+    walletName:
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof OYL
+      | typeof MAGIC_EDEN
+      | typeof OKX
+      | typeof LEATHER
+      | typeof PHANTOM
+      | typeof WIZZ
   ) => {
     setIsConnecting(true);
     try {
       if (!walletName) throw new Error("No wallet provided");
       if (walletName === UNISAT) {
-        console.log("connectin unisat");
         await connectUnisat();
       } else if (walletName === XVERSE) {
         await connectXverse();
       } else if (walletName === OYL) {
-        console.log("connectin oyl");
         await connectOyl();
+      } else if (walletName === MAGIC_EDEN) {
+        await connectMagicEden();
+      } else if (walletName === OKX) {
+        await connectOkx();
+      } else if (walletName === LEATHER) {
+        await connectLeather();
+      } else if (walletName === PHANTOM) {
+        await connectPhantom();
+      } else if (walletName === WIZZ) {
+        await connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -278,8 +561,6 @@ const LaserEyesProvider = ({
       return;
     }
 
-    console.log("acct changed", _accounts[0]);
-
     self.accounts = _accounts;
     if (_accounts.length > 0) {
       connect(UNISAT);
@@ -300,6 +581,10 @@ const LaserEyesProvider = ({
         connect(provider);
       } else if (provider === XVERSE) {
         throw new Error("Not implemented");
+      } else if (provider === WIZZ) {
+        foundNetwork = getNetworkForWizz(network);
+        setNetwork(foundNetwork);
+        connect(provider);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -338,6 +623,54 @@ const LaserEyesProvider = ({
         return [address];
       } else if (provider === OYL) {
         return await library.requestAccounts();
+      } else if (provider === OKX) {
+        return await library.requestAccounts();
+      } else if (provider === LEATHER) {
+        localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
+        const lib = (window as any).LeatherProvider;
+        // @ts-ignore
+        const getAddressesResponse: LeatherRPCResponse = await lib.request(
+          "getAddresses"
+        );
+
+        const addressesResponse =
+          getAddressesResponse.result as LeatherRequestAddressResponse;
+
+        const addresses: LeatherAddress[] = addressesResponse.addresses;
+        const leatherAccountsParsed = addresses.map(
+          (address: LeatherAddress) => address.address
+        );
+        const taprootAddress = addresses.find(
+          (address: LeatherAddress) => address.type === P2TR
+        );
+        const segwitAddress = addresses.find(
+          (address: LeatherAddress) => address.type === P2WPKH
+        );
+        setAccounts(leatherAccountsParsed);
+        setAddress(String(taprootAddress?.address));
+        setPaymentAddress(String(segwitAddress?.address));
+        setLibrary(lib);
+        setProvider(LEATHER);
+        handleAccountsChanged(leatherAccountsParsed);
+        setConnected(true);
+        await getNetwork().then((network) => {
+          // const foundNetwork = getNe(String(network))
+          if (!network) {
+            setNetwork(MAINNET);
+          } else {
+            setNetwork(network);
+          }
+        });
+        setConnected(true);
+      } else if (provider === PHANTOM) {
+        const phantomAccounts =
+          (await library.requestAccounts()) as PhantomBtcAccount[];
+        const phantomAccountsParsed = phantomAccounts.map(
+          (account: PhantomBtcAccount) => account.address
+        );
+        return phantomAccountsParsed;
+      } else if (provider === WIZZ) {
+        return await library.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -366,6 +699,33 @@ const LaserEyesProvider = ({
           return TESTNET;
         }
         return MAINNET;
+      } else if (provider === MAGIC_EDEN) {
+        if (address.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
+      } else if (provider === OKX) {
+        const okxNetwork = await library?.getNetwork();
+        const foundNetwork = getNetworkForOkx(okxNetwork) as
+          | typeof MAINNET
+          | typeof TESTNET;
+        setNetwork(foundNetwork);
+      } else if (provider === LEATHER) {
+        if (address.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
+      } else if (provider === PHANTOM) {
+        if (address.slice(0, 1) === "t") {
+          return TESTNET;
+        }
+        return MAINNET;
+      } else if (provider === WIZZ) {
+        const wizzNetwork = await library?.getNetwork();
+        const foundNetwork = getNetworkForWizz(wizzNetwork) as
+          | typeof MAINNET
+          | typeof TESTNET;
+        setNetwork(foundNetwork);
       }
       return config?.network ?? MAINNET;
     } catch (error) {
@@ -379,7 +739,11 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        const wantedNetwork = getUnisatNetwork(network);
+        const wantedNetwork = getWizzNetwork(network);
+        await library?.switchNetwork(wantedNetwork);
+        setNetwork(network);
+      } else if (provider === WIZZ) {
+        const wantedNetwork = getNetworkForWizz(network);
         await library?.switchNetwork(wantedNetwork);
         setNetwork(network);
       } else {
@@ -396,6 +760,10 @@ const LaserEyesProvider = ({
       if (provider === UNISAT) {
         return await library?.getPublicKey();
       } else if (provider === OYL) {
+        return await library?.getPublicKey();
+      } else if (provider === OKX) {
+        return await library?.getPublicKey();
+      } else if (provider === WIZZ) {
         return await library?.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
@@ -415,6 +783,17 @@ const LaserEyesProvider = ({
       } else if (provider === OYL) {
         const balanceResponse: OYLBalanceResponse = await library.getBalance();
         return balanceResponse.btc.total * 100000000;
+      } else if (provider === MAGIC_EDEN) {
+        return await getBTCBalance(paymentAddress);
+      } else if (provider === OKX) {
+        return await getBTCBalance(paymentAddress);
+      } else if (provider === LEATHER) {
+        return await getBTCBalance(paymentAddress);
+      } else if (provider === PHANTOM) {
+        return await getBTCBalance(paymentAddress);
+      } else if (provider === WIZZ) {
+        const balanceResponse: WizzBalanceResponse = await library.getBalance();
+        return balanceResponse.total * 100000000;
       }
     } catch (error) {
       throw error;
@@ -427,6 +806,10 @@ const LaserEyesProvider = ({
       if (provider === UNISAT) {
         return await library.getInscriptions(0, 10);
       } else if (provider === OYL) {
+        return await library.getInscriptions(0, 10);
+      } else if (provider === OKX) {
+        return await library.getInscriptions(0, 10);
+      } else if (provider === WIZZ) {
         return await library.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
@@ -475,10 +858,54 @@ const LaserEyesProvider = ({
           network,
           7
         );
+        const psbt = await signPsbt(psbtHex, true, true);
+        if (!psbt) throw new Error("Error sending BTC");
+        // @ts-ignore
+        return psbt.txId;
+      } else if (provider === MAGIC_EDEN) {
+        const { psbtHex, psbtBase64 } = await createSendBtcPsbt(
+          address,
+          paymentAddress,
+          to,
+          amount,
+          paymentPublicKey,
+          //@ts-ignore
+          network,
+          7
+        );
         const psbt = await signPsbt(psbtBase64, true, true);
         if (!psbt) throw new Error("Error sending BTC");
         // @ts-ignore
         return psbt.txId;
+      } else if (provider === OKX) {
+        const txId = await library?.sendBitcoin(to, amount);
+        if (!txId) throw new Error("Transaction failed");
+        return txId;
+      } else if (provider === LEATHER) {
+        const response = await library?.request("sendTransfer", {
+          recipients: [
+            {
+              address: to,
+              amount: amount,
+            },
+          ],
+        });
+        if (response?.result?.txid) {
+          return response.result.txid;
+        } else {
+          if (response.error.code === RpcErrorCode.USER_REJECTION) {
+            throw new Error("User rejected the request");
+          } else {
+            throw new Error("Error sending BTC: " + response.error.message);
+          }
+        }
+      } else if (provider === WIZZ) {
+        const txId = await library?.sendBitcoin(to, amount);
+        if (txId) {
+          return txId;
+        } else {
+          throw new Error("Error sending BTC");
+        }
       }
     } catch (error) {
       throw error;
@@ -505,6 +932,45 @@ const LaserEyesProvider = ({
             throw new Error("Error signing message: " + response.error.message);
           }
         }
+      } else if (provider === MAGIC_EDEN) {
+        let signedMessage;
+        await signMessageSatsConnect({
+          getProvider: async () => (window as any).magicEden.bitcoin,
+          payload: {
+            network: {
+              type: BitcoinNetworkType.Mainnet,
+            },
+            address: address,
+            message: message,
+          },
+          onFinish: (response) => {
+            signedMessage = response;
+          },
+          onCancel: () => {
+            alert("Request canceled");
+          },
+        });
+        return signedMessage;
+      } else if (provider === OKX) {
+        return await library?.signMessage(message);
+      } else if (provider === LEATHER) {
+        const signed = await library?.request("signMessage", {
+          message: message,
+          paymentType: P2TR,
+        });
+        console.log(signed);
+        return signed?.result?.signature;
+      } else if (provider === PHANTOM) {
+        const utf8Bytes = new TextEncoder().encode(message);
+        const uintArray = new Uint8Array(utf8Bytes);
+        const response = await library?.signMessage(address, uintArray);
+        console.log(response);
+        const binaryString = String.fromCharCode(...response.signature);
+        return btoa(binaryString);
+      } else if (provider === WIZZ) {
+        return await library?.signMessage(message);
+      } else {
+        throw new Error("The connected wallet doesn't support this method..");
       }
     } catch (error) {
       throw error;
@@ -651,6 +1117,190 @@ const LaserEyesProvider = ({
             txId: undefined,
           };
         }
+      } else if (provider === MAGIC_EDEN) {
+        const toSignPsbt = bitcoin.Psbt.fromBase64(String(psbtBase64), {
+          network: getBitcoinNetwork(network),
+        });
+
+        const inputs = toSignPsbt.data.inputs;
+        const inputsToSign = [];
+        const ordinalAddressData = {
+          address: address,
+          signingIndexes: [] as number[],
+        };
+        const paymentsAddressData = {
+          address: paymentAddress,
+          signingIndexes: [] as number[],
+        };
+
+        let counter = 0;
+        for await (let input of inputs) {
+          const { script } = input.witnessUtxo!;
+          const addressFromScript = fromOutputScript(
+            script,
+            getBitcoinNetwork(network)
+          );
+
+          if (addressFromScript === paymentAddress) {
+            paymentsAddressData.signingIndexes.push(Number(counter));
+          } else if (addressFromScript === address) {
+            ordinalAddressData.signingIndexes.push(Number(counter));
+          }
+          counter++;
+        }
+
+        if (ordinalAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(ordinalAddressData);
+        }
+
+        if (paymentsAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(paymentsAddressData);
+        }
+
+        let txId, signedPsbtHex, signedPsbtBase64;
+
+        const xverseNetwork = getXverseNetwork(network);
+
+        const signPsbtOptions = {
+          getProvider: async () => (window as any).magicEden.bitcoin,
+          payload: {
+            network: {
+              type: xverseNetwork,
+            },
+            message: "Sign Transaction",
+            psbtBase64: toSignPsbt.toBase64(),
+            broadcast: broadcast,
+            inputsToSign: inputsToSign,
+          },
+          onFinish: (response: { psbtBase64: string; txId: string }) => {
+            if (response.psbtBase64) {
+              const signedPsbt = bitcoin.Psbt.fromBase64(
+                String(response.psbtBase64),
+                {
+                  network: getBitcoinNetwork(network),
+                }
+              );
+
+              signedPsbtHex = signedPsbt.toHex();
+              signedPsbtBase64 = signedPsbt.toBase64();
+            }
+          },
+          onCancel: () => {
+            console.log("Canceled");
+            throw new Error("User canceled the request");
+          },
+          onError: (error: any) => {
+            console.log("error", error);
+            throw error;
+          },
+        };
+
+        // @ts-ignore
+        await signTransaction(signPsbtOptions);
+        if (broadcast) {
+          const signed = bitcoin.Psbt.fromBase64(String(signedPsbtBase64));
+          const finalized = signed.finalizeAllInputs();
+          const extracted = finalized.extractTransaction();
+          const txId = await pushPsbt(extracted.toHex());
+          return {
+            signedPsbtHex: extracted.toHex(),
+            signedPsbtBase64: "test",
+            txId,
+          };
+        } else {
+          return {
+            signedPsbtHex,
+            signedPsbtBase64,
+            txId,
+          };
+        }
+      } else if (provider === OKX) {
+        const signedPsbt = await library?.signPsbt(psbtHex, {
+          autoFinalized: finalize,
+        });
+
+        const psbtSignedPsbt = bitcoin.Psbt.fromHex(signedPsbt);
+
+        if (finalize && broadcast) {
+          const txId = await pushPsbt(signedPsbt);
+          return {
+            signedPsbtHex: psbtSignedPsbt.toHex(),
+            signedPsbtBase64: psbtSignedPsbt.toBase64(),
+            txId,
+          };
+        }
+
+        return {
+          signedPsbtHex: psbtSignedPsbt.toHex(),
+          signedPsbtBase64: psbtSignedPsbt.toBase64(),
+          txId: undefined,
+        };
+      } else if (provider === LEATHER) {
+        interface SignPsbtRequestParams {
+          hex: string;
+          signAtIndex?: number | number[];
+          broadcast?: boolean;
+        }
+
+        const requestParams: SignPsbtRequestParams = {
+          hex: psbtHex,
+          broadcast,
+        };
+
+        const response: LeatherRPCResponse = await library?.request(
+          "signPsbt",
+          requestParams
+        );
+        const leatherHexResult = response.result as LeatherRequestSignResponse;
+        const signedTx = leatherHexResult.hex;
+
+        const signed = bitcoin.Psbt.fromBase64(String(signedTx));
+
+        if (finalize && broadcast) {
+          const finalized = signed.finalizeAllInputs();
+          const extracted = finalized.extractTransaction();
+          const txId = await pushPsbt(extracted.toHex());
+          return {
+            signedPsbtHex: signed.toHex(),
+            signedPsbtBase64: signed.toBase64(),
+            txId,
+          };
+        } else if (finalize) {
+          const finalized = signed.finalizeAllInputs();
+          return {
+            signedPsbtHex: finalized.toHex(),
+            signedPsbtBase64: finalized.toBase64(),
+            txId: undefined,
+          };
+        } else {
+          return {
+            signedPsbtHex: signed.toHex(),
+            signedPsbtBase64: signed.toBase64(),
+            txId: undefined,
+          };
+        }
+      } else if (provider === WIZZ) {
+        const signedPsbt = await library?.signPsbt(psbtHex, {
+          autoFinalized: finalize,
+          broadcast: false,
+        });
+
+        const psbtSignedPsbt = bitcoin.Psbt.fromHex(signedPsbt);
+
+        if (finalize && broadcast) {
+          const txId = await pushPsbt(signedPsbt);
+          return {
+            signedPsbtHex: psbtSignedPsbt.toHex(),
+            signedPsbtBase64: psbtSignedPsbt.toBase64(),
+            txId,
+          };
+        }
+
+        return {
+          signedPsbtHex: psbtSignedPsbt.toHex(),
+          signedPsbtBase64: psbtSignedPsbt.toBase64(),
+          txId: undefined,
+        };
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -666,6 +1316,18 @@ const LaserEyesProvider = ({
         return await library?.pushPsbt(psbt);
       } else if (provider === OYL) {
         return (await library?.pushPsbt(psbt)) as string;
+      } else if (provider === OKX) {
+        return await library?.pushPsbt(psbt);
+      } else if (provider === MAGIC_EDEN) {
+        return await axios
+          .post("https://mempool.space/api/tx", psbt)
+          .then((res) => res.data);
+      } else if (provider === LEATHER) {
+        return await axios
+          .post("https://mempool.space/api/tx", psbt)
+          .then((res) => res.data);
+      } else if (provider === WIZZ) {
+        return await library?.pushPsbt(psbt);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -691,6 +1353,11 @@ const LaserEyesProvider = ({
         hasUnisat,
         hasXverse,
         hasOyl,
+        hasMagicEden,
+        hasOkx,
+        hasLeather,
+        hasPhantom,
+        hasWizz,
 
         // functions
         connect,
