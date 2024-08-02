@@ -22,7 +22,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 
 const App = () => {
-  const wallets = [UNISAT, XVERSE, OYL, MAGIC_EDEN, OKX, LEATHER, PHANTOM, WIZZ]
+  const wallets = [UNISAT, XVERSE, MAGIC_EDEN]
   const {
     address,
     paymentAddress,
