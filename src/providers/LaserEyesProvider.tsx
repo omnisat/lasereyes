@@ -57,11 +57,13 @@ import {
   isHex,
 } from "../lib/helpers";
 import {
+  BitcoinNetworkType,
   getAddress,
   GetAddressOptions,
   request,
   RpcErrorCode,
   signTransaction,
+  signMessage as signMessageSatsConnect,
 } from "sats-connect";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import axios from "axios";
@@ -159,9 +161,9 @@ const LaserEyesProvider = ({
   useEffect(() => {
     let foundOkx;
     if (network === TESTNET) {
-      foundOkx = (window as any).okxwallet.bitcoinTestnet;
+      foundOkx = (window as any).okxwallet?.bitcoinTestnet;
     } else if (network === MAINNET) {
-      foundOkx = (window as any).okxwallet.bitcoin;
+      foundOkx = (window as any).okxwallet?.bitcoin;
     }
     setHasOkx(!!foundOkx);
   }, []);
@@ -305,6 +307,9 @@ const LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
+      getBTCBalance(result[1]).then((totalBalance) => {
+        setBalance(totalBalance);
+      });
     } catch (error) {
       throw new Error(`Can't lasereyes to ${OYL} wallet`);
     }
@@ -853,7 +858,7 @@ const LaserEyesProvider = ({
           network,
           7
         );
-        const psbt = await signPsbt(psbtBase64, true, true);
+        const psbt = await signPsbt(psbtHex, true, true);
         if (!psbt) throw new Error("Error sending BTC");
         // @ts-ignore
         return psbt.txId;
@@ -927,6 +932,25 @@ const LaserEyesProvider = ({
             throw new Error("Error signing message: " + response.error.message);
           }
         }
+      } else if (provider === MAGIC_EDEN) {
+        let signedMessage;
+        await signMessageSatsConnect({
+          getProvider: async () => (window as any).magicEden.bitcoin,
+          payload: {
+            network: {
+              type: BitcoinNetworkType.Mainnet,
+            },
+            address: address,
+            message: message,
+          },
+          onFinish: (response) => {
+            signedMessage = response;
+          },
+          onCancel: () => {
+            alert("Request canceled");
+          },
+        });
+        return signedMessage;
       } else if (provider === OKX) {
         return await library?.signMessage(message);
       } else if (provider === LEATHER) {

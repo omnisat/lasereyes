@@ -582,11 +582,12 @@ var LaserEyesProvider = ({
   (0, import_react.useEffect)(() => {
   }, []);
   (0, import_react.useEffect)(() => {
+    var _a, _b;
     let foundOkx;
     if (network === TESTNET) {
-      foundOkx = window.okxwallet.bitcoinTestnet;
+      foundOkx = (_a = window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
     } else if (network === MAINNET) {
-      foundOkx = window.okxwallet.bitcoin;
+      foundOkx = (_b = window.okxwallet) == null ? void 0 : _b.bitcoin;
     }
     setHasOkx(!!foundOkx);
   }, []);
@@ -711,6 +712,9 @@ var LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
+      getBTCBalance(result[1]).then((totalBalance) => {
+        setBalance(totalBalance);
+      });
     } catch (error) {
       throw new Error(`Can't lasereyes to ${OYL} wallet`);
     }
@@ -1215,7 +1219,7 @@ var LaserEyesProvider = ({
           network,
           7
         );
-        const psbt = yield signPsbt(psbtBase64, true, true);
+        const psbt = yield signPsbt(psbtHex, true, true);
         if (!psbt)
           throw new Error("Error sending BTC");
         return psbt.txId;
@@ -1290,6 +1294,27 @@ var LaserEyesProvider = ({
             throw new Error("Error signing message: " + response.error.message);
           }
         }
+      } else if (provider === MAGIC_EDEN) {
+        let signedMessage;
+        yield (0, import_sats_connect.signMessage)({
+          getProvider: () => __async(void 0, null, function* () {
+            return window.magicEden.bitcoin;
+          }),
+          payload: {
+            network: {
+              type: import_sats_connect.BitcoinNetworkType.Mainnet
+            },
+            address: address2,
+            message
+          },
+          onFinish: (response) => {
+            signedMessage = response;
+          },
+          onCancel: () => {
+            alert("Request canceled");
+          }
+        });
+        return signedMessage;
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === LEATHER) {
