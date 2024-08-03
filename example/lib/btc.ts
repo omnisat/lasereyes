@@ -32,6 +32,7 @@ export function createPsbt(
   paymentPublicKey: string,
   network: typeof MAINNET | typeof TESTNET
 ) {
+  if (!outputAddress) return
   const utxoWithMostValue = inputs.reduce((acc, utxo) => {
     if (utxo.value > acc.value) {
       return utxo
@@ -42,17 +43,16 @@ export function createPsbt(
   const psbt = new Psbt({
     network: btcNetwork,
   })
+  const script = bitcoin.address.toOutputScript(outputAddress, btcNetwork)
+  if (!script) {
+    throw new Error('Invalid output address')
+  }
   psbt.addInput({
     hash: utxoWithMostValue.txid,
     index: utxoWithMostValue.vout,
     sequence: 0xffffffff,
     witnessUtxo: {
-      script: Buffer.from(
-        bitcoin.address
-          .toOutputScript(outputAddress, btcNetwork)
-          .toString('hex'),
-        'hex'
-      ),
+      script,
       value: utxoWithMostValue.value,
     },
   })
