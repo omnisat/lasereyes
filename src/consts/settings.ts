@@ -52,4 +52,7 @@ export const initialWalletContext = {
   pushPsbt: async (tx: string) => {
     return "";
   },
+  inscribe: async (content: any) => "",
+  isCreatingCommit: false,
+  isInscribing: false,
 };

@@ -108,6 +108,7 @@ __export(src_exports, {
   XVERSE_TESTNET: () => XVERSE_TESTNET,
   createConfig: () => createConfig,
   createSendBtcPsbt: () => createSendBtcPsbt,
+  delay: () => delay,
   estimateTxSize: () => estimateTxSize,
   findOrdinalsAddress: () => findOrdinalsAddress,
   findPaymentAddress: () => findPaymentAddress,
@@ -129,6 +130,7 @@ __export(src_exports, {
   isBase64: () => isBase64,
   isHex: () => isHex,
   satoshisToBTC: () => satoshisToBTC,
+  useInscriber: () => useInscriber,
   useLaserEyes: () => useLaserEyes
 });
 module.exports = __toCommonJS(src_exports);
@@ -329,7 +331,12 @@ var initialWalletContext = {
   }),
   pushPsbt: (tx) => __async(void 0, null, function* () {
     return "";
-  })
+  }),
+  inscribe: (content) => __async(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
 };
 
 // src/providers/LaserEyesProvider.tsx
@@ -511,6 +518,9 @@ function getRedeemScript(paymentPublicKey, network) {
   });
   return (_a = p2sh == null ? void 0 : p2sh.redeem) == null ? void 0 : _a.output;
 }
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 // src/providers/LaserEyesProvider.tsx
 var import_sats_connect = require("sats-connect");
@@ -521,6 +531,7 @@ var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
 };
+var DeSCRIBE_API_URL = "http://localhost:3000/api";
 var LaserEyesProvider = ({
   children,
   config
@@ -1674,6 +1685,53 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
+  const [isCreatingCommit, setIsCreatingCommit] = (0, import_react.useState)(false);
+  const [isInscribing, setIsInscribing] = (0, import_react.useState)(false);
+  const inscribe = (content) => __async(void 0, null, function* () {
+    var _a;
+    try {
+      console.log("inscribing!");
+      if (!library)
+        throw new Error("Library not found");
+      if (!paymentAddress)
+        throw new Error("Payment address not found");
+      if (!paymentPublicKey)
+        throw new Error("Payment public key not found");
+      setIsCreatingCommit(true);
+      const commitResponse = yield import_axios2.default.post(`${DeSCRIBE_API_URL}/create-inscription`, {
+        content,
+        paymentAddress,
+        paymentPublicKey,
+        feeRate: 10,
+        mimeType: "text/plain;charset=utf-8"
+      }).then((res) => res.data).finally(() => setIsCreatingCommit(false));
+      const signedResponse = yield signPsbt(commitResponse.psbtHex, true, true);
+      if (!signedResponse)
+        throw new Error("Error signing PSBT");
+      if (!signedResponse.txId)
+        throw new Error("Error pushing PSBT");
+      const { txId: commitTxId } = signedResponse;
+      setIsInscribing(true);
+      let txId;
+      try {
+        txId = yield import_axios2.default.post(`${DeSCRIBE_API_URL}/inscribe`, {
+          content,
+          mimeType: "text/plain;charset=utf-8",
+          ordinalAddress: address2,
+          commitTxId
+        }).then((res) => res.data).finally(() => setIsInscribing(false));
+      } catch (e) {
+        throw e;
+      }
+      if (!txId)
+        throw new Error("Error inscribing");
+      return txId;
+    } catch (error) {
+      if (error instanceof import_axios2.AxiosError && ((_a = error == null ? void 0 : error.response) == null ? void 0 : _a.data)) {
+        throw new Error(error.response.data);
+      }
+    }
+  });
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     LaserEyesContext.Provider,
     {
@@ -1709,11 +1767,153 @@ var LaserEyesProvider = ({
         sendBTC,
         signPsbt,
         pushPsbt,
-        signMessage
+        signMessage,
+        inscribe,
+        isCreatingCommit,
+        isInscribing
       },
       children
     }
   );
+};
+
+// src/hooks/useInscriber.ts
+var import_react2 = require("react");
+
+// src/consts/inscribe.ts
+var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
+
+// src/hooks/useInscriber.ts
+var import_axios3 = __toESM(require("axios"));
+var DESCRIBE_API_URL = "http://localhost:3000/api";
+var useInscriber = ({
+  inscribeApiUrl = DESCRIBE_API_URL
+}) => {
+  const { address: address2, paymentAddress, paymentPublicKey, publicKey, signPsbt } = useLaserEyes();
+  const [content, setContent] = (0, import_react2.useState)("");
+  const [mimeType, setMimeType] = (0, import_react2.useState)(MIME_TYPE_TEXT);
+  const [commitPsbtHex, setCommitPsbtHex] = (0, import_react2.useState)("");
+  const [commitPsbtBase64, setCommitPsbtBase64] = (0, import_react2.useState)("");
+  const [commitTxId, setCommitTxId] = (0, import_react2.useState)("");
+  const [feeRate, setFeeRate] = (0, import_react2.useState)(10);
+  const [totalFees, setTotalFees] = (0, import_react2.useState)(0);
+  const [inscriberAddress, setInscriberAddress] = (0, import_react2.useState)("");
+  const [inscriptionTxId, setInscriptionTxId] = (0, import_react2.useState)("");
+  const [previewUrl, setPreviewUrl] = (0, import_react2.useState)("");
+  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = (0, import_react2.useState)(false);
+  const [isInscribing, setIsInscribing] = (0, import_react2.useState)(false);
+  const getCommitPsbt = (0, import_react2.useCallback)(() => __async(void 0, null, function* () {
+    try {
+      if (!content)
+        throw new Error("missing content");
+      if (!paymentAddress)
+        throw new Error("missing paymentAddress");
+      if (!paymentPublicKey)
+        throw new Error("missing paymentPublicKey");
+      if (!feeRate)
+        throw new Error("missing feeRate");
+      if (!mimeType)
+        throw new Error("missing mimeType");
+      setIsFetchingCommitPsbt(true);
+      return yield import_axios3.default.post(`${inscribeApiUrl}/create-inscription`, {
+        content,
+        paymentAddress,
+        paymentPublicKey,
+        feeRate,
+        mimeType
+      }).then((res) => res.data).then((data) => {
+        setCommitPsbtHex(data.psbtHex);
+        setCommitPsbtBase64(data.psbtBase64);
+        setFeeRate(feeRate);
+        setTotalFees(data.totalFees);
+        setInscriberAddress(data.inscriberAddress);
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    } finally {
+      setIsFetchingCommitPsbt(false);
+    }
+  }), [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
+  const handleSignCommit = () => __async(void 0, null, function* () {
+    try {
+      const signedResponse = yield signPsbt(commitPsbtHex, true, true);
+      setCommitTxId(signedResponse == null ? void 0 : signedResponse.txId);
+      return signedResponse == null ? void 0 : signedResponse.txId;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  });
+  const inscribe = (0, import_react2.useCallback)(() => __async(void 0, null, function* () {
+    try {
+      if (!content)
+        throw new Error("missing content");
+      if (!address2)
+        throw new Error("missing address");
+      if (!mimeType)
+        throw new Error("missing mimeType");
+      if (!commitTxId) {
+        yield getCommitPsbt();
+        yield handleSignCommit();
+      }
+      setIsInscribing(true);
+      yield delay(1e4);
+      return yield import_axios3.default.post(`${inscribeApiUrl}/inscribe`, {
+        content,
+        mimeType,
+        ordinalAddress: address2,
+        commitTxId
+      }).then((res) => res.data).then((data) => {
+        setInscriptionTxId(data);
+        return data;
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    } finally {
+      setIsInscribing(false);
+    }
+  }), [address2, commitTxId, content, mimeType]);
+  const reset = () => {
+    setContent("");
+    setMimeType(MIME_TYPE_TEXT);
+    setCommitPsbtHex("");
+    setCommitPsbtBase64("");
+    setCommitTxId("");
+    setFeeRate(10);
+    setTotalFees(0);
+    setInscriberAddress("");
+    setInscriptionTxId("");
+    setPreviewUrl("");
+  };
+  (0, import_react2.useEffect)(() => {
+    if (commitTxId && !inscriptionTxId) {
+      inscribe();
+    }
+  }, [commitTxId, inscribe, inscriptionTxId]);
+  return {
+    content,
+    setContent,
+    setMimeType,
+    previewUrl,
+    setPreviewUrl,
+    getCommitPsbt,
+    isFetchingCommitPsbt,
+    commitPsbtHex,
+    commitPsbtBase64,
+    handleSignCommit,
+    commitTxId,
+    setCommitTxId,
+    feeRate,
+    setFeeRate,
+    totalFees,
+    inscriberAddress,
+    inscribe,
+    isInscribing,
+    inscriptionTxId,
+    reset
+  };
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
@@ -1752,6 +1952,7 @@ var LaserEyesProvider = ({
   XVERSE_TESTNET,
   createConfig,
   createSendBtcPsbt,
+  delay,
   estimateTxSize,
   findOrdinalsAddress,
   findPaymentAddress,
@@ -1773,5 +1974,6 @@ var LaserEyesProvider = ({
   isBase64,
   isHex,
   satoshisToBTC,
+  useInscriber,
   useLaserEyes
 });

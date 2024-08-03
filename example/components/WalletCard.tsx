@@ -79,6 +79,9 @@ const WalletCard = ({
     signPsbt,
     pushPsbt,
     switchNetwork,
+    inscribe,
+    isCreatingCommit,
+    isInscribing,
   } = useLaserEyes()
 
   const [finalize, setFinalize] = useState<boolean>(false)
@@ -275,6 +278,29 @@ const WalletCard = ({
     }
   }
 
+  const inscribeText = async (text: string) => {
+    try {
+      const txId = await inscribe(text)
+      toast.success(
+        <span className={'flex flex-col gap-1 items-center justify-center'}>
+          <span className={'font-black'}>View on mempool.space</span>
+          <a
+            target={'_blank'}
+            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txId}`}
+            className={'underline text-blue-600 text-xs'}
+          >
+            {txId}
+          </a>
+        </span>
+      )
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e)
+        toast.error(e.message)
+      }
+    }
+  }
+
   return (
     <Card
       className={
@@ -421,6 +447,20 @@ const WalletCard = ({
                 Push PSBT
               </Button>
             )}
+            <Button
+              disabled={isCreatingCommit || isInscribing}
+              className={'w-full bg-[#232225]'}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName ? null : inscribeText('Laser_Eyes')
+              }
+            >
+              {isInscribing
+                ? 'Inscribing...'
+                : isCreatingCommit
+                  ? ' creating commit psbt'
+                  : 'Inscribe "Laser_Eyes"'}
+            </Button>
           </div>
         </div>
       </CardContent>
