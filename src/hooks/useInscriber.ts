@@ -53,6 +53,7 @@ export const useInscriber = ({
           setFeeRate(feeRate);
           setTotalFees(data.totalFees);
           setInscriberAddress(data.inscriberAddress);
+          return data;
         });
     } catch (e) {
       console.error(e);
@@ -63,9 +64,9 @@ export const useInscriber = ({
     }
   }, [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
 
-  const handleSignCommit = async () => {
+  const handleSignCommit = async (tx: string) => {
     try {
-      const signedResponse = await signPsbt(commitPsbtHex, true, true);
+      const signedResponse = await signPsbt(tx, true, true);
       setCommitTxId(signedResponse?.txId!);
       return signedResponse?.txId;
     } catch (e) {
@@ -76,15 +77,17 @@ export const useInscriber = ({
 
   const inscribe = useCallback(async () => {
     try {
+      setIsInscribing(true);
       if (!content) throw new Error("missing content");
       if (!address) throw new Error("missing address");
       if (!mimeType) throw new Error("missing mimeType");
-
       if (!commitTxId) {
-        await getCommitPsbt();
-        await handleSignCommit();
+        console.log("commitTxId not found, getting commit psbt");
+        const signed = await getCommitPsbt();
+        console.log({ signed });
+        await handleSignCommit(signed.psbtBase64!);
       }
-      setIsInscribing(true);
+
       await delay(10000);
 
       return await axios

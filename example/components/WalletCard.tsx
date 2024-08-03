@@ -102,6 +102,10 @@ const WalletCard = ({
     network as typeof MAINNET | typeof TESTNET
   )
 
+  useEffect(() => {
+    setContent('Laser_Eyes')
+  }, [])
+
   const hasWallet = {
     unisat: hasUnisat,
     xverse: hasXverse,
@@ -290,8 +294,8 @@ const WalletCard = ({
   const inscribeText = async (text: string) => {
     try {
       setContent(text)
-      await getCommitPsbt()
-      await handleSignCommit()
+      const commitPsbt = await getCommitPsbt()
+      await handleSignCommit(commitPsbt.psbtHex)
       await inscribe()
       toast.success(
         <span className={'flex flex-col gap-1 items-center justify-center'}>
