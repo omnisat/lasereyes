@@ -176,7 +176,7 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     isFetchingCommitPsbt: boolean;
     commitPsbtHex: string;
     commitPsbtBase64: string;
-    handleSignCommit: (tx: string) => Promise<string | undefined>;
+    handleSignCommit: (tx?: string) => Promise<string | undefined>;
     commitTxId: string;
     setCommitTxId: react.Dispatch<react.SetStateAction<string>>;
     feeRate: number;

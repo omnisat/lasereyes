@@ -1355,6 +1355,8 @@ var LaserEyesProvider = ({
       let psbtHex, psbtBase64;
       if (!library)
         return;
+      if (!psbt)
+        throw new Error("No PSBT provided");
       if (isHex(psbt)) {
         psbtBase64 = bitcoin2.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
@@ -1787,7 +1789,10 @@ var useInscriber = ({
   }), [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
   const handleSignCommit = (tx) => __async(void 0, null, function* () {
     try {
-      const signedResponse = yield signPsbt(tx, true, true);
+      const toBeSigned = tx != null ? tx : commitPsbtHex;
+      if (!toBeSigned)
+        throw new Error("missing tx");
+      const signedResponse = yield signPsbt(toBeSigned, true, true);
       setCommitTxId(signedResponse == null ? void 0 : signedResponse.txId);
       return signedResponse == null ? void 0 : signedResponse.txId;
     } catch (e) {

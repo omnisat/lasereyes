@@ -984,6 +984,7 @@ const LaserEyesProvider = ({
     try {
       let psbtHex, psbtBase64;
       if (!library) return;
+      if (!psbt) throw new Error("No PSBT provided");
       if (isHex(psbt)) {
         psbtBase64 = bitcoin.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
