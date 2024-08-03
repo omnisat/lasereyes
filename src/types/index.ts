@@ -49,9 +49,6 @@ export type LaserEyesContextType = {
     | undefined
   >;
   pushPsbt: (tx: string) => Promise<string | undefined>;
-  inscribe: (content: any) => Promise<string | undefined>;
-  isCreatingCommit: boolean;
-  isInscribing: boolean;
 };
 
 export type Config = {

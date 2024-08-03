@@ -110,9 +110,6 @@ type LaserEyesContextType = {
         txId?: string;
     } | undefined>;
     pushPsbt: (tx: string) => Promise<string | undefined>;
-    inscribe: (content: any) => Promise<string | undefined>;
-    isCreatingCommit: boolean;
-    isInscribing: boolean;
 };
 type Config = {
     network: typeof MAINNET | typeof TESTNET | typeof REGTEST;

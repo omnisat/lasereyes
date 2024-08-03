@@ -74,8 +74,6 @@ const useLaserEyes = (): LaserEyesContextType => {
   return useContext(LaserEyesContext);
 };
 
-const DeSCRIBE_API_URL = "http://localhost:3000/api";
-
 const LaserEyesProvider = ({
   children,
   config,
@@ -1337,56 +1335,6 @@ const LaserEyesProvider = ({
     }
   };
 
-  const [isCreatingCommit, setIsCreatingCommit] = useState(false);
-  const [isInscribing, setIsInscribing] = useState(false);
-
-  const inscribe = async (content: string): Promise<string | undefined> => {
-    try {
-      console.log("inscribing!");
-      if (!library) throw new Error("Library not found");
-      if (!paymentAddress) throw new Error("Payment address not found");
-      if (!paymentPublicKey) throw new Error("Payment public key not found");
-
-      setIsCreatingCommit(true);
-      const commitResponse: DeScribeCreateResponse = await axios
-        .post(`${DeSCRIBE_API_URL}/create-inscription`, {
-          content,
-          paymentAddress,
-          paymentPublicKey,
-          feeRate: 10,
-          mimeType: "text/plain;charset=utf-8",
-        })
-        .then((res) => res.data)
-        .finally(() => setIsCreatingCommit(false));
-
-      const signedResponse = await signPsbt(commitResponse.psbtHex, true, true);
-      if (!signedResponse) throw new Error("Error signing PSBT");
-      if (!signedResponse.txId) throw new Error("Error pushing PSBT");
-      const { txId: commitTxId } = signedResponse;
-      setIsInscribing(true);
-      let txId;
-      try {
-        txId = await axios
-          .post(`${DeSCRIBE_API_URL}/inscribe`, {
-            content: content,
-            mimeType: "text/plain;charset=utf-8",
-            ordinalAddress: address,
-            commitTxId,
-          })
-          .then((res) => res.data)
-          .finally(() => setIsInscribing(false));
-      } catch (e) {
-        throw e;
-      }
-      if (!txId) throw new Error("Error inscribing");
-      return txId;
-    } catch (error) {
-      if (error instanceof AxiosError && error?.response?.data) {
-        throw new Error(error.response.data);
-      }
-    }
-  };
-
   return (
     <LaserEyesContext.Provider
       value={{
@@ -1423,9 +1371,6 @@ const LaserEyesProvider = ({
         signPsbt,
         pushPsbt,
         signMessage,
-        inscribe,
-        isCreatingCommit,
-        isInscribing,
       }}
     >
       {children}

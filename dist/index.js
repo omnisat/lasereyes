@@ -531,7 +531,6 @@ var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
 };
-var DeSCRIBE_API_URL = "http://localhost:3000/api";
 var LaserEyesProvider = ({
   children,
   config
@@ -1685,53 +1684,6 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const [isCreatingCommit, setIsCreatingCommit] = (0, import_react.useState)(false);
-  const [isInscribing, setIsInscribing] = (0, import_react.useState)(false);
-  const inscribe = (content) => __async(void 0, null, function* () {
-    var _a;
-    try {
-      console.log("inscribing!");
-      if (!library)
-        throw new Error("Library not found");
-      if (!paymentAddress)
-        throw new Error("Payment address not found");
-      if (!paymentPublicKey)
-        throw new Error("Payment public key not found");
-      setIsCreatingCommit(true);
-      const commitResponse = yield import_axios2.default.post(`${DeSCRIBE_API_URL}/create-inscription`, {
-        content,
-        paymentAddress,
-        paymentPublicKey,
-        feeRate: 10,
-        mimeType: "text/plain;charset=utf-8"
-      }).then((res) => res.data).finally(() => setIsCreatingCommit(false));
-      const signedResponse = yield signPsbt(commitResponse.psbtHex, true, true);
-      if (!signedResponse)
-        throw new Error("Error signing PSBT");
-      if (!signedResponse.txId)
-        throw new Error("Error pushing PSBT");
-      const { txId: commitTxId } = signedResponse;
-      setIsInscribing(true);
-      let txId;
-      try {
-        txId = yield import_axios2.default.post(`${DeSCRIBE_API_URL}/inscribe`, {
-          content,
-          mimeType: "text/plain;charset=utf-8",
-          ordinalAddress: address2,
-          commitTxId
-        }).then((res) => res.data).finally(() => setIsInscribing(false));
-      } catch (e) {
-        throw e;
-      }
-      if (!txId)
-        throw new Error("Error inscribing");
-      return txId;
-    } catch (error) {
-      if (error instanceof import_axios2.AxiosError && ((_a = error == null ? void 0 : error.response) == null ? void 0 : _a.data)) {
-        throw new Error(error.response.data);
-      }
-    }
-  });
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     LaserEyesContext.Provider,
     {
@@ -1767,10 +1719,7 @@ var LaserEyesProvider = ({
         sendBTC,
         signPsbt,
         pushPsbt,
-        signMessage,
-        inscribe,
-        isCreatingCommit,
-        isInscribing
+        signMessage
       },
       children
     }

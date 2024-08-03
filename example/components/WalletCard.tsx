@@ -10,6 +10,7 @@ import {
   WIZZ,
   XVERSE,
   LEATHER,
+  useInscriber,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -79,10 +80,18 @@ const WalletCard = ({
     signPsbt,
     pushPsbt,
     switchNetwork,
-    inscribe,
-    isCreatingCommit,
-    isInscribing,
   } = useLaserEyes()
+
+  const {
+    setContent,
+    getCommitPsbt,
+    isFetchingCommitPsbt,
+    handleSignCommit,
+    inscribe,
+    isInscribing,
+    inscriptionTxId,
+    reset,
+  } = useInscriber({ inscribeApiUrl: 'http://localhost:3001/api' })
 
   const [finalize, setFinalize] = useState<boolean>(false)
   const [broadcast, setBroadcast] = useState<boolean>(false)
@@ -280,16 +289,19 @@ const WalletCard = ({
 
   const inscribeText = async (text: string) => {
     try {
-      const txId = await inscribe(text)
+      setContent(text)
+      await getCommitPsbt()
+      await handleSignCommit()
+      await inscribe()
       toast.success(
         <span className={'flex flex-col gap-1 items-center justify-center'}>
           <span className={'font-black'}>View on mempool.space</span>
           <a
             target={'_blank'}
-            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txId}`}
+            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${inscriptionTxId}`}
             className={'underline text-blue-600 text-xs'}
           >
-            {txId}
+            {inscriptionTxId}
           </a>
         </span>
       )
@@ -448,7 +460,7 @@ const WalletCard = ({
               </Button>
             )}
             <Button
-              disabled={isCreatingCommit || isInscribing}
+              disabled={isFetchingCommitPsbt || isInscribing}
               className={'w-full bg-[#232225]'}
               variant={provider !== walletName ? 'secondary' : 'default'}
               onClick={() =>
@@ -457,7 +469,7 @@ const WalletCard = ({
             >
               {isInscribing
                 ? 'Inscribing...'
-                : isCreatingCommit
+                : isFetchingCommitPsbt
                   ? ' creating commit psbt'
                   : 'Inscribe "Laser_Eyes"'}
             </Button>
