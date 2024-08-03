@@ -91,7 +91,7 @@ const WalletCard = ({
     isInscribing,
     inscriptionTxId,
     reset,
-  } = useInscriber({ inscribeApiUrl: 'http://localhost:3001/api' })
+  } = useInscriber({ inscribeApiUrl: 'https://de-scribe.vercel.app/api' })
 
   const [finalize, setFinalize] = useState<boolean>(false)
   const [broadcast, setBroadcast] = useState<boolean>(false)
