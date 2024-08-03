@@ -39,7 +39,6 @@ import {
   getNetworkForOkx,
   getNetworkForUnisat,
   getNetworkForWizz,
-  getUnisatNetwork,
   getWizzNetwork,
   getXverseNetwork,
   MAINNET,
@@ -62,11 +61,11 @@ import {
   GetAddressOptions,
   request,
   RpcErrorCode,
-  signTransaction,
   signMessage as signMessageSatsConnect,
+  signTransaction,
 } from "sats-connect";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const LaserEyesContext =
   createContext<LaserEyesContextType>(initialWalletContext);
@@ -1378,5 +1377,13 @@ const LaserEyesProvider = ({
     </LaserEyesContext.Provider>
   );
 };
+
+export interface DeScribeCreateResponse {
+  inscriberAddress: string;
+  psbtHex: string;
+  psbtBase64: string;
+  feeRate: number;
+  totalFees: number;
+}
 
 export { LaserEyesProvider, useLaserEyes };

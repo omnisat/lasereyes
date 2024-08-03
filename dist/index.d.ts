@@ -1,4 +1,5 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
+import * as react from 'react';
 import { ReactNode } from 'react';
 import * as bitcoin from 'bitcoinjs-lib';
 
@@ -131,6 +132,13 @@ declare const LaserEyesProvider: ({ children, config, }: {
     children: ReactNode;
     config?: Config | undefined;
 }) => react_jsx_runtime.JSX.Element;
+interface DeScribeCreateResponse {
+    inscriberAddress: string;
+    psbtHex: string;
+    psbtBase64: string;
+    feeRate: number;
+    totalFees: number;
+}
 
 declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof REGTEST) => bitcoin.networks.Network;
 declare const findOrdinalsAddress: (addresses: any) => any;
@@ -147,5 +155,31 @@ declare function createSendBtcPsbt(address: string, paymentAddress: string, reci
     psbtHex: string;
 }>;
 declare function getRedeemScript(paymentPublicKey: string, network: typeof MAINNET | typeof TESTNET): Buffer | undefined;
+declare function delay(ms: number): Promise<unknown>;
 
-export { LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OKX, OKX_MAINNET, OKX_TESTNET, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, createSendBtcPsbt, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressType, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };
+declare const useInscriber: ({ inscribeApiUrl, }: {
+    inscribeApiUrl: string;
+}) => {
+    content: any;
+    setContent: react.Dispatch<any>;
+    setMimeType: react.Dispatch<react.SetStateAction<"text/plain;charset=utf-8">>;
+    previewUrl: string;
+    setPreviewUrl: react.Dispatch<react.SetStateAction<string>>;
+    getCommitPsbt: () => Promise<void>;
+    isFetchingCommitPsbt: boolean;
+    commitPsbtHex: string;
+    commitPsbtBase64: string;
+    handleSignCommit: () => Promise<string | undefined>;
+    commitTxId: string;
+    setCommitTxId: react.Dispatch<react.SetStateAction<string>>;
+    feeRate: number;
+    setFeeRate: react.Dispatch<react.SetStateAction<number>>;
+    totalFees: number;
+    inscriberAddress: string;
+    inscribe: () => Promise<string>;
+    isInscribing: boolean;
+    inscriptionTxId: string;
+    reset: () => void;
+};
+
+export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OKX, OKX_MAINNET, OKX_TESTNET, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressType, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };

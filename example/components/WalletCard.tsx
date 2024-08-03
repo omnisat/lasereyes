@@ -10,6 +10,7 @@ import {
   WIZZ,
   XVERSE,
   LEATHER,
+  useInscriber,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -80,6 +81,17 @@ const WalletCard = ({
     pushPsbt,
     switchNetwork,
   } = useLaserEyes()
+
+  const {
+    setContent,
+    getCommitPsbt,
+    isFetchingCommitPsbt,
+    handleSignCommit,
+    inscribe,
+    isInscribing,
+    inscriptionTxId,
+    reset,
+  } = useInscriber({ inscribeApiUrl: 'http://localhost:3001/api' })
 
   const [finalize, setFinalize] = useState<boolean>(false)
   const [broadcast, setBroadcast] = useState<boolean>(false)
@@ -275,6 +287,32 @@ const WalletCard = ({
     }
   }
 
+  const inscribeText = async (text: string) => {
+    try {
+      setContent(text)
+      await getCommitPsbt()
+      await handleSignCommit()
+      await inscribe()
+      toast.success(
+        <span className={'flex flex-col gap-1 items-center justify-center'}>
+          <span className={'font-black'}>View on mempool.space</span>
+          <a
+            target={'_blank'}
+            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${inscriptionTxId}`}
+            className={'underline text-blue-600 text-xs'}
+          >
+            {inscriptionTxId}
+          </a>
+        </span>
+      )
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e)
+        toast.error(e.message)
+      }
+    }
+  }
+
   return (
     <Card
       className={
@@ -421,6 +459,20 @@ const WalletCard = ({
                 Push PSBT
               </Button>
             )}
+            <Button
+              disabled={isFetchingCommitPsbt || isInscribing}
+              className={'w-full bg-[#232225]'}
+              variant={provider !== walletName ? 'secondary' : 'default'}
+              onClick={() =>
+                provider !== walletName ? null : inscribeText('Laser_Eyes')
+              }
+            >
+              {isInscribing
+                ? 'Inscribing...'
+                : isFetchingCommitPsbt
+                  ? ' creating commit psbt'
+                  : 'Inscribe "Laser_Eyes"'}
+            </Button>
           </div>
         </div>
       </CardContent>

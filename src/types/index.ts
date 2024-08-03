@@ -134,3 +134,68 @@ export type WizzBalanceResponse = {
   confirmed: number;
   total: number;
 };
+
+export interface UTXO {
+  tx_hash_big_endian: string;
+  tx_hash: string;
+  tx_output_n: number;
+  script: string;
+  value: number;
+  value_hex: string;
+  confirmations: number;
+  tx_index: number;
+}
+
+export interface CommitPsbtResponse {
+  inscriberAddress: string;
+  psbtHex: string;
+  psbtBase64: string;
+  feeRate: number;
+  totalFees: number;
+}
+
+export interface MempoolTransaction {
+  txid: string;
+  version: number;
+  locktime: number;
+  vin: Vin[];
+  vout: Vout[];
+  size: number;
+  weight: number;
+  sigops: number;
+  fee: number;
+  status: Status;
+}
+
+export interface Vin {
+  txid: string;
+  vout: number;
+  prevout: Prevout;
+  scriptsig: string;
+  scriptsig_asm: string;
+  is_coinbase: boolean;
+  sequence: number;
+}
+
+export interface Prevout {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
+  value: number;
+}
+
+export interface Vout {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
+  value: number;
+}
+
+export interface Status {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
+}
