@@ -124,6 +124,13 @@ interface BlockchainInfoUTXO {
     confirmations: number;
     tx_index: number;
 }
+interface CommitPsbtResponse {
+    inscriberAddress: string;
+    psbtHex: string;
+    psbtBase64: string;
+    feeRate: number;
+    totalFees: number;
+}
 
 declare const createConfig: (config: Config) => Config;
 
@@ -165,11 +172,11 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     setMimeType: react.Dispatch<react.SetStateAction<"text/plain;charset=utf-8">>;
     previewUrl: string;
     setPreviewUrl: react.Dispatch<react.SetStateAction<string>>;
-    getCommitPsbt: () => Promise<void>;
+    getCommitPsbt: () => Promise<CommitPsbtResponse>;
     isFetchingCommitPsbt: boolean;
     commitPsbtHex: string;
     commitPsbtBase64: string;
-    handleSignCommit: () => Promise<string | undefined>;
+    handleSignCommit: (tx: string) => Promise<string | undefined>;
     commitTxId: string;
     setCommitTxId: react.Dispatch<react.SetStateAction<string>>;
     feeRate: number;

@@ -1698,6 +1698,7 @@ var useInscriber = ({
         setFeeRate(feeRate);
         setTotalFees(data.totalFees);
         setInscriberAddress(data.inscriberAddress);
+        return data;
       });
     } catch (e) {
       console.error(e);
@@ -1706,9 +1707,9 @@ var useInscriber = ({
       setIsFetchingCommitPsbt(false);
     }
   }), [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
-  const handleSignCommit = () => __async(void 0, null, function* () {
+  const handleSignCommit = (tx) => __async(void 0, null, function* () {
     try {
-      const signedResponse = yield signPsbt(commitPsbtHex, true, true);
+      const signedResponse = yield signPsbt(tx, true, true);
       setCommitTxId(signedResponse == null ? void 0 : signedResponse.txId);
       return signedResponse == null ? void 0 : signedResponse.txId;
     } catch (e) {
@@ -1718,6 +1719,7 @@ var useInscriber = ({
   });
   const inscribe = useCallback(() => __async(void 0, null, function* () {
     try {
+      setIsInscribing(true);
       if (!content)
         throw new Error("missing content");
       if (!address2)
@@ -1725,10 +1727,11 @@ var useInscriber = ({
       if (!mimeType)
         throw new Error("missing mimeType");
       if (!commitTxId) {
-        yield getCommitPsbt();
-        yield handleSignCommit();
+        console.log("commitTxId not found, getting commit psbt");
+        const signed = yield getCommitPsbt();
+        console.log({ signed });
+        yield handleSignCommit(signed.psbtBase64);
       }
-      setIsInscribing(true);
       yield delay(1e4);
       return yield axios3.post(`${inscribeApiUrl}/inscribe`, {
         content,
