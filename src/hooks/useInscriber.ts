@@ -64,9 +64,11 @@ export const useInscriber = ({
     }
   }, [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
 
-  const handleSignCommit = async (tx: string) => {
+  const handleSignCommit = async (tx?: string) => {
     try {
-      const signedResponse = await signPsbt(tx, true, true);
+      const toBeSigned = tx ?? commitPsbtHex;
+      if (!toBeSigned) throw new Error("missing tx");
+      const signedResponse = await signPsbt(toBeSigned, true, true);
       setCommitTxId(signedResponse?.txId!);
       return signedResponse?.txId;
     } catch (e) {
