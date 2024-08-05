@@ -511,18 +511,18 @@ const LaserEyesProvider = ({
         await connectUnisat();
       } else if (walletName === XVERSE) {
         await connectXverse();
-      } else if (walletName === OYL) {
-        await connectOyl();
-      } else if (walletName === MAGIC_EDEN) {
-        await connectMagicEden();
-      } else if (walletName === OKX) {
-        await connectOkx();
-      } else if (walletName === LEATHER) {
-        await connectLeather();
-      } else if (walletName === PHANTOM) {
-        await connectPhantom();
-      } else if (walletName === WIZZ) {
-        await connectWizz();
+        // } else if (walletName === OYL) {
+        //   await connectOyl();
+        // } else if (walletName === MAGIC_EDEN) {
+        //   await connectMagicEden();
+        // } else if (walletName === OKX) {
+        //   await connectOkx();
+        // } else if (walletName === LEATHER) {
+        //   await connectLeather();
+        // } else if (walletName === PHANTOM) {
+        //   await connectPhantom();
+        // } else if (walletName === WIZZ) {
+        //   await connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -939,7 +939,7 @@ const LaserEyesProvider = ({
             network: {
               type: BitcoinNetworkType.Mainnet,
             },
-            address: address,
+            address: paymentAddress,
             message: message,
           },
           onFinish: (response) => {
@@ -957,13 +957,11 @@ const LaserEyesProvider = ({
           message: message,
           paymentType: P2TR,
         });
-        console.log(signed);
         return signed?.result?.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
         const response = await library?.signMessage(address, uintArray);
-        console.log(response);
         const binaryString = String.fromCharCode(...response.signature);
         return btoa(binaryString);
       } else if (provider === WIZZ) {

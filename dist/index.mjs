@@ -822,18 +822,6 @@ var LaserEyesProvider = ({
         yield connectUnisat();
       } else if (walletName === XVERSE) {
         yield connectXverse();
-      } else if (walletName === OYL) {
-        yield connectOyl();
-      } else if (walletName === MAGIC_EDEN) {
-        yield connectMagicEden();
-      } else if (walletName === OKX) {
-        yield connectOkx();
-      } else if (walletName === LEATHER) {
-        yield connectLeather();
-      } else if (walletName === PHANTOM) {
-        yield connectPhantom();
-      } else if (walletName === WIZZ) {
-        yield connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -1236,7 +1224,7 @@ var LaserEyesProvider = ({
             network: {
               type: BitcoinNetworkType.Mainnet
             },
-            address: address2,
+            address: paymentAddress,
             message
           },
           onFinish: (response) => {
@@ -1254,13 +1242,11 @@ var LaserEyesProvider = ({
           message,
           paymentType: P2TR
         });
-        console.log(signed);
         return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
         const response = yield library == null ? void 0 : library.signMessage(address2, uintArray);
-        console.log(response);
         const binaryString = String.fromCharCode(...response.signature);
         return btoa(binaryString);
       } else if (provider === WIZZ) {

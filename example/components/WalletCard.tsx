@@ -321,16 +321,6 @@ const WalletCard = ({
 
   const isConnected = provider === walletName
   const isMissingWallet = !hasWallet[walletName]
-  const isMissingOrNotConnected = isMissingWallet || !isConnected
-
-  console.log(
-    isMissingWallet,
-    walletName,
-    provider,
-    isConnected,
-    signed,
-    unsigned
-  )
 
   return (
     <Card
@@ -342,7 +332,6 @@ const WalletCard = ({
         <CardTitle className={'uppercase text-white text-center'}>
           {walletName.replace('-', ' ')}
         </CardTitle>
-        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <div className={'flex flex-col gap-4'}>
