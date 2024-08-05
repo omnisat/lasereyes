@@ -511,18 +511,18 @@ const LaserEyesProvider = ({
         await connectUnisat();
       } else if (walletName === XVERSE) {
         await connectXverse();
-      } else if (walletName === OYL) {
-        await connectOyl();
-      } else if (walletName === MAGIC_EDEN) {
-        await connectMagicEden();
-      } else if (walletName === OKX) {
-        await connectOkx();
-      } else if (walletName === LEATHER) {
-        await connectLeather();
-      } else if (walletName === PHANTOM) {
-        await connectPhantom();
-      } else if (walletName === WIZZ) {
-        await connectWizz();
+        // } else if (walletName === OYL) {
+        //   await connectOyl();
+        // } else if (walletName === MAGIC_EDEN) {
+        //   await connectMagicEden();
+        // } else if (walletName === OKX) {
+        //   await connectOkx();
+        // } else if (walletName === LEATHER) {
+        //   await connectLeather();
+        // } else if (walletName === PHANTOM) {
+        //   await connectPhantom();
+        // } else if (walletName === WIZZ) {
+        //   await connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }

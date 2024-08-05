@@ -822,18 +822,6 @@ var LaserEyesProvider = ({
         yield connectUnisat();
       } else if (walletName === XVERSE) {
         yield connectXverse();
-      } else if (walletName === OYL) {
-        yield connectOyl();
-      } else if (walletName === MAGIC_EDEN) {
-        yield connectMagicEden();
-      } else if (walletName === OKX) {
-        yield connectOkx();
-      } else if (walletName === LEATHER) {
-        yield connectLeather();
-      } else if (walletName === PHANTOM) {
-        yield connectPhantom();
-      } else if (walletName === WIZZ) {
-        yield connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }
