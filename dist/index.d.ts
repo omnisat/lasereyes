@@ -183,7 +183,12 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     setFeeRate: react.Dispatch<react.SetStateAction<number>>;
     totalFees: number;
     inscriberAddress: string;
-    inscribe: () => Promise<string>;
+    inscribe: ({ content: providedContent, mimeType: providedMimeType, ordinalAddress: providedAddress, commitTxId: providedCommitTxId, }: {
+        content?: any;
+        mimeType?: string | undefined;
+        ordinalAddress?: string | undefined;
+        commitTxId?: string | undefined;
+    }) => Promise<string>;
     isInscribing: boolean;
     inscriptionTxId: string;
     reset: () => void;
