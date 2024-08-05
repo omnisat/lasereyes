@@ -126,7 +126,7 @@ const App = () => {
             <div className={'flex flex-row gap-2'}>
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Address
+                  address (taproot)
                 </span>
                 <span
                   className={clsx(
@@ -149,7 +149,7 @@ const App = () => {
             >
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Payment Address
+                  payment address
                 </span>
                 <span
                   className={clsx(
@@ -176,7 +176,7 @@ const App = () => {
             >
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Public Key
+                  public key
                 </span>
                 <span
                   className={clsx(
@@ -198,7 +198,7 @@ const App = () => {
             >
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Payment Public Key
+                  payment public key
                 </span>
                 <span
                   className={clsx(
@@ -226,7 +226,7 @@ const App = () => {
           >
             <div className={'flex flex-col items-center'}>
               <span className={clsx('font-black text-orange-500')}>
-                Balance
+                balance
               </span>
               <span
                 className={clsx(
@@ -241,7 +241,7 @@ const App = () => {
 
           <div className={'flex flex-col items-center'}>
             <span className={clsx('font-black text-orange-500')}>
-              Signature
+              signature
             </span>{' '}
             <span
               className={clsx(
@@ -267,7 +267,7 @@ const App = () => {
             >
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Unsigned PSBT
+                  unsigned PSBT
                 </span>
                 <span
                   className={clsx(
@@ -280,7 +280,7 @@ const App = () => {
                   )}
                   <Input
                     type="text"
-                    className={'bg-transparent text-center border-none'}
+                    className={'bg-transparent text-lg text-center border-none'}
                     placeholder="Tx Hex"
                     value={truncateString(
                       unsignedPsbt ? unsignedPsbt : '--',
@@ -299,7 +299,7 @@ const App = () => {
             >
               <div className={'flex flex-col items-center'}>
                 <span className={clsx('font-black text-orange-500')}>
-                  Signed PSBT
+                  signed PSBT
                 </span>
                 <span
                   className={clsx(

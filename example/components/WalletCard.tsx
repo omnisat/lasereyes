@@ -26,9 +26,10 @@ import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
-import { getMempoolSpaceUrl } from '@/lib/urls'
+import { getMempoolSpaceUrl, getOrdpoolSpaceUrl } from '@/lib/urls'
 import { clsx } from 'clsx'
 import { cn } from '@/lib/utils'
+import { MIME_TYPE_TEXT } from '../../src/consts/inscribe'
 
 const WalletCard = ({
   walletName,
@@ -62,6 +63,7 @@ const WalletCard = ({
   const {
     connect,
     disconnect,
+    address,
     connected,
     provider,
     network,
@@ -83,16 +85,8 @@ const WalletCard = ({
     switchNetwork,
   } = useLaserEyes()
 
-  const {
-    setContent,
-    getCommitPsbt,
-    isFetchingCommitPsbt,
-    handleSignCommit,
-    inscribe,
-    isInscribing,
-    inscriptionTxId,
-    reset,
-  } = useInscriber({ inscribeApiUrl: 'https://de-scribe.vercel.app/api' })
+  const { inscribe, setContent, isFetchingCommitPsbt, isInscribing, reset } =
+    useInscriber({ inscribeApiUrl: 'https://de-scribe.vercel.app/api' })
 
   const [finalize, setFinalize] = useState<boolean>(false)
   const [broadcast, setBroadcast] = useState<boolean>(false)
@@ -118,27 +112,6 @@ const WalletCard = ({
     wizz: hasWizz,
   }
 
-  const connectWallet = async (
-    walletName:
-      | typeof UNISAT
-      | typeof XVERSE
-      | typeof OYL
-      | typeof MAGIC_EDEN
-      | typeof OKX
-      | typeof LEATHER
-      | typeof PHANTOM
-      | typeof WIZZ
-  ) => {
-    try {
-      // @ts-ignore
-      await connect(walletName)
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message)
-      }
-    }
-  }
-
   useEffect(() => {
     if (utxos.length > 0 && connected) {
       const psbt = createPsbt(
@@ -147,9 +120,11 @@ const WalletCard = ({
         paymentPublicKey,
         network as typeof MAINNET | typeof TESTNET
       )
-      if (psbt) {
+      if (psbt && psbt.toHex() !== unsigned) {
         setUnsignedPsbt(psbt.toHex())
         setUnsigned(psbt.toHex())
+        setSigned(undefined)
+        setSignedPsbt(undefined)
       }
     }
   }, [utxos, connected])
@@ -177,6 +152,27 @@ const WalletCard = ({
           </a>
         </span>
       )
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
+  const connectWallet = async (
+    walletName:
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof OYL
+      | typeof MAGIC_EDEN
+      | typeof OKX
+      | typeof LEATHER
+      | typeof PHANTOM
+      | typeof WIZZ
+  ) => {
+    try {
+      // @ts-ignore
+      await connect(walletName)
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -295,18 +291,23 @@ const WalletCard = ({
   const inscribeText = async (text: string) => {
     try {
       setContent(text)
-      const commitPsbt = await getCommitPsbt()
-      await handleSignCommit(commitPsbt.psbtHex)
-      await inscribe()
+      const txId = await inscribe({
+        content: text,
+        mimeType: MIME_TYPE_TEXT,
+        ordinalAddress: address,
+      })
+
       toast.success(
         <span className={'flex flex-col gap-1 items-center justify-center'}>
-          <span className={'font-black'}>View on mempool.space</span>
+          <span className={'font-black'}>
+            view inscription tx on ordpool.space
+          </span>
           <a
             target={'_blank'}
-            href={`${getMempoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${inscriptionTxId}`}
+            href={`${getOrdpoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txId}`}
             className={'underline text-blue-600 text-xs'}
           >
-            {inscriptionTxId}
+            {txId}
           </a>
         </span>
       )
@@ -321,6 +322,15 @@ const WalletCard = ({
   const isConnected = provider === walletName
   const isMissingWallet = !hasWallet[walletName]
   const isMissingOrNotConnected = isMissingWallet || !isConnected
+
+  console.log(
+    isMissingWallet,
+    walletName,
+    provider,
+    isConnected,
+    signed,
+    unsigned
+  )
 
   return (
     <Card
@@ -338,7 +348,7 @@ const WalletCard = ({
         <div className={'flex flex-col gap-4'}>
           <div className={'flex flex-row space-between items-center gap-6'}>
             <Badge variant={isConnected ? 'success' : 'secondary'}>
-              {isConnected ? 'Connected' : 'Disconnected'}
+              {isConnected ? 'connected' : 'disconnected'}
             </Badge>
             <Button
               className={'w-full bg-[#232225] '}
@@ -349,10 +359,10 @@ const WalletCard = ({
               }
             >
               {isMissingWallet
-                ? 'Missing Wallet'
+                ? 'missing wallet'
                 : isConnected
-                  ? 'Disconnect'
-                  : 'Connect'}
+                  ? 'disconnect'
+                  : 'connect'}
             </Button>
           </div>
 
@@ -367,7 +377,7 @@ const WalletCard = ({
                   : switchNet(network === TESTNET ? MAINNET : TESTNET)
               }
             >
-              Switch Network
+              switch network
             </Button>
             <Button
               className={'w-full bg-[#232225]'}
@@ -375,7 +385,7 @@ const WalletCard = ({
               variant={!isConnected ? 'secondary' : 'default'}
               onClick={() => (!isConnected ? null : send())}
             >
-              Send BTC
+              send BTC
             </Button>
             <Button
               className={'w-full bg-[#232225]'}
@@ -387,7 +397,7 @@ const WalletCard = ({
                   : sign('Laser Eyes - Test Message').then(console.log)
               }
             >
-              Sign Message
+              sign message
             </Button>
             <span
               className={
@@ -400,7 +410,7 @@ const WalletCard = ({
                 variant={!isConnected ? 'secondary' : 'default'}
                 onClick={() => (!isConnected ? null : signUnsignedPsbt())}
               >
-                Sign{broadcast ? ' & Send' : ''} PSBT
+                sign{broadcast ? ' & Send' : ''} PSBT
               </Button>
               <Button
                 className={clsx(
@@ -414,7 +424,7 @@ const WalletCard = ({
                   setBroadcast(false)
                 }}
               >
-                Finalize
+                finalize
               </Button>
               <Button
                 className={clsx(
@@ -434,16 +444,17 @@ const WalletCard = ({
                 }
                 onClick={() => setBroadcast(!broadcast)}
               >
-                Broadcast
+                broadcast
               </Button>
             </span>
+
             <Button
               className={'w-full bg-[#232225]'}
               disabled={isMissingWallet || !isConnected || !signed || !unsigned}
               variant={!isConnected ? 'secondary' : 'default'}
               onClick={() => (!isConnected ? null : push())}
             >
-              Push PSBT
+              push PSBT
             </Button>
             <Button
               disabled={
@@ -457,12 +468,12 @@ const WalletCard = ({
               onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}
             >
               {isInscribing ? (
-                'Inscribing...'
+                'inscribing...'
               ) : isFetchingCommitPsbt ? (
                 ' creating commit psbt'
               ) : (
                 <>
-                  Inscribe{' '}
+                  inscribe{' '}
                   <span
                     className={cn(
                       ' text-[8px] p-.5 px-1',

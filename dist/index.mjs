@@ -1673,6 +1673,11 @@ var useInscriber = ({
   const [previewUrl, setPreviewUrl] = useState2("");
   const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = useState2(false);
   const [isInscribing, setIsInscribing] = useState2(false);
+  useEffect2(() => {
+    setCommitPsbtHex("");
+    setCommitPsbtBase64("");
+    setCommitTxId("");
+  }, [content, address2, mimeType, feeRate]);
   const getCommitPsbt = useCallback(() => __async(void 0, null, function* () {
     try {
       if (!content)
@@ -1720,38 +1725,53 @@ var useInscriber = ({
       throw e;
     }
   });
-  const inscribe = useCallback(() => __async(void 0, null, function* () {
-    try {
-      setIsInscribing(true);
-      if (!content)
-        throw new Error("missing content");
-      if (!address2)
-        throw new Error("missing address");
-      if (!mimeType)
-        throw new Error("missing mimeType");
-      if (!commitTxId) {
-        console.log("commitTxId not found, getting commit psbt");
-        const signed = yield getCommitPsbt();
-        console.log({ signed });
-        yield handleSignCommit(signed.psbtBase64);
+  const inscribe = useCallback(
+    (_0) => __async(void 0, [_0], function* ({
+      content: providedContent,
+      mimeType: providedMimeType,
+      ordinalAddress: providedAddress,
+      commitTxId: providedCommitTxId
+    }) {
+      try {
+        const inscribeContent = providedContent != null ? providedContent : content;
+        const inscribeMimeType = providedMimeType != null ? providedMimeType : mimeType;
+        const inscribeOutputAddress = providedAddress != null ? providedAddress : address2;
+        let inscribeCommitTxId = providedCommitTxId != null ? providedCommitTxId : commitTxId;
+        if (!inscribeContent)
+          throw new Error("missing content");
+        if (!inscribeMimeType)
+          throw new Error("missing mimeType");
+        if (!inscribeOutputAddress)
+          throw new Error("missing address");
+        setIsInscribing(true);
+        if (!inscribeCommitTxId) {
+          const signed = yield getCommitPsbt();
+          inscribeCommitTxId = yield handleSignCommit(signed.psbtBase64);
+          if (!inscribeCommitTxId)
+            throw new Error("failed to broadcast commit");
+          console.log("tempCommitTxId", inscribeCommitTxId);
+        }
+        yield delay(1e4);
+        if (!inscribeCommitTxId)
+          throw new Error("missing commitTxId");
+        return yield axios3.post(`${inscribeApiUrl}/inscribe`, {
+          content,
+          mimeType,
+          ordinalAddress: address2,
+          commitTxId: inscribeCommitTxId
+        }).then((res) => res.data).then((data) => {
+          setInscriptionTxId(data);
+          return data;
+        });
+      } catch (e) {
+        console.error(e);
+        throw e;
+      } finally {
+        setIsInscribing(false);
       }
-      yield delay(1e4);
-      return yield axios3.post(`${inscribeApiUrl}/inscribe`, {
-        content,
-        mimeType,
-        ordinalAddress: address2,
-        commitTxId
-      }).then((res) => res.data).then((data) => {
-        setInscriptionTxId(data);
-        return data;
-      });
-    } catch (e) {
-      console.error(e);
-      throw e;
-    } finally {
-      setIsInscribing(false);
-    }
-  }), [address2, commitTxId, content, mimeType]);
+    }),
+    [address2, commitTxId, content, mimeType]
+  );
   const reset = () => {
     setContent("");
     setMimeType(MIME_TYPE_TEXT);
@@ -1764,11 +1784,6 @@ var useInscriber = ({
     setInscriptionTxId("");
     setPreviewUrl("");
   };
-  useEffect2(() => {
-    if (commitTxId && !inscriptionTxId) {
-      inscribe();
-    }
-  }, [commitTxId, inscribe, inscriptionTxId]);
   return {
     content,
     setContent,
