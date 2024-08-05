@@ -939,7 +939,7 @@ const LaserEyesProvider = ({
             network: {
               type: BitcoinNetworkType.Mainnet,
             },
-            address: address,
+            address: paymentAddress,
             message: message,
           },
           onFinish: (response) => {
@@ -957,13 +957,11 @@ const LaserEyesProvider = ({
           message: message,
           paymentType: P2TR,
         });
-        console.log(signed);
         return signed?.result?.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
         const response = await library?.signMessage(address, uintArray);
-        console.log(response);
         const binaryString = String.fromCharCode(...response.signature);
         return btoa(binaryString);
       } else if (provider === WIZZ) {
