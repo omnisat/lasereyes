@@ -58,7 +58,7 @@ export const useInscriber = ({
     } catch (e) {
       console.error(e);
       // @ts-ignore
-      throw e;
+      throw new Error(e.response.data);
     } finally {
       setIsFetchingCommitPsbt(false);
     }

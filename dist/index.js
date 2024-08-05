@@ -1468,9 +1468,7 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, true, true);
         console.log({ signedPsbt });
         const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
-        console.log("psbtSignedPsbt", psbtSignedPsbt.toBase64());
         if (broadcast) {
-          console.log("broadcastin");
           const txId = yield pushPsbt(psbtSignedPsbt.toHex());
           return {
             signedPsbtHex: psbtSignedPsbt.toHex(),
@@ -1782,7 +1780,7 @@ var useInscriber = ({
       });
     } catch (e) {
       console.error(e);
-      throw e;
+      throw new Error(e.response.data);
     } finally {
       setIsFetchingCommitPsbt(false);
     }

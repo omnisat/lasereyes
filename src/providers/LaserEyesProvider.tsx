@@ -1100,10 +1100,7 @@ const LaserEyesProvider = ({
         console.log({ signedPsbt });
         const psbtSignedPsbt = bitcoin.Psbt.fromHex(signedPsbt);
 
-        console.log("psbtSignedPsbt", psbtSignedPsbt.toBase64());
-
         if (broadcast) {
-          console.log("broadcastin");
           const txId = await pushPsbt(psbtSignedPsbt.toHex());
           return {
             signedPsbtHex: psbtSignedPsbt.toHex(),

@@ -28,6 +28,7 @@ import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
 import { getMempoolSpaceUrl } from '@/lib/urls'
 import { clsx } from 'clsx'
+import { cn } from '@/lib/utils'
 
 const WalletCard = ({
   walletName,
@@ -317,6 +318,10 @@ const WalletCard = ({
     }
   }
 
+  const isConnected = provider === walletName
+  const isMissingWallet = !hasWallet[walletName]
+  const isMissingOrNotConnected = isMissingWallet || !isConnected
+
   return (
     <Card
       className={
@@ -332,64 +337,58 @@ const WalletCard = ({
       <CardContent>
         <div className={'flex flex-col gap-4'}>
           <div className={'flex flex-row space-between items-center gap-6'}>
-            <Badge variant={provider === walletName ? 'success' : 'secondary'}>
-              {provider === walletName ? 'Connected' : 'Disconnected'}
+            <Badge variant={isConnected ? 'success' : 'secondary'}>
+              {isConnected ? 'Connected' : 'Disconnected'}
             </Badge>
             <Button
               className={'w-full bg-[#232225] '}
-              disabled={!hasWallet[walletName]}
+              disabled={isMissingWallet}
               variant={'default'}
               onClick={() =>
-                provider === walletName
-                  ? disconnect()
-                  : connectWallet(walletName)
+                isConnected ? disconnect() : connectWallet(walletName)
               }
             >
-              {!hasWallet[walletName]
+              {isMissingWallet
                 ? 'Missing Wallet'
-                : provider === walletName
+                : isConnected
                   ? 'Disconnect'
                   : 'Connect'}
             </Button>
           </div>
 
           <div className={'flex flex-col space-between items-center gap-2'}>
-            {provider !== XVERSE && provider !== OYL && (
-              <Button
-                className={'w-full bg-[#232225]'}
-                disabled={!hasWallet[walletName] || provider !== walletName}
-                variant={provider !== walletName ? 'secondary' : 'default'}
-                onClick={() =>
-                  provider !== walletName
-                    ? null
-                    : switchNet(network === TESTNET ? MAINNET : TESTNET)
-                }
-              >
-                Switch Network
-              </Button>
-            )}
             <Button
               className={'w-full bg-[#232225]'}
-              disabled={!hasWallet[walletName] || provider !== walletName}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() => (provider !== walletName ? null : send())}
+              disabled={isMissingWallet || !isConnected}
+              variant={!isConnected ? 'secondary' : 'default'}
+              onClick={() =>
+                !isConnected
+                  ? null
+                  : switchNet(network === TESTNET ? MAINNET : TESTNET)
+              }
+            >
+              Switch Network
+            </Button>
+            <Button
+              className={'w-full bg-[#232225]'}
+              disabled={isMissingWallet || !isConnected}
+              variant={!isConnected ? 'secondary' : 'default'}
+              onClick={() => (!isConnected ? null : send())}
             >
               Send BTC
             </Button>
-            {provider !== OYL && (
-              <Button
-                className={'w-full bg-[#232225]'}
-                disabled={!hasWallet[walletName] || provider !== walletName}
-                variant={provider !== walletName ? 'secondary' : 'default'}
-                onClick={() =>
-                  provider !== walletName
-                    ? null
-                    : sign('Laser Eyes - Test Message').then(console.log)
-                }
-              >
-                Sign Message
-              </Button>
-            )}
+            <Button
+              className={'w-full bg-[#232225]'}
+              disabled={isMissingWallet || !isConnected}
+              variant={!isConnected ? 'secondary' : 'default'}
+              onClick={() =>
+                !isConnected
+                  ? null
+                  : sign('Laser Eyes - Test Message').then(console.log)
+              }
+            >
+              Sign Message
+            </Button>
             <span
               className={
                 'w-full flex flex-row items-center justify-center gap-4'
@@ -397,46 +396,36 @@ const WalletCard = ({
             >
               <Button
                 className={'w-full bg-[#232225]'}
-                disabled={
-                  !hasWallet[walletName] || provider !== walletName || !unsigned
-                }
-                variant={provider !== walletName ? 'secondary' : 'default'}
-                onClick={() =>
-                  provider !== walletName ? null : signUnsignedPsbt()
-                }
+                disabled={isMissingWallet || !isConnected || !unsigned}
+                variant={!isConnected ? 'secondary' : 'default'}
+                onClick={() => (!isConnected ? null : signUnsignedPsbt())}
               >
                 Sign{broadcast ? ' & Send' : ''} PSBT
               </Button>
-              {provider !== XVERSE && (
-                <Button
-                  className={clsx(
-                    'shrink bg-[#232225] disabled:text-gray-500',
-                    finalize ? 'text-white' : 'bg-[#232225]'
-                  )}
-                  disabled={
-                    !hasWallet[walletName] ||
-                    provider !== walletName ||
-                    !unsigned
-                  }
-                  variant={finalize ? 'outline' : 'default'}
-                  onClick={() => {
-                    setFinalize(!finalize)
-                    setBroadcast(false)
-                  }}
-                >
-                  Finalize
-                </Button>
-              )}
+              <Button
+                className={clsx(
+                  'shrink bg-[#232225] disabled:text-gray-500',
+                  finalize ? 'text-white' : 'bg-[#232225]'
+                )}
+                disabled={isMissingWallet || !isConnected || !unsigned}
+                variant={finalize ? 'outline' : 'default'}
+                onClick={() => {
+                  setFinalize(!finalize)
+                  setBroadcast(false)
+                }}
+              >
+                Finalize
+              </Button>
               <Button
                 className={clsx(
                   finalize || provider !== UNISAT
                     ? 'text-white'
                     : 'bg-[#232225]',
-                  'shrink disabled:text-gray-500'
+                  'shrink disabled:text-gray-500 disabled'
                 )}
                 disabled={
-                  !hasWallet[walletName] ||
-                  provider !== walletName ||
+                  isMissingWallet ||
+                  !isConnected ||
                   (!finalize && provider !== XVERSE) ||
                   !unsigned
                 }
@@ -448,34 +437,42 @@ const WalletCard = ({
                 Broadcast
               </Button>
             </span>
-            {provider !== XVERSE && (
-              <Button
-                className={'w-full bg-[#232225]'}
-                disabled={
-                  !hasWallet[walletName] ||
-                  provider !== walletName ||
-                  !signed ||
-                  !unsigned
-                }
-                variant={provider !== walletName ? 'secondary' : 'default'}
-                onClick={() => (provider !== walletName ? null : push())}
-              >
-                Push PSBT
-              </Button>
-            )}
             <Button
-              disabled={isFetchingCommitPsbt || isInscribing}
               className={'w-full bg-[#232225]'}
-              variant={provider !== walletName ? 'secondary' : 'default'}
-              onClick={() =>
-                provider !== walletName ? null : inscribeText('Laser_Eyes')
-              }
+              disabled={isMissingWallet || !isConnected || !signed || !unsigned}
+              variant={!isConnected ? 'secondary' : 'default'}
+              onClick={() => (!isConnected ? null : push())}
             >
-              {isInscribing
-                ? 'Inscribing...'
-                : isFetchingCommitPsbt
-                  ? ' creating commit psbt'
-                  : 'Inscribe "Laser_Eyes"'}
+              Push PSBT
+            </Button>
+            <Button
+              disabled={
+                isMissingWallet ||
+                !isConnected ||
+                isFetchingCommitPsbt ||
+                isInscribing
+              }
+              className={'w-full bg-[#232225] gap-1'}
+              variant={!isConnected ? 'secondary' : 'default'}
+              onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}
+            >
+              {isInscribing ? (
+                'Inscribing...'
+              ) : isFetchingCommitPsbt ? (
+                ' creating commit psbt'
+              ) : (
+                <>
+                  Inscribe{' '}
+                  <span
+                    className={cn(
+                      ' text-[8px] p-.5 px-1',
+                      isConnected ? 'bg-black' : ''
+                    )}
+                  >
+                    Laser_Eyes
+                  </span>
+                </>
+              )}
             </Button>
           </div>
         </div>
