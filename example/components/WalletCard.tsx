@@ -196,6 +196,15 @@ const WalletCard = ({
     try {
       const signature = await signMessage(message)
       setSignature(signature)
+      if (typeof signature === 'string') {
+        toast.success(
+          <div className={'flex flex-col gap-2 items-center'}>
+            <span className={'font-black'}>signed message</span>{' '}
+            <div className={'text-xs'}>{signature}</div>
+          </div>
+        )
+        return
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -219,6 +228,12 @@ const WalletCard = ({
         broadcast
       )
 
+      if (signPsbtResponse?.txId) {
+        setUnsigned(undefined)
+        setSignedPsbt(undefined)
+        return
+      }
+
       // @ts-ignore
       setSigned(signPsbtResponse?.signedPsbtHex)
       if (!signPsbtResponse) {
@@ -228,8 +243,18 @@ const WalletCard = ({
       //@ts-ignore
       setSignedPsbt(signPsbtResponse)
 
-      if (typeof signPsbtResponse === 'string') {
-        toast.success('Signed PSBT')
+      if (
+        typeof signPsbtResponse.signedPsbtHex === 'string' &&
+        !signPsbtResponse.txId
+      ) {
+        toast.success(
+          <div className={'flex flex-col gap-2 items-center'}>
+            <span className={'font-black'}>
+              signed {finalize ? '& finalized' : ''} PSBT
+            </span>{' '}
+            <div className={'text-xs'}>{signPsbtResponse.signedPsbtHex}</div>
+          </div>
+        )
         return
       }
 
