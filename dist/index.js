@@ -288,6 +288,7 @@ var initialWalletContext = {
   hasLeather: false,
   hasPhantom: false,
   hasWizz: false,
+  isInitializing: true,
   connected: false,
   isConnecting: false,
   publicKey: "",
@@ -514,6 +515,7 @@ var LaserEyesProvider = ({
   const self = selfRef.current;
   const [library, setLibrary] = (0, import_react.useState)(null);
   const [provider, setProvider] = (0, import_react.useState)();
+  const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
   const [connected, setConnected] = (0, import_react.useState)(false);
   const [isConnecting, setIsConnecting] = (0, import_react.useState)(false);
   const [accounts, setAccounts] = (0, import_react.useState)([]);
@@ -545,6 +547,11 @@ var LaserEyesProvider = ({
       });
     }
   }, [config, library]);
+  const checkInitializationComplete = () => {
+    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
+      setIsInitializing(false);
+    }
+  };
   (0, import_react.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const unisatLib = window == null ? void 0 : window.unisat;
@@ -660,6 +667,18 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
+  (0, import_react.useEffect)(() => {
+    checkInitializationComplete();
+  }, [
+    hasUnisat,
+    hasXverse,
+    hasOyl,
+    hasMagicEden,
+    hasOkx,
+    hasLeather,
+    hasPhantom,
+    hasWizz
+  ]);
   (0, import_react.useEffect)(() => {
     setBalance(void 0);
   }, [network]);
@@ -1730,6 +1749,7 @@ var LaserEyesProvider = ({
         provider,
         balance,
         network,
+        isInitializing,
         connected,
         isConnecting,
         hasUnisat,

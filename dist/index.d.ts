@@ -77,6 +77,7 @@ declare const WALLETS: {
 };
 
 type LaserEyesContextType = {
+    isInitializing: boolean;
     connected: boolean;
     isConnecting: boolean;
     publicKey: string;

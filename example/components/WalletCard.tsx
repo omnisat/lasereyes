@@ -61,6 +61,7 @@ const WalletCard = ({
   ) => void
 }) => {
   const {
+    isInitializing,
     connect,
     disconnect,
     address,
@@ -357,11 +358,13 @@ const WalletCard = ({
                 isConnected ? disconnect() : connectWallet(walletName)
               }
             >
-              {isMissingWallet
-                ? 'missing wallet'
-                : isConnected
-                  ? 'disconnect'
-                  : 'connect'}
+              {isInitializing
+                ? 'initializing..'
+                : isMissingWallet
+                  ? 'missing wallet'
+                  : isConnected
+                    ? 'disconnect'
+                    : 'connect'}
             </Button>
           </div>
 

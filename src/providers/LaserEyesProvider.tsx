@@ -100,6 +100,7 @@ const LaserEyesProvider = ({
     | typeof WIZZ
     | undefined
   >();
+  const [isInitializing, setIsInitializing] = useState(true);
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -136,6 +137,21 @@ const LaserEyesProvider = ({
       });
     }
   }, [config, library]);
+
+  const checkInitializationComplete = () => {
+    if (
+      hasUnisat !== undefined &&
+      hasXverse !== undefined &&
+      hasOyl !== undefined &&
+      hasMagicEden !== undefined &&
+      hasOkx !== undefined &&
+      hasLeather !== undefined &&
+      hasPhantom !== undefined &&
+      hasWizz !== undefined
+    ) {
+      setIsInitializing(false);
+    }
+  };
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -272,6 +288,19 @@ const LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    checkInitializationComplete();
+  }, [
+    hasUnisat,
+    hasXverse,
+    hasOyl,
+    hasMagicEden,
+    hasOkx,
+    hasLeather,
+    hasPhantom,
+    hasWizz,
+  ]);
 
   useEffect(() => {
     setBalance(undefined);
@@ -1433,6 +1462,7 @@ const LaserEyesProvider = ({
         provider,
         balance,
         network,
+        isInitializing,
         connected,
         isConnecting,
         hasUnisat,
