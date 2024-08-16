@@ -14,12 +14,14 @@ import {
   WIZZ,
 } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
-import { truncateString } from '@/lib/utils'
+import { cn, truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
 import PollCard from '@/components/PollCard'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
+import { getPackageVersion } from '@/lib/github'
+import { Badge, badgeVariants } from '@/components/ui/badge'
 
 const App = () => {
   const wallets = [UNISAT, XVERSE, LEATHER]
@@ -33,6 +35,8 @@ const App = () => {
     balance,
   } = useLaserEyes()
 
+  const [pkgVersion, setPkgVersion] = useState<string | undefined>()
+
   const [signature, setSignature] = useState<string>('')
   const [unsignedPsbt, setUnsignedPsbt] = useState<string | undefined>()
   const [signedPsbt, setSignedPsbt] = useState<
@@ -43,6 +47,12 @@ const App = () => {
       }
     | undefined
   >()
+
+  useEffect(() => {
+    getPackageVersion().then((version) => {
+      setPkgVersion(version)
+    })
+  }, [])
 
   useEffect(() => {
     setSignature('')
@@ -59,7 +69,7 @@ const App = () => {
         'flex flex-col gap-4 w-full mt-12 mb-24 max-w-[1200px] px-12 font-windows'
       }
     >
-      <div className={'w-full flex gap-4 flex-row justify-center items-center'}>
+      <div className={'w-full flex gap-2 flex-row justify-center items-center'}>
         <Image
           src={
             address ? '/lasereyes_connected.svg' : '/lasereyes_disconnected.svg'
@@ -68,6 +78,16 @@ const App = () => {
           width={300}
           height={300}
         />
+        <Link
+          className={cn(
+            badgeVariants({ variant: 'outline' }),
+            'self-end mb-2 text-white hover:bg-white hover:text-black transition-all text-[10px]'
+          )}
+          href={'https://github.com/omnisat/lasereyes'}
+        >
+          {pkgVersion ? `v ${pkgVersion}` : '--'}
+        </Link>
+
         <div className={'grow'} />
         <Link
           href={'https://www.lasereyes.build/docs/getting-started'}

@@ -1,6 +1,7 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -100,6 +101,7 @@ const LaserEyesProvider = ({
     | typeof WIZZ
     | undefined
   >();
+  const [isInitializing, setIsInitializing] = useState(true);
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -137,56 +139,169 @@ const LaserEyesProvider = ({
     }
   }, [config, library]);
 
-  useEffect(() => {
-    const unisatLib = (window as any)?.unisat;
-    setHasUnisat(!!unisatLib);
-  }, []);
-
-  useEffect(() => {
-    const xverseLib = (window as any)?.XverseProviders?.BitcoinProvider;
-    setHasXverse(!!xverseLib);
-  }, []);
-
-  useEffect(() => {
-    const oylLib = (window as any)?.oyl;
-    setHasOyl(!!oylLib);
-  }, []);
-
-  useEffect(() => {
-    const magicEdenLib = (window as any)?.magicEden;
-    setHasMagicEden(!!magicEdenLib);
-  }, []);
-
-  useEffect(() => {}, []);
-
-  useEffect(() => {
-    let foundOkx;
-    if (network === TESTNET) {
-      foundOkx = (window as any).okxwallet?.bitcoinTestnet;
-    } else if (network === MAINNET) {
-      foundOkx = (window as any).okxwallet?.bitcoin;
+  const checkInitializationComplete = () => {
+    if (
+      hasUnisat !== undefined &&
+      hasXverse !== undefined &&
+      hasOyl !== undefined &&
+      hasMagicEden !== undefined &&
+      hasOkx !== undefined &&
+      hasLeather !== undefined &&
+      hasPhantom !== undefined &&
+      hasWizz !== undefined
+    ) {
+      setIsInitializing(false);
     }
-    setHasOkx(!!foundOkx);
+  };
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const unisatLib = (window as any)?.unisat;
+      if (unisatLib) {
+        setHasUnisat(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const leatherLib = (window as any)?.LeatherProvider;
-    setHasLeather(!!leatherLib);
+    const observer = new MutationObserver(() => {
+      const xverseLib = (window as any)?.XverseProviders?.BitcoinProvider;
+      if (xverseLib) {
+        setHasXverse(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const phantomLib = (window as any)?.phantom?.bitcoin;
-    if (phantomLib && phantomLib.isPhantom) {
-      setHasPhantom(!!phantomLib);
-    } else {
-      setHasPhantom(false);
-    }
+    const observer = new MutationObserver(() => {
+      const oylLib = (window as any)?.oyl;
+      if (oylLib) {
+        setHasOyl(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const wissLib = (window as any)?.wizz;
-    setHasWizz(!!wissLib);
+    const observer = new MutationObserver(() => {
+      const magicEdenLib = (window as any)?.magicEden;
+      if (magicEdenLib) {
+        setHasMagicEden(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      let foundOkx;
+      if (network === TESTNET) {
+        foundOkx = (window as any)?.okxwallet?.bitcoinTestnet;
+      } else if (network === MAINNET) {
+        foundOkx = (window as any)?.okxwallet?.bitcoin;
+      }
+      if (foundOkx) {
+        setHasOkx(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [network]); // note that `network` is still a dependency here
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const leatherLib = (window as any)?.LeatherProvider;
+      if (leatherLib) {
+        setHasLeather(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const phantomLib = (window as any)?.phantom?.bitcoin;
+      if (phantomLib && phantomLib.isPhantom) {
+        setHasPhantom(true);
+        observer.disconnect();
+      } else {
+        setHasPhantom(false);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const wizzLib = (window as any)?.wizz;
+      if (wizzLib) {
+        setHasWizz(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    checkInitializationComplete();
+  }, [
+    hasUnisat,
+    hasXverse,
+    hasOyl,
+    hasMagicEden,
+    hasOkx,
+    hasLeather,
+    hasPhantom,
+    hasWizz,
+  ]);
 
   useEffect(() => {
     setBalance(undefined);
@@ -209,25 +324,27 @@ const LaserEyesProvider = ({
   }, [library]);
 
   useEffect(() => {
-    const defaultWallet = localStorage?.getItem(
-      LOCAL_STORAGE_DEFAULT_WALLET
-    ) as
-      | typeof UNISAT
-      | typeof XVERSE
-      | typeof OYL
-      | typeof MAGIC_EDEN
-      | typeof OKX
-      | typeof LEATHER
-      | typeof PHANTOM
-      | typeof WIZZ
-      | undefined;
-    if (defaultWallet) {
-      setProvider(defaultWallet);
-      connect(defaultWallet);
+    if (!isInitializing) {
+      const defaultWallet = localStorage?.getItem(
+        LOCAL_STORAGE_DEFAULT_WALLET
+      ) as
+        | typeof UNISAT
+        | typeof XVERSE
+        | typeof OYL
+        | typeof MAGIC_EDEN
+        | typeof OKX
+        | typeof LEATHER
+        | typeof PHANTOM
+        | typeof WIZZ
+        | undefined;
+      if (defaultWallet) {
+        setProvider(defaultWallet);
+        connect(defaultWallet);
+      }
     }
-  }, []);
+  }, [isInitializing]);
 
-  const connectUnisat = async () => {
+  const connectUnisat = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = (window as any).unisat;
@@ -248,9 +365,9 @@ const LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  };
+  }, [hasUnisat]);
 
-  const connectXverse = async () => {
+  const connectXverse = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork(config?.network || MAINNET);
@@ -290,7 +407,7 @@ const LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  };
+  }, [hasXverse]);
 
   const connectOyl = async () => {
     try {
@@ -388,7 +505,7 @@ const LaserEyesProvider = ({
     }
   };
 
-  const connectLeather = async () => {
+  const connectLeather = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
 
@@ -437,7 +554,7 @@ const LaserEyesProvider = ({
     } catch (error) {
       new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
-  };
+  }, [hasLeather]);
 
   const connectPhantom = async () => {
     try {
@@ -1348,6 +1465,7 @@ const LaserEyesProvider = ({
         provider,
         balance,
         network,
+        isInitializing,
         connected,
         isConnecting,
         hasUnisat,

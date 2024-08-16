@@ -12,6 +12,7 @@ export const initialWalletContext = {
   hasLeather: false,
   hasPhantom: false,
   hasWizz: false,
+  isInitializing: true,
   connected: false,
   isConnecting: false,
   publicKey: "",

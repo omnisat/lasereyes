@@ -23,7 +23,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
 import { getMempoolSpaceUrl, getOrdpoolSpaceUrl } from '@/lib/urls'
@@ -61,6 +61,7 @@ const WalletCard = ({
   ) => void
 }) => {
   const {
+    isInitializing,
     connect,
     disconnect,
     address,
@@ -88,6 +89,9 @@ const WalletCard = ({
   const { inscribe, setContent, isFetchingCommitPsbt, isInscribing, reset } =
     useInscriber({ inscribeApiUrl: 'https://de-scribe.vercel.app/api' })
 
+  const [hasError, setHasError] = useState(false)
+  const hasRun = useRef(false)
+
   const [finalize, setFinalize] = useState<boolean>(false)
   const [broadcast, setBroadcast] = useState<boolean>(false)
   const [unsigned, setUnsigned] = useState<string | undefined>()
@@ -113,20 +117,26 @@ const WalletCard = ({
   }
 
   useEffect(() => {
-    if (utxos.length > 0 && connected) {
-      const psbt = createPsbt(
+    if (utxos.length > 0 && connected && !hasRun.current && !hasError) {
+      hasRun.current = true
+      createPsbt(
         utxos,
         paymentAddress,
         paymentPublicKey,
         network as typeof MAINNET | typeof TESTNET
-      ).then((psbt) => {
-        if (psbt && psbt.toHex() !== unsigned) {
-          setUnsignedPsbt(psbt.toHex())
-          setUnsigned(psbt.toHex())
-          setSigned(undefined)
-          setSignedPsbt(undefined)
-        }
-      })
+      )
+        .then((psbt) => {
+          if (psbt && psbt.toHex() !== unsigned) {
+            setUnsignedPsbt(psbt.toHex())
+            setUnsigned(psbt.toHex())
+            setSigned(undefined)
+            setSignedPsbt(undefined)
+          }
+        })
+        .catch((e) => {
+          setHasError(true)
+          toast.error(e.message)
+        })
     }
   }, [utxos, connected])
 
@@ -348,11 +358,13 @@ const WalletCard = ({
                 isConnected ? disconnect() : connectWallet(walletName)
               }
             >
-              {isMissingWallet
-                ? 'missing wallet'
-                : isConnected
-                  ? 'disconnect'
-                  : 'connect'}
+              {isInitializing
+                ? 'initializing..'
+                : isMissingWallet
+                  ? 'missing wallet'
+                  : isConnected
+                    ? 'disconnect'
+                    : 'connect'}
             </Button>
           </div>
 
@@ -446,35 +458,35 @@ const WalletCard = ({
             >
               push PSBT
             </Button>
-            <Button
-              disabled={
-                isMissingWallet ||
-                !isConnected ||
-                isFetchingCommitPsbt ||
-                isInscribing
-              }
-              className={'w-full bg-[#232225] gap-1'}
-              variant={!isConnected ? 'secondary' : 'default'}
-              onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}
-            >
-              {isInscribing ? (
-                'inscribing...'
-              ) : isFetchingCommitPsbt ? (
-                ' creating commit psbt'
-              ) : (
-                <>
-                  inscribe{' '}
-                  <span
-                    className={cn(
-                      ' text-[8px] p-.5 px-1',
-                      isConnected ? 'bg-black' : ''
-                    )}
-                  >
-                    Laser_Eyes
-                  </span>
-                </>
-              )}
-            </Button>
+            {/*<Button*/}
+            {/*  disabled={*/}
+            {/*    isMissingWallet ||*/}
+            {/*    !isConnected ||*/}
+            {/*    isFetchingCommitPsbt ||*/}
+            {/*    isInscribing*/}
+            {/*  }*/}
+            {/*  className={'w-full bg-[#232225] gap-1'}*/}
+            {/*  variant={!isConnected ? 'secondary' : 'default'}*/}
+            {/*  onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}*/}
+            {/*>*/}
+            {/*  {isInscribing ? (*/}
+            {/*    'inscribing...'*/}
+            {/*  ) : isFetchingCommitPsbt ? (*/}
+            {/*    ' creating commit psbt'*/}
+            {/*  ) : (*/}
+            {/*    <>*/}
+            {/*      inscribe{' '}*/}
+            {/*      <span*/}
+            {/*        className={cn(*/}
+            {/*          ' text-[8px] p-.5 px-1',*/}
+            {/*          isConnected ? 'bg-black' : ''*/}
+            {/*        )}*/}
+            {/*      >*/}
+            {/*        Laser_Eyes*/}
+            {/*      </span>*/}
+            {/*    </>*/}
+            {/*  )}*/}
+            {/*</Button>*/}
           </div>
         </div>
       </CardContent>

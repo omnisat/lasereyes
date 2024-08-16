@@ -2,6 +2,7 @@ import { MAGIC_EDEN, UNISAT, XVERSE } from "../consts/wallets";
 import { MAINNET, REGTEST, SIGNET, TESTNET } from "../consts/networks";
 
 export type LaserEyesContextType = {
+  isInitializing: boolean;
   connected: boolean;
   isConnecting: boolean;
   publicKey: string;

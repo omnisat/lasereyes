@@ -185,6 +185,7 @@ var createConfig = (config) => {
 // src/providers/LaserEyesProvider.tsx
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -203,6 +204,7 @@ var initialWalletContext = {
   hasLeather: false,
   hasPhantom: false,
   hasWizz: false,
+  isInitializing: true,
   connected: false,
   isConnecting: false,
   publicKey: "",
@@ -436,6 +438,7 @@ var LaserEyesProvider = ({
   const self = selfRef.current;
   const [library, setLibrary] = useState(null);
   const [provider, setProvider] = useState();
+  const [isInitializing, setIsInitializing] = useState(true);
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -467,52 +470,138 @@ var LaserEyesProvider = ({
       });
     }
   }, [config, library]);
-  useEffect(() => {
-    const unisatLib = window == null ? void 0 : window.unisat;
-    setHasUnisat(!!unisatLib);
-  }, []);
-  useEffect(() => {
-    var _a;
-    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
-    setHasXverse(!!xverseLib);
-  }, []);
-  useEffect(() => {
-    const oylLib = window == null ? void 0 : window.oyl;
-    setHasOyl(!!oylLib);
-  }, []);
-  useEffect(() => {
-    const magicEdenLib = window == null ? void 0 : window.magicEden;
-    setHasMagicEden(!!magicEdenLib);
-  }, []);
-  useEffect(() => {
-  }, []);
-  useEffect(() => {
-    var _a, _b;
-    let foundOkx;
-    if (network === TESTNET) {
-      foundOkx = (_a = window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
-    } else if (network === MAINNET) {
-      foundOkx = (_b = window.okxwallet) == null ? void 0 : _b.bitcoin;
+  const checkInitializationComplete = () => {
+    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
+      setIsInitializing(false);
     }
-    setHasOkx(!!foundOkx);
+  };
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const unisatLib = window == null ? void 0 : window.unisat;
+      if (unisatLib) {
+        setHasUnisat(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   useEffect(() => {
-    const leatherLib = window == null ? void 0 : window.LeatherProvider;
-    setHasLeather(!!leatherLib);
+    const observer = new MutationObserver(() => {
+      var _a;
+      const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+      if (xverseLib) {
+        setHasXverse(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   useEffect(() => {
-    var _a;
-    const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
-    if (phantomLib && phantomLib.isPhantom) {
-      setHasPhantom(!!phantomLib);
-    } else {
-      setHasPhantom(false);
-    }
+    const observer = new MutationObserver(() => {
+      const oylLib = window == null ? void 0 : window.oyl;
+      if (oylLib) {
+        setHasOyl(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   useEffect(() => {
-    const wissLib = window == null ? void 0 : window.wizz;
-    setHasWizz(!!wissLib);
+    const observer = new MutationObserver(() => {
+      const magicEdenLib = window == null ? void 0 : window.magicEden;
+      if (magicEdenLib) {
+        setHasMagicEden(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      var _a, _b;
+      let foundOkx;
+      if (network === TESTNET) {
+        foundOkx = (_a = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
+      } else if (network === MAINNET) {
+        foundOkx = (_b = window == null ? void 0 : window.okxwallet) == null ? void 0 : _b.bitcoin;
+      }
+      if (foundOkx) {
+        setHasOkx(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, [network]);
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const leatherLib = window == null ? void 0 : window.LeatherProvider;
+      if (leatherLib) {
+        setHasLeather(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      var _a;
+      const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
+      if (phantomLib && phantomLib.isPhantom) {
+        setHasPhantom(true);
+        observer.disconnect();
+      } else {
+        setHasPhantom(false);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const wizzLib = window == null ? void 0 : window.wizz;
+      if (wizzLib) {
+        setHasWizz(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    checkInitializationComplete();
+  }, [
+    hasUnisat,
+    hasXverse,
+    hasOyl,
+    hasMagicEden,
+    hasOkx,
+    hasLeather,
+    hasPhantom,
+    hasWizz
+  ]);
   useEffect(() => {
     setBalance(void 0);
   }, [network]);
@@ -531,15 +620,17 @@ var LaserEyesProvider = ({
     };
   }, [library]);
   useEffect(() => {
-    const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
-      LOCAL_STORAGE_DEFAULT_WALLET
-    );
-    if (defaultWallet) {
-      setProvider(defaultWallet);
-      connect(defaultWallet);
+    if (!isInitializing) {
+      const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
+        LOCAL_STORAGE_DEFAULT_WALLET
+      );
+      if (defaultWallet) {
+        setProvider(defaultWallet);
+        connect(defaultWallet);
+      }
     }
-  }, []);
-  const connectUnisat = () => __async(void 0, null, function* () {
+  }, [isInitializing]);
+  const connectUnisat = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
@@ -562,8 +653,8 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
-  const connectXverse = () => __async(void 0, null, function* () {
+  }), [hasUnisat]);
+  const connectXverse = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
@@ -602,7 +693,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
+  }), [hasXverse]);
   const connectOyl = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
@@ -693,7 +784,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectLeather = () => __async(void 0, null, function* () {
+  const connectLeather = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -733,7 +824,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
-  });
+  }), [hasLeather]);
   const connectPhantom = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, PHANTOM);
@@ -1583,6 +1674,7 @@ var LaserEyesProvider = ({
         provider,
         balance,
         network,
+        isInitializing,
         connected,
         isConnecting,
         hasUnisat,
@@ -1613,7 +1705,7 @@ var LaserEyesProvider = ({
 };
 
 // src/hooks/useInscriber.ts
-import { useCallback, useEffect as useEffect2, useState as useState2 } from "react";
+import { useCallback as useCallback2, useEffect as useEffect2, useState as useState2 } from "react";
 
 // src/consts/inscribe.ts
 var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
@@ -1642,7 +1734,7 @@ var useInscriber = ({
     setCommitPsbtBase64("");
     setCommitTxId("");
   }, [content, address2, mimeType, feeRate]);
-  const getCommitPsbt = useCallback(() => __async(void 0, null, function* () {
+  const getCommitPsbt = useCallback2(() => __async(void 0, null, function* () {
     try {
       if (!content)
         throw new Error("missing content");
@@ -1689,7 +1781,7 @@ var useInscriber = ({
       throw e;
     }
   });
-  const inscribe = useCallback(
+  const inscribe = useCallback2(
     (_0) => __async(void 0, [_0], function* ({
       content: providedContent,
       mimeType: providedMimeType,
