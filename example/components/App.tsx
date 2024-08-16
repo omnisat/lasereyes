@@ -81,7 +81,7 @@ const App = () => {
         <Link
           className={cn(
             badgeVariants({ variant: 'outline' }),
-            'self-end mb-2 text-white hover:bg-white hover:text-black transition-all text-[10px]'
+            'self-end mb-1.5 text-orange-500 border-orange-500 hover:border-white hover:bg-white hover:text-black transition-all text-md'
           )}
           href={'https://github.com/omnisat/lasereyes'}
         >
