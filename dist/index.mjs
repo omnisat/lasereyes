@@ -185,6 +185,7 @@ var createConfig = (config) => {
 // src/providers/LaserEyesProvider.tsx
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -627,7 +628,7 @@ var LaserEyesProvider = ({
       connect(defaultWallet);
     }
   }, []);
-  const connectUnisat = () => __async(void 0, null, function* () {
+  const connectUnisat = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
@@ -650,8 +651,8 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
-  const connectXverse = () => __async(void 0, null, function* () {
+  }), [hasUnisat]);
+  const connectXverse = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
@@ -690,7 +691,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
+  }), [hasXverse]);
   const connectOyl = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
@@ -781,7 +782,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectLeather = () => __async(void 0, null, function* () {
+  const connectLeather = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -821,7 +822,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
-  });
+  }), [hasLeather]);
   const connectPhantom = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, PHANTOM);
@@ -1702,7 +1703,7 @@ var LaserEyesProvider = ({
 };
 
 // src/hooks/useInscriber.ts
-import { useCallback, useEffect as useEffect2, useState as useState2 } from "react";
+import { useCallback as useCallback2, useEffect as useEffect2, useState as useState2 } from "react";
 
 // src/consts/inscribe.ts
 var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
@@ -1731,7 +1732,7 @@ var useInscriber = ({
     setCommitPsbtBase64("");
     setCommitTxId("");
   }, [content, address2, mimeType, feeRate]);
-  const getCommitPsbt = useCallback(() => __async(void 0, null, function* () {
+  const getCommitPsbt = useCallback2(() => __async(void 0, null, function* () {
     try {
       if (!content)
         throw new Error("missing content");
@@ -1778,7 +1779,7 @@ var useInscriber = ({
       throw e;
     }
   });
-  const inscribe = useCallback(
+  const inscribe = useCallback2(
     (_0) => __async(void 0, [_0], function* ({
       content: providedContent,
       mimeType: providedMimeType,

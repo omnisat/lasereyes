@@ -1,6 +1,7 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -341,7 +342,7 @@ const LaserEyesProvider = ({
     }
   }, []);
 
-  const connectUnisat = async () => {
+  const connectUnisat = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = (window as any).unisat;
@@ -362,9 +363,9 @@ const LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  };
+  }, [hasUnisat]);
 
-  const connectXverse = async () => {
+  const connectXverse = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork(config?.network || MAINNET);
@@ -404,7 +405,7 @@ const LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  };
+  }, [hasXverse]);
 
   const connectOyl = async () => {
     try {
@@ -502,7 +503,7 @@ const LaserEyesProvider = ({
     }
   };
 
-  const connectLeather = async () => {
+  const connectLeather = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
 
@@ -551,7 +552,7 @@ const LaserEyesProvider = ({
     } catch (error) {
       new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
-  };
+  }, [hasLeather]);
 
   const connectPhantom = async () => {
     try {

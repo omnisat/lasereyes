@@ -458,35 +458,35 @@ const WalletCard = ({
             >
               push PSBT
             </Button>
-            <Button
-              disabled={
-                isMissingWallet ||
-                !isConnected ||
-                isFetchingCommitPsbt ||
-                isInscribing
-              }
-              className={'w-full bg-[#232225] gap-1'}
-              variant={!isConnected ? 'secondary' : 'default'}
-              onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}
-            >
-              {isInscribing ? (
-                'inscribing...'
-              ) : isFetchingCommitPsbt ? (
-                ' creating commit psbt'
-              ) : (
-                <>
-                  inscribe{' '}
-                  <span
-                    className={cn(
-                      ' text-[8px] p-.5 px-1',
-                      isConnected ? 'bg-black' : ''
-                    )}
-                  >
-                    Laser_Eyes
-                  </span>
-                </>
-              )}
-            </Button>
+            {/*<Button*/}
+            {/*  disabled={*/}
+            {/*    isMissingWallet ||*/}
+            {/*    !isConnected ||*/}
+            {/*    isFetchingCommitPsbt ||*/}
+            {/*    isInscribing*/}
+            {/*  }*/}
+            {/*  className={'w-full bg-[#232225] gap-1'}*/}
+            {/*  variant={!isConnected ? 'secondary' : 'default'}*/}
+            {/*  onClick={() => (!isConnected ? null : inscribeText('Laser_Eyes'))}*/}
+            {/*>*/}
+            {/*  {isInscribing ? (*/}
+            {/*    'inscribing...'*/}
+            {/*  ) : isFetchingCommitPsbt ? (*/}
+            {/*    ' creating commit psbt'*/}
+            {/*  ) : (*/}
+            {/*    <>*/}
+            {/*      inscribe{' '}*/}
+            {/*      <span*/}
+            {/*        className={cn(*/}
+            {/*          ' text-[8px] p-.5 px-1',*/}
+            {/*          isConnected ? 'bg-black' : ''*/}
+            {/*        )}*/}
+            {/*      >*/}
+            {/*        Laser_Eyes*/}
+            {/*      </span>*/}
+            {/*    </>*/}
+            {/*  )}*/}
+            {/*</Button>*/}
           </div>
         </div>
       </CardContent>

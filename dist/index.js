@@ -705,7 +705,7 @@ var LaserEyesProvider = ({
       connect(defaultWallet);
     }
   }, []);
-  const connectUnisat = () => __async(void 0, null, function* () {
+  const connectUnisat = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
@@ -728,8 +728,8 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
-  const connectXverse = () => __async(void 0, null, function* () {
+  }), [hasUnisat]);
+  const connectXverse = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
@@ -768,7 +768,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  });
+  }), [hasXverse]);
   const connectOyl = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
@@ -859,7 +859,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectLeather = () => __async(void 0, null, function* () {
+  const connectLeather = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -899,7 +899,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       new Error(`Can't lasereyes to ${LEATHER} wallet`);
     }
-  });
+  }), [hasLeather]);
   const connectPhantom = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, PHANTOM);
