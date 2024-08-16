@@ -324,23 +324,25 @@ const LaserEyesProvider = ({
   }, [library]);
 
   useEffect(() => {
-    const defaultWallet = localStorage?.getItem(
-      LOCAL_STORAGE_DEFAULT_WALLET
-    ) as
-      | typeof UNISAT
-      | typeof XVERSE
-      | typeof OYL
-      | typeof MAGIC_EDEN
-      | typeof OKX
-      | typeof LEATHER
-      | typeof PHANTOM
-      | typeof WIZZ
-      | undefined;
-    if (defaultWallet) {
-      setProvider(defaultWallet);
-      connect(defaultWallet);
+    if (!isInitializing) {
+      const defaultWallet = localStorage?.getItem(
+        LOCAL_STORAGE_DEFAULT_WALLET
+      ) as
+        | typeof UNISAT
+        | typeof XVERSE
+        | typeof OYL
+        | typeof MAGIC_EDEN
+        | typeof OKX
+        | typeof LEATHER
+        | typeof PHANTOM
+        | typeof WIZZ
+        | undefined;
+      if (defaultWallet) {
+        setProvider(defaultWallet);
+        connect(defaultWallet);
+      }
     }
-  }, []);
+  }, [isInitializing]);
 
   const connectUnisat = useCallback(async () => {
     try {

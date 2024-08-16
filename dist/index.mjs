@@ -620,14 +620,16 @@ var LaserEyesProvider = ({
     };
   }, [library]);
   useEffect(() => {
-    const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
-      LOCAL_STORAGE_DEFAULT_WALLET
-    );
-    if (defaultWallet) {
-      setProvider(defaultWallet);
-      connect(defaultWallet);
+    if (!isInitializing) {
+      const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
+        LOCAL_STORAGE_DEFAULT_WALLET
+      );
+      if (defaultWallet) {
+        setProvider(defaultWallet);
+        connect(defaultWallet);
+      }
     }
-  }, []);
+  }, [isInitializing]);
   const connectUnisat = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
