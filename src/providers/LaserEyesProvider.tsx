@@ -138,54 +138,139 @@ const LaserEyesProvider = ({
   }, [config, library]);
 
   useEffect(() => {
-    const unisatLib = (window as any)?.unisat;
-    setHasUnisat(!!unisatLib);
+    const observer = new MutationObserver(() => {
+      const unisatLib = (window as any)?.unisat;
+      if (unisatLib) {
+        setHasUnisat(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const xverseLib = (window as any)?.XverseProviders?.BitcoinProvider;
-    setHasXverse(!!xverseLib);
+    const observer = new MutationObserver(() => {
+      const xverseLib = (window as any)?.XverseProviders?.BitcoinProvider;
+      if (xverseLib) {
+        setHasXverse(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const oylLib = (window as any)?.oyl;
-    setHasOyl(!!oylLib);
+    const observer = new MutationObserver(() => {
+      const oylLib = (window as any)?.oyl;
+      if (oylLib) {
+        setHasOyl(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const magicEdenLib = (window as any)?.magicEden;
-    setHasMagicEden(!!magicEdenLib);
-  }, []);
+    const observer = new MutationObserver(() => {
+      const magicEdenLib = (window as any)?.magicEden;
+      if (magicEdenLib) {
+        setHasMagicEden(true);
+        observer.disconnect();
+      }
+    });
 
-  useEffect(() => {}, []);
+    observer.observe(document, { childList: true, subtree: true });
 
-  useEffect(() => {
-    let foundOkx;
-    if (network === TESTNET) {
-      foundOkx = (window as any).okxwallet?.bitcoinTestnet;
-    } else if (network === MAINNET) {
-      foundOkx = (window as any).okxwallet?.bitcoin;
-    }
-    setHasOkx(!!foundOkx);
-  }, []);
-
-  useEffect(() => {
-    const leatherLib = (window as any)?.LeatherProvider;
-    setHasLeather(!!leatherLib);
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const phantomLib = (window as any)?.phantom?.bitcoin;
-    if (phantomLib && phantomLib.isPhantom) {
-      setHasPhantom(!!phantomLib);
-    } else {
-      setHasPhantom(false);
-    }
+    const observer = new MutationObserver(() => {
+      let foundOkx;
+      if (network === TESTNET) {
+        foundOkx = (window as any)?.okxwallet?.bitcoinTestnet;
+      } else if (network === MAINNET) {
+        foundOkx = (window as any)?.okxwallet?.bitcoin;
+      }
+      if (foundOkx) {
+        setHasOkx(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [network]); // note that `network` is still a dependency here
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const leatherLib = (window as any)?.LeatherProvider;
+      if (leatherLib) {
+        setHasLeather(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    const wissLib = (window as any)?.wizz;
-    setHasWizz(!!wissLib);
+    const observer = new MutationObserver(() => {
+      const phantomLib = (window as any)?.phantom?.bitcoin;
+      if (phantomLib && phantomLib.isPhantom) {
+        setHasPhantom(true);
+        observer.disconnect();
+      } else {
+        setHasPhantom(false);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const wizzLib = (window as any)?.wizz;
+      if (wizzLib) {
+        setHasWizz(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {

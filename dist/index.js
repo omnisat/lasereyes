@@ -546,50 +546,119 @@ var LaserEyesProvider = ({
     }
   }, [config, library]);
   (0, import_react.useEffect)(() => {
-    const unisatLib = window == null ? void 0 : window.unisat;
-    setHasUnisat(!!unisatLib);
+    const observer = new MutationObserver(() => {
+      const unisatLib = window == null ? void 0 : window.unisat;
+      if (unisatLib) {
+        setHasUnisat(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
-    var _a;
-    const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
-    setHasXverse(!!xverseLib);
+    const observer = new MutationObserver(() => {
+      var _a;
+      const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+      if (xverseLib) {
+        setHasXverse(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
-    const oylLib = window == null ? void 0 : window.oyl;
-    setHasOyl(!!oylLib);
+    const observer = new MutationObserver(() => {
+      const oylLib = window == null ? void 0 : window.oyl;
+      if (oylLib) {
+        setHasOyl(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
-    const magicEdenLib = window == null ? void 0 : window.magicEden;
-    setHasMagicEden(!!magicEdenLib);
+    const observer = new MutationObserver(() => {
+      const magicEdenLib = window == null ? void 0 : window.magicEden;
+      if (magicEdenLib) {
+        setHasMagicEden(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
+    const observer = new MutationObserver(() => {
+      var _a, _b;
+      let foundOkx;
+      if (network === TESTNET) {
+        foundOkx = (_a = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
+      } else if (network === MAINNET) {
+        foundOkx = (_b = window == null ? void 0 : window.okxwallet) == null ? void 0 : _b.bitcoin;
+      }
+      if (foundOkx) {
+        setHasOkx(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, [network]);
+  (0, import_react.useEffect)(() => {
+    const observer = new MutationObserver(() => {
+      const leatherLib = window == null ? void 0 : window.LeatherProvider;
+      if (leatherLib) {
+        setHasLeather(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
-    var _a, _b;
-    let foundOkx;
-    if (network === TESTNET) {
-      foundOkx = (_a = window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
-    } else if (network === MAINNET) {
-      foundOkx = (_b = window.okxwallet) == null ? void 0 : _b.bitcoin;
-    }
-    setHasOkx(!!foundOkx);
+    const observer = new MutationObserver(() => {
+      var _a;
+      const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
+      if (phantomLib && phantomLib.isPhantom) {
+        setHasPhantom(true);
+        observer.disconnect();
+      } else {
+        setHasPhantom(false);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
-    const leatherLib = window == null ? void 0 : window.LeatherProvider;
-    setHasLeather(!!leatherLib);
-  }, []);
-  (0, import_react.useEffect)(() => {
-    var _a;
-    const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
-    if (phantomLib && phantomLib.isPhantom) {
-      setHasPhantom(!!phantomLib);
-    } else {
-      setHasPhantom(false);
-    }
-  }, []);
-  (0, import_react.useEffect)(() => {
-    const wissLib = window == null ? void 0 : window.wizz;
-    setHasWizz(!!wissLib);
+    const observer = new MutationObserver(() => {
+      const wizzLib = window == null ? void 0 : window.wizz;
+      if (wizzLib) {
+        setHasWizz(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
   }, []);
   (0, import_react.useEffect)(() => {
     setBalance(void 0);

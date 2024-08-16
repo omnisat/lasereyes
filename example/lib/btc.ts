@@ -78,6 +78,12 @@ export async function createPsbt(
     }
   }
 
+  if (utxoWithMostValue.value - 546 < 1000) {
+    throw new Error("Couldn't create test psbt: Insufficient funds")
+  }
+
+  console.log(utxoWithMostValue.value)
+
   psbt.addOutput({
     address: outputAddress,
     value: utxoWithMostValue.value - 1000,
