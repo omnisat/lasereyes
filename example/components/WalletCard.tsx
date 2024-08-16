@@ -119,13 +119,14 @@ const WalletCard = ({
         paymentAddress,
         paymentPublicKey,
         network as typeof MAINNET | typeof TESTNET
-      )
-      if (psbt && psbt.toHex() !== unsigned) {
-        setUnsignedPsbt(psbt.toHex())
-        setUnsigned(psbt.toHex())
-        setSigned(undefined)
-        setSignedPsbt(undefined)
-      }
+      ).then((psbt) => {
+        if (psbt && psbt.toHex() !== unsigned) {
+          setUnsignedPsbt(psbt.toHex())
+          setUnsigned(psbt.toHex())
+          setSigned(undefined)
+          setSignedPsbt(undefined)
+        }
+      })
     }
   }, [utxos, connected])
 

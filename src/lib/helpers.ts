@@ -1,18 +1,19 @@
 import * as bitcoin from "bitcoinjs-lib";
 
-import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
+import { MAINNET, REGTEST, SIGNET, TESTNET } from "../consts/networks";
 import axios from "axios";
-import { P2PKH, P2PSH, P2TR, P2WPKH, P2WSH } from "../consts/wallets";
-import { BlockchainInfoUTXO, MempoolUtxo } from "../types";
+import { MempoolUtxo } from "../types";
 import { getMempoolSpaceUrl } from "./urls";
 import * as ecc from "@bitcoinerlab/secp256k1";
 
 bitcoin.initEccLib(ecc);
 
 export const getBitcoinNetwork = (
-  network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
 ) => {
   if (network === TESTNET) {
+    return bitcoin.networks.testnet;
+  } else if (network === SIGNET) {
     return bitcoin.networks.testnet;
   } else if (network === REGTEST) {
     return bitcoin.networks.regtest;
@@ -44,18 +45,6 @@ export const getBTCBalance = async (address: string): Promise<number> => {
   }
 };
 
-export const getAddressUtxos = async (
-  address: string
-): Promise<BlockchainInfoUTXO[]> => {
-  try {
-    return await axios
-      .get(`https://blockchain.info/unspent?active=${address}`)
-      .then((response) => response.data.unspent_outputs);
-  } catch (error) {
-    throw new Error("Failed to fetch UTXOs");
-  }
-};
-
 export const satoshisToBTC = (satoshis: number): string => {
   if (Number.isNaN(satoshis) || satoshis === undefined) return "--";
   const btcValue = satoshis / 100000000;
@@ -72,43 +61,6 @@ export const isHex = (str: string): boolean => {
   const hexRegex = /^[a-fA-F0-9]+$/;
   return hexRegex.test(str);
 };
-
-const detectEncoding = (str: string): "base64" | "hex" | "unknown" => {
-  if (isBase64(str)) {
-    return "base64";
-  }
-  if (isHex(str)) {
-    return "hex";
-  }
-  return "unknown";
-};
-
-export function getAddressType(address: string) {
-  try {
-    bitcoin.address.fromBase58Check(address);
-    return P2PKH;
-  } catch (e) {}
-
-  try {
-    bitcoin.address.fromBase58Check(address);
-    return P2PSH;
-  } catch (e) {}
-
-  try {
-    const { version, data } = bitcoin.address.fromBech32(address);
-    if (version === 0) {
-      if (data.length === 20) {
-        return P2WPKH;
-      } else if (data.length === 32) {
-        return P2WSH;
-      }
-    } else if (version === 1 && data.length === 32) {
-      return P2TR;
-    }
-  } catch (e) {}
-
-  throw new Error("Invalid address");
-}
 
 export function estimateTxSize(
   taprootInputCount: number,

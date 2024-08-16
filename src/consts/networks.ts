@@ -5,6 +5,7 @@ export const UNISAT_TESTNET = "testnet";
 
 export const XVERSE_MAINNET = "Mainnet";
 export const XVERSE_TESTNET = "Testnet";
+export const XVERSE_SIGNET = "Signet";
 
 export const OKX_MAINNET = "livenet";
 export const OKX_TESTNET = "testnet";
@@ -22,6 +23,7 @@ export const REGTEST = "regtest";
 export const getXverseNetwork = (network: string) => {
   if (network === MAINNET) return XVERSE_MAINNET;
   if (network === TESTNET) return XVERSE_TESTNET;
+  if (network === SIGNET) return XVERSE_SIGNET;
   return XVERSE_MAINNET;
 };
 
@@ -75,6 +77,13 @@ export const getNetworkForWizz = (network: string) => {
 
 export const MEMPOOL_SPACE_URL = "https://mempool.space";
 export const MEMPOOL_SPACE_TESTNET_URL = "https://mempool.space/testnet";
+export const MEMPOOL_SPACE_SIGNET_URL = "https://mempool.space/signet";
 
-export const getMempoolSpaceUrl = (network: string) =>
-  network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : MEMPOOL_SPACE_URL;
+export const getMempoolSpaceUrl = (
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+) =>
+  network === TESTNET
+    ? MEMPOOL_SPACE_TESTNET_URL
+    : network === SIGNET
+    ? MEMPOOL_SPACE_SIGNET_URL
+    : MEMPOOL_SPACE_URL;

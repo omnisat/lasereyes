@@ -28,6 +28,7 @@ import {
   MAGIC_EDEN,
   OKX,
   OYL,
+  P2PKH,
   P2TR,
   P2WPKH,
   PHANTOM,
@@ -43,6 +44,7 @@ import {
   getXverseNetwork,
   MAINNET,
   REGTEST,
+  SIGNET,
   TESTNET,
   XVERSE_NETWORK,
 } from "../consts/networks";
@@ -117,7 +119,7 @@ const LaserEyesProvider = ({
   const [hasWizz, setHasWizz] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
-    typeof MAINNET | typeof TESTNET | typeof REGTEST
+    typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
   >("network", MAINNET, {
     initializeWithValue: false,
   });
@@ -517,9 +519,9 @@ const LaserEyesProvider = ({
         //   await connectMagicEden();
         // } else if (walletName === OKX) {
         //   await connectOkx();
-        // } else if (walletName === LEATHER) {
-        //   await connectLeather();
-        // } else if (walletName === PHANTOM) {
+      } else if (walletName === LEATHER) {
+        await connectLeather();
+        // }else if (walletName === PHANTOM) {
         //   await connectPhantom();
         // } else if (walletName === WIZZ) {
         //   await connectWizz();
@@ -733,7 +735,7 @@ const LaserEyesProvider = ({
   };
 
   const switchNetwork = async (
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
   ) => {
     try {
       if (!library) return;
@@ -955,7 +957,7 @@ const LaserEyesProvider = ({
       } else if (provider === LEATHER) {
         const signed = await library?.request("signMessage", {
           message: message,
-          paymentType: P2TR,
+          paymentType: P2WPKH,
         });
         return signed?.result?.signature;
       } else if (provider === PHANTOM) {
@@ -987,8 +989,8 @@ const LaserEyesProvider = ({
         psbtBase64 = bitcoin.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
       } else if (isBase64(psbt)) {
-        psbtHex = bitcoin.Psbt.fromBase64(psbt).toHex();
         psbtBase64 = psbt;
+        psbtHex = bitcoin.Psbt.fromBase64(psbt).toHex();
       } else {
         throw new Error("Invalid PSBT format");
       }
@@ -1235,11 +1237,13 @@ const LaserEyesProvider = ({
           hex: string;
           signAtIndex?: number | number[];
           broadcast?: boolean;
+          network: string;
         }
 
         const requestParams: SignPsbtRequestParams = {
           hex: psbtHex,
           broadcast,
+          network,
         };
 
         const response: LeatherRPCResponse = await library?.request(
@@ -1248,8 +1252,7 @@ const LaserEyesProvider = ({
         );
         const leatherHexResult = response.result as LeatherRequestSignResponse;
         const signedTx = leatherHexResult.hex;
-
-        const signed = bitcoin.Psbt.fromBase64(String(signedTx));
+        const signed = bitcoin.Psbt.fromHex(String(signedTx));
 
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
@@ -1318,8 +1321,10 @@ const LaserEyesProvider = ({
           .post("https://mempool.space/api/tx", psbt)
           .then((res) => res.data);
       } else if (provider === LEATHER) {
+        const decoded = bitcoin.Psbt.fromHex(psbt);
+        const extracted = decoded.extractTransaction();
         return await axios
-          .post("https://mempool.space/api/tx", psbt)
+          .post("https://mempool.space/api/tx", extracted.toHex())
           .then((res) => res.data);
       } else if (provider === WIZZ) {
         return await library?.pushPsbt(psbt);
