@@ -1,5 +1,5 @@
 import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "./wallets";
-import { MAINNET, REGTEST, TESTNET } from "./networks";
+import { MAINNET, REGTEST, SIGNET, TESTNET } from "./networks";
 
 export const LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
 
@@ -19,7 +19,11 @@ export const initialWalletContext = {
   paymentAddress: "",
   paymentPublicKey: "",
   balance: undefined,
-  network: MAINNET as typeof MAINNET | typeof TESTNET | typeof REGTEST,
+  network: MAINNET as
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof REGTEST,
   library: null,
   provider: null,
   accounts: [],
@@ -35,7 +39,7 @@ export const initialWalletContext = {
   requestAccounts: async () => [],
   getNetwork: async () => MAINNET,
   switchNetwork: async (
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
   ) => {},
   getPublicKey: async () => "",
   getBalance: async () => "",

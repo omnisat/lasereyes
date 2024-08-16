@@ -10,6 +10,7 @@ import {
 import * as bitcoin from 'bitcoinjs-lib'
 import { Psbt } from 'bitcoinjs-lib'
 import * as ecc2 from '@bitcoinerlab/secp256k1'
+import axios from 'axios'
 
 bitcoin.initEccLib(ecc2)
 
@@ -26,7 +27,7 @@ export const getBtcJsNetwork = (network: string): bitcoin.networks.Network => {
     : bitcoin.networks.testnet
 }
 
-export function createPsbt(
+export async function createPsbt(
   inputs: IMempoolUtxo[],
   outputAddress: string,
   paymentPublicKey: string,
@@ -43,24 +44,40 @@ export function createPsbt(
   const psbt = new Psbt({
     network: btcNetwork,
   })
-  const script = bitcoin.address.toOutputScript(outputAddress, btcNetwork)
+  const script = bitcoin.address.toOutputScript(
+    outputAddress,
+    getBitcoinNetwork(network)
+  )
   if (!script) {
     throw new Error('Invalid output address')
   }
-  psbt.addInput({
-    hash: utxoWithMostValue.txid,
-    index: utxoWithMostValue.vout,
-    sequence: 0xffffffff,
-    witnessUtxo: {
-      script,
-      value: utxoWithMostValue.value,
-    },
-  })
 
-  if (getAddressType(outputAddress) === P2PKH) {
-    let redeemScript = getRedeemScript(paymentPublicKey, network)
-    psbt.updateInput(0, { redeemScript })
+  if (getAddressType(outputAddress) === P2WPKH) {
+    const txHexResponse = await axios(
+      `https://mempool.space/api/tx/${utxoWithMostValue.txid}/hex`
+    )
+    const txHex = txHexResponse.data
+    psbt.addInput({
+      hash: utxoWithMostValue.txid,
+      index: utxoWithMostValue.vout,
+      nonWitnessUtxo: Buffer.from(txHex, 'hex'),
+    })
+  } else {
+    psbt.addInput({
+      hash: utxoWithMostValue.txid,
+      index: utxoWithMostValue.vout,
+      witnessUtxo: {
+        script,
+        value: utxoWithMostValue.value,
+      },
+    })
+
+    if (getAddressType(outputAddress) === P2PKH) {
+      let redeemScript = getRedeemScript(paymentPublicKey, network)
+      psbt.updateInput(0, { redeemScript })
+    }
   }
+
   psbt.addOutput({
     address: outputAddress,
     value: utxoWithMostValue.value - 1000,

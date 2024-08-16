@@ -50,6 +50,7 @@ var UNISAT_MAINNET = "livenet";
 var UNISAT_TESTNET = "testnet";
 var XVERSE_MAINNET = "Mainnet";
 var XVERSE_TESTNET = "Testnet";
+var XVERSE_SIGNET = "Signet";
 var OKX_MAINNET = "livenet";
 var OKX_TESTNET = "testnet";
 var WIZZ_MAINNET = "livenet";
@@ -65,6 +66,8 @@ var getXverseNetwork = (network) => {
     return XVERSE_MAINNET;
   if (network === TESTNET)
     return XVERSE_TESTNET;
+  if (network === SIGNET)
+    return XVERSE_SIGNET;
   return XVERSE_MAINNET;
 };
 var getLeatherNetwork = (network) => {
@@ -125,7 +128,8 @@ var getNetworkForWizz = (network) => {
 };
 var MEMPOOL_SPACE_URL = "https://mempool.space";
 var MEMPOOL_SPACE_TESTNET_URL = "https://mempool.space/testnet";
-var getMempoolSpaceUrl = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : MEMPOOL_SPACE_URL;
+var MEMPOOL_SPACE_SIGNET_URL = "https://mempool.space/signet";
+var getMempoolSpaceUrl = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL : network === SIGNET ? MEMPOOL_SPACE_SIGNET_URL : MEMPOOL_SPACE_URL;
 
 // src/consts/wallets.ts
 var OYL = "oyl";
@@ -272,6 +276,8 @@ bitcoin.initEccLib(ecc);
 var getBitcoinNetwork = (network) => {
   if (network === TESTNET) {
     return bitcoin.networks.testnet;
+  } else if (network === SIGNET) {
+    return bitcoin.networks.testnet;
   } else if (network === REGTEST) {
     return bitcoin.networks.regtest;
   } else {
@@ -296,13 +302,6 @@ var getBTCBalance = (address2) => __async(void 0, null, function* () {
     throw new Error("Failed to fetch BTC balance");
   }
 });
-var getAddressUtxos = (address2) => __async(void 0, null, function* () {
-  try {
-    return yield axios.get(`https://blockchain.info/unspent?active=${address2}`).then((response) => response.data.unspent_outputs);
-  } catch (error) {
-    throw new Error("Failed to fetch UTXOs");
-  }
-});
 var satoshisToBTC = (satoshis) => {
   if (Number.isNaN(satoshis) || satoshis === void 0)
     return "--";
@@ -317,32 +316,6 @@ var isHex = (str) => {
   const hexRegex = /^[a-fA-F0-9]+$/;
   return hexRegex.test(str);
 };
-function getAddressType(address2) {
-  try {
-    bitcoin.address.fromBase58Check(address2);
-    return P2PKH;
-  } catch (e) {
-  }
-  try {
-    bitcoin.address.fromBase58Check(address2);
-    return P2PSH;
-  } catch (e) {
-  }
-  try {
-    const { version, data } = bitcoin.address.fromBech32(address2);
-    if (version === 0) {
-      if (data.length === 20) {
-        return P2WPKH;
-      } else if (data.length === 32) {
-        return P2WSH;
-      }
-    } else if (version === 1 && data.length === 32) {
-      return P2TR;
-    }
-  } catch (e) {
-  }
-  throw new Error("Invalid address");
-}
 function estimateTxSize(taprootInputCount, nonTaprootInputCount, outputCount) {
   const baseTxSize = 10;
   const taprootInputSize = 57;
@@ -822,6 +795,8 @@ var LaserEyesProvider = ({
         yield connectUnisat();
       } else if (walletName === XVERSE) {
         yield connectXverse();
+      } else if (walletName === LEATHER) {
+        yield connectLeather();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -1240,7 +1215,7 @@ var LaserEyesProvider = ({
       } else if (provider === LEATHER) {
         const signed = yield library == null ? void 0 : library.request("signMessage", {
           message,
-          paymentType: P2TR
+          paymentType: P2WPKH
         });
         return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
       } else if (provider === PHANTOM) {
@@ -1269,8 +1244,8 @@ var LaserEyesProvider = ({
         psbtBase64 = bitcoin2.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
       } else if (isBase64(psbt)) {
-        psbtHex = bitcoin2.Psbt.fromBase64(psbt).toHex();
         psbtBase64 = psbt;
+        psbtHex = bitcoin2.Psbt.fromBase64(psbt).toHex();
       } else {
         throw new Error("Invalid PSBT format");
       }
@@ -1511,7 +1486,8 @@ var LaserEyesProvider = ({
       } else if (provider === LEATHER) {
         const requestParams = {
           hex: psbtHex,
-          broadcast
+          broadcast,
+          network
         };
         const response = yield library == null ? void 0 : library.request(
           "signPsbt",
@@ -1519,7 +1495,7 @@ var LaserEyesProvider = ({
         );
         const leatherHexResult = response.result;
         const signedTx = leatherHexResult.hex;
-        const signed = bitcoin2.Psbt.fromBase64(String(signedTx));
+        const signed = bitcoin2.Psbt.fromHex(String(signedTx));
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
           const extracted = finalized.extractTransaction();
@@ -1582,7 +1558,9 @@ var LaserEyesProvider = ({
       } else if (provider === MAGIC_EDEN) {
         return yield axios2.post("https://mempool.space/api/tx", psbt).then((res) => res.data);
       } else if (provider === LEATHER) {
-        return yield axios2.post("https://mempool.space/api/tx", psbt).then((res) => res.data);
+        const decoded = bitcoin2.Psbt.fromHex(psbt);
+        const extracted = decoded.extractTransaction();
+        return yield axios2.post("https://mempool.space/api/tx", extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else {
@@ -1800,6 +1778,7 @@ export {
   LaserEyesProvider,
   MAGIC_EDEN,
   MAINNET,
+  MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL,
   OKX,
@@ -1826,6 +1805,7 @@ export {
   XVERSE,
   XVERSE_MAINNET,
   XVERSE_NETWORK,
+  XVERSE_SIGNET,
   XVERSE_TESTNET,
   createConfig,
   createSendBtcPsbt,
@@ -1833,8 +1813,6 @@ export {
   estimateTxSize,
   findOrdinalsAddress,
   findPaymentAddress,
-  getAddressType,
-  getAddressUtxos,
   getBTCBalance,
   getBitcoinNetwork,
   getLeatherNetwork,

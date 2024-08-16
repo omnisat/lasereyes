@@ -1,5 +1,5 @@
 import { MAGIC_EDEN, UNISAT, XVERSE } from "../consts/wallets";
-import { MAINNET, REGTEST, TESTNET } from "../consts/networks";
+import { MAINNET, REGTEST, SIGNET, TESTNET } from "../consts/networks";
 
 export type LaserEyesContextType = {
   connected: boolean;
@@ -9,7 +9,7 @@ export type LaserEyesContextType = {
   paymentAddress: string;
   paymentPublicKey: string;
   balance: number | undefined;
-  network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
   library: any;
   provider: any;
   accounts: string[];
@@ -29,7 +29,7 @@ export type LaserEyesContextType = {
   requestAccounts: () => Promise<string[]>;
   getNetwork: () => Promise<string | undefined>;
   switchNetwork: (
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
   ) => Promise<void>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<string>;
@@ -52,7 +52,7 @@ export type LaserEyesContextType = {
 };
 
 export type Config = {
-  network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
 };
 
 export interface OYLBalanceResponse {

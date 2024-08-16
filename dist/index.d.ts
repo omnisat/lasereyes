@@ -8,6 +8,7 @@ declare const UNISAT_MAINNET = "livenet";
 declare const UNISAT_TESTNET = "testnet";
 declare const XVERSE_MAINNET = "Mainnet";
 declare const XVERSE_TESTNET = "Testnet";
+declare const XVERSE_SIGNET = "Signet";
 declare const OKX_MAINNET = "livenet";
 declare const OKX_TESTNET = "testnet";
 declare const WIZZ_MAINNET = "livenet";
@@ -18,7 +19,7 @@ declare const MAINNET = "mainnet";
 declare const SIGNET = "signet";
 declare const TESTNET = "testnet";
 declare const REGTEST = "regtest";
-declare const getXverseNetwork: (network: string) => "Mainnet" | "Testnet";
+declare const getXverseNetwork: (network: string) => "Mainnet" | "Testnet" | "Signet";
 declare const getLeatherNetwork: (network: string) => "testnet" | "mainnet";
 declare const getUnisatNetwork: (network: string) => "livenet" | "testnet";
 declare const getWizzNetwork: (network: string) => "livenet" | "testnet";
@@ -29,7 +30,8 @@ declare const getNetworkForOkx: (network: string) => "testnet" | "mainnet";
 declare const getNetworkForWizz: (network: string) => "testnet" | "mainnet";
 declare const MEMPOOL_SPACE_URL = "https://mempool.space";
 declare const MEMPOOL_SPACE_TESTNET_URL = "https://mempool.space/testnet";
-declare const getMempoolSpaceUrl: (network: string) => "https://mempool.space" | "https://mempool.space/testnet";
+declare const MEMPOOL_SPACE_SIGNET_URL = "https://mempool.space/signet";
+declare const getMempoolSpaceUrl: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST) => "https://mempool.space" | "https://mempool.space/testnet" | "https://mempool.space/signet";
 
 declare const OYL = "oyl";
 declare const UNISAT = "unisat";
@@ -82,7 +84,7 @@ type LaserEyesContextType = {
     paymentAddress: string;
     paymentPublicKey: string;
     balance: number | undefined;
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
     library: any;
     provider: any;
     accounts: string[];
@@ -98,7 +100,7 @@ type LaserEyesContextType = {
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;
-    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof REGTEST) => Promise<void>;
+    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST) => Promise<void>;
     getPublicKey: () => Promise<string>;
     getBalance: () => Promise<string>;
     getInscriptions: () => Promise<any[]>;
@@ -112,18 +114,8 @@ type LaserEyesContextType = {
     pushPsbt: (tx: string) => Promise<string | undefined>;
 };
 type Config = {
-    network: typeof MAINNET | typeof TESTNET | typeof REGTEST;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
 };
-interface BlockchainInfoUTXO {
-    tx_hash_big_endian: string;
-    tx_hash: string;
-    tx_output_n: number;
-    script: string;
-    value: number;
-    value_hex: string;
-    confirmations: number;
-    tx_index: number;
-}
 interface CommitPsbtResponse {
     inscriberAddress: string;
     psbtHex: string;
@@ -147,15 +139,13 @@ interface DeScribeCreateResponse {
     totalFees: number;
 }
 
-declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof REGTEST) => bitcoin.networks.Network;
+declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST) => bitcoin.networks.Network;
 declare const findOrdinalsAddress: (addresses: any) => any;
 declare const findPaymentAddress: (addresses: any) => any;
 declare const getBTCBalance: (address: string) => Promise<number>;
-declare const getAddressUtxos: (address: string) => Promise<BlockchainInfoUTXO[]>;
 declare const satoshisToBTC: (satoshis: number) => string;
 declare const isBase64: (str: string) => boolean;
 declare const isHex: (str: string) => boolean;
-declare function getAddressType(address: string): "p2tr" | "p2pkh" | "p2wpkh" | "p2psh" | "p2wsh";
 declare function estimateTxSize(taprootInputCount: number, nonTaprootInputCount: number, outputCount: number): number;
 declare function createSendBtcPsbt(address: string, paymentAddress: string, recipientAddress: string, amount: number, paymentPublicKey: string, network: typeof MAINNET | typeof TESTNET, feeRate?: number): Promise<{
     psbtBase64: string;
@@ -194,4 +184,4 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     reset: () => void;
 };
 
-export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OKX, OKX_MAINNET, OKX_TESTNET, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_TESTNET, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressType, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
+export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OKX, OKX_MAINNET, OKX_TESTNET, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
