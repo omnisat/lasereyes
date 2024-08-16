@@ -1654,7 +1654,7 @@ var LaserEyesProvider = ({
       } else if (provider === LEATHER) {
         const requestParams = {
           hex: psbtHex,
-          broadcast,
+          broadcast: false,
           network
         };
         const response = yield library == null ? void 0 : library.request(
@@ -1666,8 +1666,7 @@ var LaserEyesProvider = ({
         const signed = bitcoin2.Psbt.fromHex(String(signedTx));
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
-          const extracted = finalized.extractTransaction();
-          const txId = yield pushPsbt(extracted.toHex());
+          const txId = yield pushPsbt(finalized.toHex());
           return {
             signedPsbtHex: signed.toHex(),
             signedPsbtBase64: signed.toBase64(),

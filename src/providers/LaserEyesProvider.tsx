@@ -1359,7 +1359,7 @@ const LaserEyesProvider = ({
 
         const requestParams: SignPsbtRequestParams = {
           hex: psbtHex,
-          broadcast,
+          broadcast: false,
           network,
         };
 
@@ -1373,8 +1373,7 @@ const LaserEyesProvider = ({
 
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
-          const extracted = finalized.extractTransaction();
-          const txId = await pushPsbt(extracted.toHex());
+          const txId = await pushPsbt(finalized.toHex());
           return {
             signedPsbtHex: signed.toHex(),
             signedPsbtBase64: signed.toBase64(),
