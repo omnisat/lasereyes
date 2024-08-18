@@ -28,7 +28,7 @@ import { MdOutbound } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 const App = () => {
-  const wallets = [UNISAT, XVERSE, LEATHER, MAGIC_EDEN, OKX, PHANTOM, WIZZ]
+  const wallets = [UNISAT, XVERSE, LEATHER]
   const {
     address,
     paymentAddress,
