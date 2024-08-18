@@ -11,6 +11,7 @@ import {
   XVERSE,
   LEATHER,
   useInscriber,
+  WalletIcon,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -362,7 +363,12 @@ const WalletCard = ({
       }
     >
       <CardHeader>
-        <CardTitle className={'uppercase text-white text-center'}>
+        <CardTitle
+          className={
+            'uppercase text-white text-center flex flex-row items-center justify-center gap-2'
+          }
+        >
+          <WalletIcon walletName={walletName} size={42} />
           {walletName.replace('-', ' ')}
         </CardTitle>
       </CardHeader>

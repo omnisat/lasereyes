@@ -12,6 +12,7 @@ import {
   LEATHER,
   PHANTOM,
   WIZZ,
+  WalletIcon,
 } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { cn, truncateString } from '@/lib/utils'
@@ -137,6 +138,7 @@ const App = () => {
                   provider?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
+                {provider && <WalletIcon walletName={provider} size={24} />}{' '}
                 {provider?.length > 0 ? provider : '--'}
               </span>
             </div>

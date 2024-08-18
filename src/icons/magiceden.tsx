@@ -5,7 +5,7 @@ interface MagicedenLogoProps extends React.SVGProps<SVGSVGElement> {
   variant?: "first" | "second";
 }
 
-const MagicedenLogo: React.FC<MagicedenLogoProps> = ({
+const MagicEdenLogo: React.FC<MagicedenLogoProps> = ({
   size = 42,
   variant = "first",
   className,
@@ -62,4 +62,4 @@ const MagicedenLogo: React.FC<MagicedenLogoProps> = ({
   );
 };
 
-export { MagicedenLogo };
+export { MagicEdenLogo };

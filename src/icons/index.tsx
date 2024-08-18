@@ -6,3 +6,4 @@ export * from "./unisat";
 export * from "./wizz";
 export * from "./okx";
 export * from "./magiceden";
+export * from "./walletIcon";
