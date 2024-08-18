@@ -22,6 +22,9 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { getPackageVersion } from '@/lib/github'
 import { Badge, badgeVariants } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { MdOutbound } from 'react-icons/md'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 
 const App = () => {
   const wallets = [UNISAT, XVERSE, LEATHER]
@@ -145,7 +148,9 @@ const App = () => {
           >
             <div className={'flex flex-row gap-2'}>
               <div className={'flex flex-col items-center'}>
-                <span className={clsx('font-black text-orange-500')}>
+                <span
+                  className={clsx('font-black text-orange-500 justify-center')}
+                >
                   address (taproot)
                 </span>
                 <span
@@ -155,7 +160,16 @@ const App = () => {
                   )}
                 >
                   {address?.length > 0 && (
-                    <ClickToCopy value={address as string} />
+                    <span className={'flex flex-row gap-4'}>
+                      <Link
+                        href={`https://mempool.space/address/${address}`}
+                        target={'_blank'}
+                        className={'flex flex-row items-center gap-1'}
+                      >
+                        <FaExternalLinkAlt className="h-3 w-3 text-gray-500" />
+                      </Link>
+                      <ClickToCopy value={address as string} />
+                    </span>
                   )}
                   {address?.length > 0 ? truncateString(address, 24) : '--'}
                 </span>
@@ -181,7 +195,16 @@ const App = () => {
                     ? truncateString(paymentAddress, 24)
                     : '--'}
                   {paymentAddress?.length > 0 && (
-                    <ClickToCopy value={paymentAddress as string} />
+                    <span className={'flex flex-row gap-4'}>
+                      <ClickToCopy value={paymentAddress as string} />
+                      <Link
+                        href={`https://mempool.space/address/${paymentAddress}`}
+                        target={'_blank'}
+                        className={'flex flex-row items-center gap-1'}
+                      >
+                        <FaExternalLinkAlt className="h-3 w-3 text-gray-500" />
+                      </Link>
+                    </span>
                   )}
                 </span>
               </div>

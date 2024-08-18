@@ -85,6 +85,8 @@ __export(src_exports, {
   OKX: () => OKX,
   OKX_MAINNET: () => OKX_MAINNET,
   OKX_TESTNET: () => OKX_TESTNET,
+  OP_WALLET_MAINNET: () => OP_WALLET_MAINNET,
+  OP_WALLET_TESTNET: () => OP_WALLET_TESTNET,
   OYL: () => OYL,
   P2PKH: () => P2PKH,
   P2PSH: () => P2PSH,
@@ -139,6 +141,8 @@ module.exports = __toCommonJS(src_exports);
 var XVERSE_NETWORK = "Mainnet";
 var UNISAT_MAINNET = "livenet";
 var UNISAT_TESTNET = "testnet";
+var OP_WALLET_MAINNET = "livenet";
+var OP_WALLET_TESTNET = "testnet";
 var XVERSE_MAINNET = "Mainnet";
 var XVERSE_TESTNET = "Testnet";
 var XVERSE_SIGNET = "Signet";
@@ -274,8 +278,8 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = require("react");
-var bitcoin2 = __toESM(require("bitcoinjs-lib"));
+var import_react33 = _toESM(require("react"));
+var bitcoin19 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
@@ -345,7 +349,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = require("usehooks-ts");
+var import_usehooks_ts17 = _toESM(require("usehooks-ts"));
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -380,9 +384,9 @@ var findPaymentAddress = (addresses) => {
     ({ purpose }) => purpose === "payment"
   );
 };
-var getBTCBalance = (address2) => __async(void 0, null, function* () {
+var getBTCBalance = (address3) => __async(void 0, null, function* () {
   try {
-    return yield import_axios.default.get(`https://blockchain.info/q/addressbalance/${address2}`).then((response) => response.data);
+    return yield import_axios.default.get(`https://blockchain.info/q/addressbalance/${address3}`).then((response) => response.data);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
@@ -411,9 +415,9 @@ function estimateTxSize(taprootInputCount, nonTaprootInputCount, outputCount) {
   const totalOutputSize = outputCount * outputSize;
   return baseTxSize + totalInputSize + totalOutputSize;
 }
-function createSendBtcPsbt(address2, paymentAddress, recipientAddress, amount, paymentPublicKey, network, feeRate = 7) {
+function createSendBtcPsbt(address3, paymentAddress, recipientAddress, amount, paymentPublicKey, network, feeRate = 7) {
   return __async(this, null, function* () {
-    const isTaprootOnly = address2 === paymentAddress;
+    const isTaprootOnly = address3 === paymentAddress;
     const mempoolUrl = `${getMempoolSpaceUrl2(
       network
     )}/api/address/${paymentAddress}/utxo`;
@@ -497,45 +501,1621 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = require("sats-connect");
-var import_address = require("bitcoinjs-lib/src/address");
-var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = require("react/jsx-runtime");
-var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
+var import_sats_connect17 = _toESM(require("sats-connect"));
+var import_address17 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios50 = __toESM(require("axios"));
+
+// dist/index.mjs
+var import_react = _toESM(require("react"));
+var bitcoin18 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts = _toESM(require("usehooks-ts"));
+var bitcoin2 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios2 = __toESM(require("axios"), 1);
+var ecc2 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect = _toESM(require("sats-connect"));
+var import_address = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios3 = __toESM(require("axios"), 1);
+var import_react2 = _toESM(require("react"));
+var bitcoin17 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts2 = _toESM(require("usehooks-ts"));
+var bitcoin22 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios4 = __toESM(require("axios"), 1);
+var ecc22 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect2 = _toESM(require("sats-connect"));
+var import_address2 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios5 = __toESM(require("axios"), 1);
+var import_react3 = _toESM(require("react"));
+var bitcoin16 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts3 = _toESM(require("usehooks-ts"));
+var bitcoin222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios6 = __toESM(require("axios"), 1);
+var ecc222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect3 = _toESM(require("sats-connect"));
+var import_address3 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios7 = __toESM(require("axios"), 1);
+var import_react4 = _toESM(require("react"));
+var bitcoin15 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts4 = _toESM(require("usehooks-ts"));
+var bitcoin2222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios8 = __toESM(require("axios"), 1);
+var ecc2222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect4 = _toESM(require("sats-connect"));
+var import_address4 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios9 = __toESM(require("axios"), 1);
+var import_react5 = _toESM(require("react"));
+var bitcoin14 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts5 = _toESM(require("usehooks-ts"));
+var bitcoin22222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios10 = __toESM(require("axios"), 1);
+var ecc22222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect5 = _toESM(require("sats-connect"));
+var import_address5 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios11 = __toESM(require("axios"), 1);
+var import_react6 = _toESM(require("react"));
+var bitcoin13 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts6 = _toESM(require("usehooks-ts"));
+var bitcoin222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios12 = __toESM(require("axios"), 1);
+var ecc222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect6 = _toESM(require("sats-connect"));
+var import_address6 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios13 = __toESM(require("axios"), 1);
+var import_react7 = _toESM(require("react"));
+var bitcoin12 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts7 = _toESM(require("usehooks-ts"));
+var bitcoin2222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios14 = __toESM(require("axios"), 1);
+var ecc2222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect7 = _toESM(require("sats-connect"));
+var import_address7 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios15 = __toESM(require("axios"), 1);
+var import_react8 = _toESM(require("react"));
+var bitcoin11 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts8 = _toESM(require("usehooks-ts"));
+var bitcoin22222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios16 = __toESM(require("axios"), 1);
+var ecc22222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect8 = _toESM(require("sats-connect"));
+var import_address8 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios17 = __toESM(require("axios"), 1);
+var import_react9 = _toESM(require("react"));
+var bitcoin10 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts9 = _toESM(require("usehooks-ts"));
+var bitcoin222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios18 = __toESM(require("axios"), 1);
+var ecc222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect9 = _toESM(require("sats-connect"));
+var import_address9 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios19 = __toESM(require("axios"), 1);
+var import_react10 = _toESM(require("react"));
+var bitcoin9 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts10 = _toESM(require("usehooks-ts"));
+var bitcoin2222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios20 = __toESM(require("axios"), 1);
+var ecc2222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect10 = _toESM(require("sats-connect"));
+var import_address10 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios21 = __toESM(require("axios"), 1);
+var import_react11 = _toESM(require("react"));
+var bitcoin8 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts11 = _toESM(require("usehooks-ts"));
+var bitcoin22222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios22 = __toESM(require("axios"), 1);
+var ecc22222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect11 = _toESM(require("sats-connect"));
+var import_address11 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios23 = __toESM(require("axios"), 1);
+var import_react12 = _toESM(require("react"));
+var bitcoin7 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts12 = _toESM(require("usehooks-ts"));
+var bitcoin222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios24 = __toESM(require("axios"), 1);
+var ecc222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect12 = _toESM(require("sats-connect"));
+var import_address12 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios25 = __toESM(require("axios"), 1);
+var import_react13 = _toESM(require("react"));
+var bitcoin6 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts13 = _toESM(require("usehooks-ts"));
+var bitcoin2222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios26 = __toESM(require("axios"), 1);
+var ecc2222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect13 = _toESM(require("sats-connect"));
+var import_address13 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios27 = __toESM(require("axios"), 1);
+var import_react14 = _toESM(require("react"));
+var bitcoin5 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts14 = _toESM(require("usehooks-ts"));
+var bitcoin22222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios28 = __toESM(require("axios"), 1);
+var ecc22222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect14 = _toESM(require("sats-connect"));
+var import_address14 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios29 = __toESM(require("axios"), 1);
+var import_react15 = _toESM(require("react"));
+var bitcoin4 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts15 = _toESM(require("usehooks-ts"));
+var bitcoin222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios30 = __toESM(require("axios"), 1);
+var ecc222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect15 = _toESM(require("sats-connect"));
+var import_address15 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios31 = __toESM(require("axios"), 1);
+var import_react16 = _toESM(require("react"));
+var bitcoin2222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts16 = _toESM(require("usehooks-ts"));
+var bitcoin3 = __toESM(require("bitcoinjs-lib"), 1);
+var import_axios32 = __toESM(require("axios"), 1);
+var ecc2222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect16 = _toESM(require("sats-connect"));
+var import_address16 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_axios33 = __toESM(require("axios"), 1);
+var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
+var import_react17 = _toESM(require("react"));
+var import_axios34 = __toESM(require("axios"), 1);
+var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
+var import_react18 = _toESM(require("react"));
+var import_axios35 = __toESM(require("axios"), 1);
+var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
+var import_react19 = _toESM(require("react"));
+var import_axios36 = __toESM(require("axios"), 1);
+var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
+var import_react20 = _toESM(require("react"));
+var import_axios37 = __toESM(require("axios"), 1);
+var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
+var import_react21 = _toESM(require("react"));
+var import_axios38 = __toESM(require("axios"), 1);
+var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
+var import_react22 = _toESM(require("react"));
+var import_axios39 = __toESM(require("axios"), 1);
+var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
+var import_react23 = _toESM(require("react"));
+var import_axios40 = __toESM(require("axios"), 1);
+var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
+var import_react24 = _toESM(require("react"));
+var import_axios41 = __toESM(require("axios"), 1);
+var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
+var import_react25 = _toESM(require("react"));
+var import_axios42 = __toESM(require("axios"), 1);
+var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
+var import_react26 = _toESM(require("react"));
+var import_axios43 = __toESM(require("axios"), 1);
+var import_jsx_runtime11 = _toESM(require("react/jsx-runtime"));
+var import_react27 = _toESM(require("react"));
+var import_axios44 = __toESM(require("axios"), 1);
+var import_jsx_runtime12 = _toESM(require("react/jsx-runtime"));
+var import_react28 = _toESM(require("react"));
+var import_axios45 = __toESM(require("axios"), 1);
+var import_jsx_runtime13 = _toESM(require("react/jsx-runtime"));
+var import_react29 = _toESM(require("react"));
+var import_axios46 = __toESM(require("axios"), 1);
+var import_jsx_runtime14 = _toESM(require("react/jsx-runtime"));
+var import_react30 = _toESM(require("react"));
+var import_axios47 = __toESM(require("axios"), 1);
+var import_jsx_runtime15 = _toESM(require("react/jsx-runtime"));
+var import_react31 = _toESM(require("react"));
+var import_axios48 = __toESM(require("axios"), 1);
+var import_jsx_runtime16 = _toESM(require("react/jsx-runtime"));
+var import_react32 = _toESM(require("react"));
+var import_axios49 = __toESM(require("axios"), 1);
+var __async2 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4 = "mainnet";
+var SIGNET3 = "signet";
+var TESTNET3 = "testnet";
+var initialWalletContext2 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2(void 0, null, function* () {
+    return MAINNET4;
+  }),
+  switchNetwork: (network) => __async2(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin2.initEccLib(ecc2);
+var __async22 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42 = "mainnet";
+var initialWalletContext22 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22(void 0, null, function* () {
+    return MAINNET42;
+  }),
+  switchNetwork: (network) => __async22(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22.initEccLib(ecc22);
+var MAINNET422 = "mainnet";
+var initialWalletContext222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22(void 0, null, function* () {
+    return MAINNET422;
+  }),
+  switchNetwork: (network) => __async22(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin222.initEccLib(ecc222);
+var __async222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4222 = "mainnet";
+var initialWalletContext2222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async222(void 0, null, function* () {
+    return MAINNET4222;
+  }),
+  switchNetwork: (network) => __async222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin2222.initEccLib(ecc2222);
+var __async2222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42222 = "mainnet";
+var initialWalletContext22222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2222(void 0, null, function* () {
+    return MAINNET42222;
+  }),
+  switchNetwork: (network) => __async2222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22222.initEccLib(ecc22222);
+var __async22222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET422222 = "mainnet";
+var initialWalletContext222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22222(void 0, null, function* () {
+    return MAINNET422222;
+  }),
+  switchNetwork: (network) => __async22222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin222222.initEccLib(ecc222222);
+var __async222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4222222 = "mainnet";
+var initialWalletContext2222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async222222(void 0, null, function* () {
+    return MAINNET4222222;
+  }),
+  switchNetwork: (network) => __async222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin2222222.initEccLib(ecc2222222);
+var __async2222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42222222 = "mainnet";
+var initialWalletContext22222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2222222(void 0, null, function* () {
+    return MAINNET42222222;
+  }),
+  switchNetwork: (network) => __async2222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22222222.initEccLib(ecc22222222);
+var __async22222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET422222222 = "mainnet";
+var initialWalletContext222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22222222(void 0, null, function* () {
+    return MAINNET422222222;
+  }),
+  switchNetwork: (network) => __async22222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin222222222.initEccLib(ecc222222222);
+var __async222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4222222222 = "mainnet";
+var initialWalletContext2222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async222222222(void 0, null, function* () {
+    return MAINNET4222222222;
+  }),
+  switchNetwork: (network) => __async222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin2222222222.initEccLib(ecc2222222222);
+var __async2222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42222222222 = "mainnet";
+var initialWalletContext22222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2222222222(void 0, null, function* () {
+    return MAINNET42222222222;
+  }),
+  switchNetwork: (network) => __async2222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22222222222.initEccLib(ecc22222222222);
+var __async22222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET422222222222 = "mainnet";
+var initialWalletContext222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22222222222(void 0, null, function* () {
+    return MAINNET422222222222;
+  }),
+  switchNetwork: (network) => __async22222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin222222222222.initEccLib(ecc222222222222);
+var __async222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4222222222222 = "mainnet";
+var initialWalletContext2222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async222222222222(void 0, null, function* () {
+    return MAINNET4222222222222;
+  }),
+  switchNetwork: (network) => __async222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin2222222222222.initEccLib(ecc2222222222222);
+var __async2222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42222222222222 = "mainnet";
+var initialWalletContext22222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2222222222222(void 0, null, function* () {
+    return MAINNET42222222222222;
+  }),
+  switchNetwork: (network) => __async2222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22222222222222.initEccLib(ecc22222222222222);
+var __async22222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET422222222222222 = "mainnet";
+var initialWalletContext222222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22222222222222(void 0, null, function* () {
+    return MAINNET422222222222222;
+  }),
+  switchNetwork: (network) => __async22222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin222222222222222.initEccLib(ecc222222222222222);
+var __async222222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET4222222222222222 = "mainnet";
+var initialWalletContext2222222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET4222222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async222222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async222222222222222(void 0, null, function* () {
+    return MAINNET4222222222222222;
+  }),
+  switchNetwork: (network) => __async222222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async222222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin3.initEccLib(ecc2222222222222222);
+var LaserEyesContext = (0, import_react16.createContext)(initialWalletContext2222222222222222);
+var LaserEyesContext2 = (0, import_react15.createContext)(initialWalletContext222222222222222);
+var LaserEyesContext3 = (0, import_react14.createContext)(initialWalletContext22222222222222);
+var LaserEyesContext4 = (0, import_react13.createContext)(initialWalletContext2222222222222);
+var LaserEyesContext5 = (0, import_react12.createContext)(initialWalletContext222222222222);
+var LaserEyesContext6 = (0, import_react11.createContext)(initialWalletContext22222222222);
+var LaserEyesContext7 = (0, import_react10.createContext)(initialWalletContext2222222222);
+var LaserEyesContext8 = (0, import_react9.createContext)(initialWalletContext222222222);
+var LaserEyesContext9 = (0, import_react8.createContext)(initialWalletContext22222222);
+var LaserEyesContext10 = (0, import_react7.createContext)(initialWalletContext2222222);
+var LaserEyesContext11 = (0, import_react6.createContext)(initialWalletContext222222);
+var LaserEyesContext12 = (0, import_react5.createContext)(initialWalletContext22222);
+var LaserEyesContext13 = (0, import_react4.createContext)(initialWalletContext2222);
+var LaserEyesContext14 = (0, import_react3.createContext)(initialWalletContext222);
+var LaserEyesContext15 = (0, import_react2.createContext)(initialWalletContext22);
+var LaserEyesContext16 = (0, import_react.createContext)(initialWalletContext2);
+
+// example/lib/urls.ts
+var MEMPOOL_SPACE_URL3 = "https://mempool.space";
+var MEMPOOL_SPACE_TESTNET_URL3 = "https://mempool.space/testnet";
+var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet";
+var getMempoolSpaceUrl3 = (network) => network === TESTNET3 ? MEMPOOL_SPACE_TESTNET_URL3 : network === SIGNET3 ? MEMPOOL_SPACE_SIGNET_URL2 : MEMPOOL_SPACE_URL3;
+
+// src/providers/LaserEyesProvider.tsx
+var import_jsx_runtime17 = _toESM(require("react/jsx-runtime"));
+var LaserEyesContext17 = (0, import_react33.createContext)(initialWalletContext);
 var useLaserEyes = () => {
-  return (0, import_react.useContext)(LaserEyesContext);
+  return (0, import_react33.useContext)(LaserEyesContext17);
 };
 var LaserEyesProvider = ({
   children,
   config
 }) => {
-  const selfRef = (0, import_react.useRef)({
+  const selfRef = (0, import_react33.useRef)({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = (0, import_react.useState)(null);
-  const [provider, setProvider] = (0, import_react.useState)();
-  const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
-  const [connected, setConnected] = (0, import_react.useState)(false);
-  const [isConnecting, setIsConnecting] = (0, import_react.useState)(false);
-  const [accounts, setAccounts] = (0, import_react.useState)([]);
-  const [publicKey, setPublicKey] = (0, import_react.useState)("");
-  const [paymentPublicKey, setPaymentPublicKey] = (0, import_react.useState)("");
-  const [address2, setAddress] = (0, import_react.useState)("");
-  const [paymentAddress, setPaymentAddress] = (0, import_react.useState)("");
-  const [balance, setBalance] = (0, import_react.useState)();
-  const [hasUnisat, setHasUnisat] = (0, import_react.useState)(false);
-  const [hasXverse, setHasXverse] = (0, import_react.useState)(false);
-  const [hasOyl, setHasOyl] = (0, import_react.useState)(false);
-  const [hasMagicEden, setHasMagicEden] = (0, import_react.useState)(false);
-  const [hasOkx, setHasOkx] = (0, import_react.useState)(false);
-  const [hasLeather, setHasLeather] = (0, import_react.useState)(false);
-  const [hasPhantom, setHasPhantom] = (0, import_react.useState)(false);
-  const [hasWizz, setHasWizz] = (0, import_react.useState)(false);
-  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", MAINNET, {
+  const [library, setLibrary] = (0, import_react33.useState)(null);
+  const [provider, setProvider] = (0, import_react33.useState)();
+  const [isInitializing, setIsInitializing] = (0, import_react33.useState)(true);
+  const [connected, setConnected] = (0, import_react33.useState)(false);
+  const [isConnecting, setIsConnecting] = (0, import_react33.useState)(false);
+  const [accounts, setAccounts] = (0, import_react33.useState)([]);
+  const [publicKey, setPublicKey] = (0, import_react33.useState)("");
+  const [paymentPublicKey, setPaymentPublicKey] = (0, import_react33.useState)("");
+  const [address3, setAddress] = (0, import_react33.useState)("");
+  const [paymentAddress, setPaymentAddress] = (0, import_react33.useState)("");
+  const [balance, setBalance] = (0, import_react33.useState)();
+  const [hasUnisat, setHasUnisat] = (0, import_react33.useState)(false);
+  const [hasXverse, setHasXverse] = (0, import_react33.useState)(false);
+  const [hasOyl, setHasOyl] = (0, import_react33.useState)(false);
+  const [hasMagicEden, setHasMagicEden] = (0, import_react33.useState)(false);
+  const [hasOkx, setHasOkx] = (0, import_react33.useState)(false);
+  const [hasLeather, setHasLeather] = (0, import_react33.useState)(false);
+  const [hasPhantom, setHasPhantom] = (0, import_react33.useState)(false);
+  const [hasWizz, setHasWizz] = (0, import_react33.useState)(false);
+  const [network, setNetwork] = (0, import_usehooks_ts17.useLocalStorage)("network", MAINNET, {
     initializeWithValue: false
   });
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     if (config) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
@@ -552,7 +2132,7 @@ var LaserEyesProvider = ({
       setIsInitializing(false);
     }
   };
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const unisatLib = window == null ? void 0 : window.unisat;
       if (unisatLib) {
@@ -565,7 +2145,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a;
       const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
@@ -579,7 +2159,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const oylLib = window == null ? void 0 : window.oyl;
       if (oylLib) {
@@ -592,7 +2172,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const magicEdenLib = window == null ? void 0 : window.magicEden;
       if (magicEdenLib) {
@@ -605,7 +2185,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a, _b;
       let foundOkx;
@@ -624,7 +2204,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, [network]);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const leatherLib = window == null ? void 0 : window.LeatherProvider;
       if (leatherLib) {
@@ -637,7 +2217,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a;
       const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
@@ -654,7 +2234,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const wizzLib = window == null ? void 0 : window.wizz;
       if (wizzLib) {
@@ -667,7 +2247,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     checkInitializationComplete();
   }, [
     hasUnisat,
@@ -679,10 +2259,10 @@ var LaserEyesProvider = ({
     hasPhantom,
     hasWizz
   ]);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     setBalance(void 0);
   }, [network]);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     if (provider !== UNISAT && provider !== WIZZ) {
       return;
     }
@@ -696,7 +2276,7 @@ var LaserEyesProvider = ({
       library.removeListener("networkChanged", handleNetworkChanged);
     };
   }, [library]);
-  (0, import_react.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     if (!isInitializing) {
       const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
         LOCAL_STORAGE_DEFAULT_WALLET
@@ -707,7 +2287,7 @@ var LaserEyesProvider = ({
       }
     }
   }, [isInitializing]);
-  const connectUnisat = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
+  const connectUnisat = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
@@ -731,7 +2311,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   }), [hasUnisat]);
-  const connectXverse = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
+  const connectXverse = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
@@ -765,7 +2345,7 @@ var LaserEyesProvider = ({
           throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
         }
       };
-      yield (0, import_sats_connect.getAddress)(getAddressOptions);
+      yield (0, import_sats_connect17.getAddress)(getAddressOptions);
       setConnected(true);
     } catch (error) {
       throw error;
@@ -830,7 +2410,7 @@ var LaserEyesProvider = ({
         }
       };
       console.log(JSON.stringify(getAddressOptions));
-      yield (0, import_sats_connect.getAddress)(getAddressOptions);
+      yield (0, import_sats_connect17.getAddress)(getAddressOptions);
       setConnected(true);
     } catch (error) {
       console.log("error", error);
@@ -861,7 +2441,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectLeather = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
+  const connectLeather = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -871,13 +2451,13 @@ var LaserEyesProvider = ({
       const addressesResponse = getAddressesResponse.result;
       const addresses = addressesResponse.addresses;
       const leatherAccountsParsed = addresses.map(
-        (address3) => address3.address
+        (address4) => address4.address
       );
       const taprootAddress = addresses.find(
-        (address3) => address3.type === P2TR
+        (address4) => address4.type === P2TR
       );
       const segwitAddress = addresses.find(
-        (address3) => address3.type === P2WPKH
+        (address4) => address4.type === P2WPKH
       );
       setAccounts(leatherAccountsParsed);
       setAddress(String(taprootAddress == null ? void 0 : taprootAddress.address));
@@ -1054,7 +2634,7 @@ var LaserEyesProvider = ({
             console.log("CANCELLED");
           }
         };
-        return [address2];
+        return [address3];
       } else if (provider === OYL) {
         return yield library.requestAccounts();
       } else if (provider === OKX) {
@@ -1068,13 +2648,13 @@ var LaserEyesProvider = ({
         const addressesResponse = getAddressesResponse.result;
         const addresses = addressesResponse.addresses;
         const leatherAccountsParsed = addresses.map(
-          (address3) => address3.address
+          (address4) => address4.address
         );
         const taprootAddress = addresses.find(
-          (address3) => address3.type === P2TR
+          (address4) => address4.type === P2TR
         );
         const segwitAddress = addresses.find(
-          (address3) => address3.type === P2WPKH
+          (address4) => address4.type === P2WPKH
         );
         setAccounts(leatherAccountsParsed);
         setAddress(String(taprootAddress == null ? void 0 : taprootAddress.address));
@@ -1117,17 +2697,17 @@ var LaserEyesProvider = ({
         setNetwork(foundNetwork);
         return foundNetwork;
       } else if (provider === XVERSE) {
-        if (address2.slice(0, 1) === "t") {
+        if (address3.slice(0, 1) === "t") {
           return TESTNET;
         }
         return MAINNET;
       } else if (provider === OYL) {
-        if (address2.slice(0, 1) === "t") {
+        if (address3.slice(0, 1) === "t") {
           return TESTNET;
         }
         return MAINNET;
       } else if (provider === MAGIC_EDEN) {
-        if (address2.slice(0, 1) === "t") {
+        if (address3.slice(0, 1) === "t") {
           return TESTNET;
         }
         return MAINNET;
@@ -1136,12 +2716,12 @@ var LaserEyesProvider = ({
         const foundNetwork = getNetworkForOkx(okxNetwork);
         setNetwork(foundNetwork);
       } else if (provider === LEATHER) {
-        if (address2.slice(0, 1) === "t") {
+        if (address3.slice(0, 1) === "t") {
           return TESTNET;
         }
         return MAINNET;
       } else if (provider === PHANTOM) {
-        if (address2.slice(0, 1) === "t") {
+        if (address3.slice(0, 1) === "t") {
           return TESTNET;
         }
         return MAINNET;
@@ -1254,7 +2834,7 @@ var LaserEyesProvider = ({
           throw new Error("Transaction failed");
         return txId;
       } else if (provider === XVERSE) {
-        const response = yield (0, import_sats_connect.request)("sendTransfer", {
+        const response = yield (0, import_sats_connect17.request)("sendTransfer", {
           recipients: [
             {
               address: to,
@@ -1265,7 +2845,7 @@ var LaserEyesProvider = ({
         if (response.status === "success") {
           return response.result.txid;
         } else {
-          if (response.error.code === import_sats_connect.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error sending BTC: " + response.error.message);
@@ -1273,7 +2853,7 @@ var LaserEyesProvider = ({
         }
       } else if (provider === OYL) {
         const { psbtHex, psbtBase64 } = yield createSendBtcPsbt(
-          address2,
+          address3,
           paymentAddress,
           to,
           amount,
@@ -1288,7 +2868,7 @@ var LaserEyesProvider = ({
         return psbt.txId;
       } else if (provider === MAGIC_EDEN) {
         const { psbtHex, psbtBase64 } = yield createSendBtcPsbt(
-          address2,
+          address3,
           paymentAddress,
           to,
           amount,
@@ -1318,7 +2898,7 @@ var LaserEyesProvider = ({
         if ((_a = response == null ? void 0 : response.result) == null ? void 0 : _a.txid) {
           return response.result.txid;
         } else {
-          if (response.error.code === import_sats_connect.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error sending BTC: " + response.error.message);
@@ -1344,14 +2924,14 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === XVERSE) {
-        const response = yield (0, import_sats_connect.request)("signMessage", {
-          address: address2,
+        const response = yield (0, import_sats_connect17.request)("signMessage", {
+          address: address3,
           message
         });
         if (response.status === "success") {
           return response.result.signature;
         } else {
-          if (response.error.code === import_sats_connect.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error signing message: " + response.error.message);
@@ -1359,13 +2939,13 @@ var LaserEyesProvider = ({
         }
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
-        yield (0, import_sats_connect.signMessage)({
+        yield (0, import_sats_connect17.signMessage)({
           getProvider: () => __async(void 0, null, function* () {
             return window.magicEden.bitcoin;
           }),
           payload: {
             network: {
-              type: import_sats_connect.BitcoinNetworkType.Mainnet
+              type: import_sats_connect17.BitcoinNetworkType.Mainnet
             },
             address: paymentAddress,
             message
@@ -1389,7 +2969,7 @@ var LaserEyesProvider = ({
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
-        const response = yield library == null ? void 0 : library.signMessage(address2, uintArray);
+        const response = yield library == null ? void 0 : library.signMessage(address3, uintArray);
         const binaryString = String.fromCharCode(...response.signature);
         return btoa(binaryString);
       } else if (provider === WIZZ) {
@@ -1409,11 +2989,11 @@ var LaserEyesProvider = ({
       if (!psbt)
         throw new Error("No PSBT provided");
       if (isHex(psbt)) {
-        psbtBase64 = bitcoin2.Psbt.fromHex(psbt).toBase64();
+        psbtBase64 = bitcoin19.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
       } else if (isBase64(psbt)) {
         psbtBase64 = psbt;
-        psbtHex = bitcoin2.Psbt.fromBase64(psbt).toHex();
+        psbtHex = bitcoin19.Psbt.fromBase64(psbt).toHex();
       } else {
         throw new Error("Invalid PSBT format");
       }
@@ -1421,7 +3001,7 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
-        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -1436,13 +3016,13 @@ var LaserEyesProvider = ({
           txId: void 0
         };
       } else if (provider === XVERSE) {
-        const toSignPsbt = bitcoin2.Psbt.fromBase64(String(psbtBase64), {
+        const toSignPsbt = bitcoin19.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network)
         });
         const inputs = toSignPsbt.data.inputs;
         const inputsToSign = [];
         const ordinalAddressData = {
-          address: address2,
+          address: address3,
           signingIndexes: []
         };
         const paymentsAddressData = {
@@ -1454,13 +3034,13 @@ var LaserEyesProvider = ({
           for (var iter = __forAwait(inputs), more, temp, error; more = !(temp = yield iter.next()).done; more = false) {
             let input = temp.value;
             const { script } = input.witnessUtxo;
-            const addressFromScript = (0, import_address.fromOutputScript)(
+            const addressFromScript = (0, import_address17.fromOutputScript)(
               script,
               getBitcoinNetwork(network)
             );
             if (addressFromScript === paymentAddress) {
               paymentsAddressData.signingIndexes.push(Number(counter));
-            } else if (addressFromScript === address2) {
+            } else if (addressFromScript === address3) {
               ordinalAddressData.signingIndexes.push(Number(counter));
             }
             counter++;
@@ -1497,7 +3077,7 @@ var LaserEyesProvider = ({
             if (response.txId) {
               txId = response.txId;
             } else if (response.psbtBase64) {
-              const signedPsbt = bitcoin2.Psbt.fromBase64(
+              const signedPsbt = bitcoin19.Psbt.fromBase64(
                 String(response.psbtBase64),
                 {
                   network: getBitcoinNetwork(network)
@@ -1509,7 +3089,7 @@ var LaserEyesProvider = ({
           },
           onCancel: () => console.log("Canceled")
         };
-        yield (0, import_sats_connect.signTransaction)(signPsbtOptions);
+        yield (0, import_sats_connect17.signTransaction)(signPsbtOptions);
         return {
           signedPsbtHex,
           signedPsbtBase64,
@@ -1518,7 +3098,7 @@ var LaserEyesProvider = ({
       } else if (provider === OYL) {
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, true, true);
         console.log({ signedPsbt });
-        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
         if (broadcast) {
           const txId = yield pushPsbt(psbtSignedPsbt.toHex());
           return {
@@ -1534,13 +3114,13 @@ var LaserEyesProvider = ({
           };
         }
       } else if (provider === MAGIC_EDEN) {
-        const toSignPsbt = bitcoin2.Psbt.fromBase64(String(psbtBase64), {
+        const toSignPsbt = bitcoin19.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network)
         });
         const inputs = toSignPsbt.data.inputs;
         const inputsToSign = [];
         const ordinalAddressData = {
-          address: address2,
+          address: address3,
           signingIndexes: []
         };
         const paymentsAddressData = {
@@ -1552,13 +3132,13 @@ var LaserEyesProvider = ({
           for (var iter2 = __forAwait(inputs), more2, temp2, error2; more2 = !(temp2 = yield iter2.next()).done; more2 = false) {
             let input = temp2.value;
             const { script } = input.witnessUtxo;
-            const addressFromScript = (0, import_address.fromOutputScript)(
+            const addressFromScript = (0, import_address17.fromOutputScript)(
               script,
               getBitcoinNetwork(network)
             );
             if (addressFromScript === paymentAddress) {
               paymentsAddressData.signingIndexes.push(Number(counter));
-            } else if (addressFromScript === address2) {
+            } else if (addressFromScript === address3) {
               ordinalAddressData.signingIndexes.push(Number(counter));
             }
             counter++;
@@ -1596,7 +3176,7 @@ var LaserEyesProvider = ({
           },
           onFinish: (response) => {
             if (response.psbtBase64) {
-              const signedPsbt = bitcoin2.Psbt.fromBase64(
+              const signedPsbt = bitcoin19.Psbt.fromBase64(
                 String(response.psbtBase64),
                 {
                   network: getBitcoinNetwork(network)
@@ -1615,9 +3195,9 @@ var LaserEyesProvider = ({
             throw error3;
           }
         };
-        yield (0, import_sats_connect.signTransaction)(signPsbtOptions);
+        yield (0, import_sats_connect17.signTransaction)(signPsbtOptions);
         if (broadcast) {
-          const signed = bitcoin2.Psbt.fromBase64(String(signedPsbtBase64));
+          const signed = bitcoin19.Psbt.fromBase64(String(signedPsbtBase64));
           const finalized = signed.finalizeAllInputs();
           const extracted = finalized.extractTransaction();
           const txId2 = yield pushPsbt(extracted.toHex());
@@ -1637,7 +3217,7 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
-        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -1663,7 +3243,7 @@ var LaserEyesProvider = ({
         );
         const leatherHexResult = response.result;
         const signedTx = leatherHexResult.hex;
-        const signed = bitcoin2.Psbt.fromHex(String(signedTx));
+        const signed = bitcoin19.Psbt.fromHex(String(signedTx));
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
           const txId = yield pushPsbt(finalized.toHex());
@@ -1691,7 +3271,7 @@ var LaserEyesProvider = ({
           autoFinalized: finalize,
           broadcast: false
         });
-        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -1723,11 +3303,11 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else if (provider === MAGIC_EDEN) {
-        return yield import_axios2.default.post("https://mempool.space/api/tx", psbt).then((res) => res.data);
+        return yield import_axios50.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === LEATHER) {
-        const decoded = bitcoin2.Psbt.fromHex(psbt);
+        const decoded = bitcoin19.Psbt.fromHex(psbt);
         const extracted = decoded.extractTransaction();
-        return yield import_axios2.default.post("https://mempool.space/api/tx", extracted.toHex()).then((res) => res.data);
+        return yield import_axios50.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else {
@@ -1737,14 +3317,14 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    LaserEyesContext.Provider,
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    LaserEyesContext17.Provider,
     {
       value: {
         library,
         accounts,
         publicKey,
-        address: address2,
+        address: address3,
         paymentAddress,
         paymentPublicKey,
         provider,
@@ -1781,36 +3361,36 @@ var LaserEyesProvider = ({
 };
 
 // src/hooks/useInscriber.ts
-var import_react2 = require("react");
+var import_react34 = _toESM(require("react"));
 
 // src/consts/inscribe.ts
 var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
 
 // src/hooks/useInscriber.ts
-var import_axios3 = __toESM(require("axios"));
+var import_axios51 = __toESM(require("axios"));
 var DESCRIBE_API_URL = "http://localhost:3000/api";
 var useInscriber = ({
   inscribeApiUrl = DESCRIBE_API_URL
 }) => {
-  const { address: address2, paymentAddress, paymentPublicKey, publicKey, signPsbt } = useLaserEyes();
-  const [content, setContent] = (0, import_react2.useState)("");
-  const [mimeType, setMimeType] = (0, import_react2.useState)(MIME_TYPE_TEXT);
-  const [commitPsbtHex, setCommitPsbtHex] = (0, import_react2.useState)("");
-  const [commitPsbtBase64, setCommitPsbtBase64] = (0, import_react2.useState)("");
-  const [commitTxId, setCommitTxId] = (0, import_react2.useState)("");
-  const [feeRate, setFeeRate] = (0, import_react2.useState)(10);
-  const [totalFees, setTotalFees] = (0, import_react2.useState)(0);
-  const [inscriberAddress, setInscriberAddress] = (0, import_react2.useState)("");
-  const [inscriptionTxId, setInscriptionTxId] = (0, import_react2.useState)("");
-  const [previewUrl, setPreviewUrl] = (0, import_react2.useState)("");
-  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = (0, import_react2.useState)(false);
-  const [isInscribing, setIsInscribing] = (0, import_react2.useState)(false);
-  (0, import_react2.useEffect)(() => {
+  const { address: address3, paymentAddress, paymentPublicKey, publicKey, signPsbt } = useLaserEyes();
+  const [content, setContent] = (0, import_react34.useState)("");
+  const [mimeType, setMimeType] = (0, import_react34.useState)(MIME_TYPE_TEXT);
+  const [commitPsbtHex, setCommitPsbtHex] = (0, import_react34.useState)("");
+  const [commitPsbtBase64, setCommitPsbtBase64] = (0, import_react34.useState)("");
+  const [commitTxId, setCommitTxId] = (0, import_react34.useState)("");
+  const [feeRate, setFeeRate] = (0, import_react34.useState)(10);
+  const [totalFees, setTotalFees] = (0, import_react34.useState)(0);
+  const [inscriberAddress, setInscriberAddress] = (0, import_react34.useState)("");
+  const [inscriptionTxId, setInscriptionTxId] = (0, import_react34.useState)("");
+  const [previewUrl, setPreviewUrl] = (0, import_react34.useState)("");
+  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = (0, import_react34.useState)(false);
+  const [isInscribing, setIsInscribing] = (0, import_react34.useState)(false);
+  (0, import_react34.useEffect)(() => {
     setCommitPsbtHex("");
     setCommitPsbtBase64("");
     setCommitTxId("");
-  }, [content, address2, mimeType, feeRate]);
-  const getCommitPsbt = (0, import_react2.useCallback)(() => __async(void 0, null, function* () {
+  }, [content, address3, mimeType, feeRate]);
+  const getCommitPsbt = (0, import_react34.useCallback)(() => __async(void 0, null, function* () {
     try {
       if (!content)
         throw new Error("missing content");
@@ -1823,7 +3403,7 @@ var useInscriber = ({
       if (!mimeType)
         throw new Error("missing mimeType");
       setIsFetchingCommitPsbt(true);
-      return yield import_axios3.default.post(`${inscribeApiUrl}/create-inscription`, {
+      return yield import_axios51.default.post(`${inscribeApiUrl}/create-inscription`, {
         content,
         paymentAddress,
         paymentPublicKey,
@@ -1857,7 +3437,7 @@ var useInscriber = ({
       throw e;
     }
   });
-  const inscribe = (0, import_react2.useCallback)(
+  const inscribe = (0, import_react34.useCallback)(
     (_0) => __async(void 0, [_0], function* ({
       content: providedContent,
       mimeType: providedMimeType,
@@ -1867,7 +3447,7 @@ var useInscriber = ({
       try {
         const inscribeContent = providedContent != null ? providedContent : content;
         const inscribeMimeType = providedMimeType != null ? providedMimeType : mimeType;
-        const inscribeOutputAddress = providedAddress != null ? providedAddress : address2;
+        const inscribeOutputAddress = providedAddress != null ? providedAddress : address3;
         let inscribeCommitTxId = providedCommitTxId != null ? providedCommitTxId : commitTxId;
         if (!inscribeContent)
           throw new Error("missing content");
@@ -1886,10 +3466,10 @@ var useInscriber = ({
         yield delay(1e4);
         if (!inscribeCommitTxId)
           throw new Error("missing commitTxId");
-        return yield import_axios3.default.post(`${inscribeApiUrl}/inscribe`, {
+        return yield import_axios51.default.post(`${inscribeApiUrl}/inscribe`, {
           content,
           mimeType,
-          ordinalAddress: address2,
+          ordinalAddress: address3,
           commitTxId: inscribeCommitTxId
         }).then((res) => res.data).then((data) => {
           setInscriptionTxId(data);
@@ -1902,7 +3482,7 @@ var useInscriber = ({
         setIsInscribing(false);
       }
     }),
-    [address2, commitTxId, content, mimeType]
+    [address3, commitTxId, content, mimeType]
   );
   const reset = () => {
     setContent("");
@@ -1953,6 +3533,8 @@ var useInscriber = ({
   OKX,
   OKX_MAINNET,
   OKX_TESTNET,
+  OP_WALLET_MAINNET,
+  OP_WALLET_TESTNET,
   OYL,
   P2PKH,
   P2PSH,

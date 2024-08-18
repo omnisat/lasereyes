@@ -20,11 +20,7 @@ export const initialWalletContext = {
   paymentAddress: "",
   paymentPublicKey: "",
   balance: undefined,
-  network: MAINNET as
-    | typeof MAINNET
-    | typeof TESTNET
-    | typeof SIGNET
-    | typeof REGTEST,
+  network: MAINNET as typeof MAINNET | typeof TESTNET | typeof SIGNET,
   library: null,
   provider: null,
   accounts: [],
@@ -40,7 +36,7 @@ export const initialWalletContext = {
   requestAccounts: async () => [],
   getNetwork: async () => MAINNET,
   switchNetwork: async (
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET
   ) => {},
   getPublicKey: async () => "",
   getBalance: async () => "",
