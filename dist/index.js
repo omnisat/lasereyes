@@ -302,8 +302,8 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react33 = _toESM(require("react"));
-var bitcoin19 = __toESM(require("bitcoinjs-lib"));
+var import_react37 = require("react");
+var bitcoin21 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
 var LOCAL_STORAGE_DEFAULT_WALLET = "defaultWallet";
@@ -373,7 +373,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts17 = _toESM(require("usehooks-ts"));
+var import_usehooks_ts19 = require("usehooks-ts");
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -525,203 +525,236 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect17 = _toESM(require("sats-connect"));
-var import_address17 = _toESM(require("bitcoinjs-lib/src/address"));
-var import_axios50 = __toESM(require("axios"));
+var import_sats_connect19 = require("sats-connect");
+var import_address19 = require("bitcoinjs-lib/src/address");
+var import_axios56 = __toESM(require("axios"));
 
 // dist/index.mjs
-var import_react = _toESM(require("react"));
-var bitcoin18 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts = _toESM(require("usehooks-ts"));
+var import_react = require("react");
+var bitcoin20 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts = require("usehooks-ts");
 var bitcoin2 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios2 = __toESM(require("axios"), 1);
 var ecc2 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect = _toESM(require("sats-connect"));
-var import_address = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect = require("sats-connect");
+var import_address = require("bitcoinjs-lib/src/address");
 var import_axios3 = __toESM(require("axios"), 1);
-var import_react2 = _toESM(require("react"));
-var bitcoin17 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts2 = _toESM(require("usehooks-ts"));
+var import_react2 = require("react");
+var bitcoin19 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts2 = require("usehooks-ts");
 var bitcoin22 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios4 = __toESM(require("axios"), 1);
 var ecc22 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect2 = _toESM(require("sats-connect"));
-var import_address2 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect2 = require("sats-connect");
+var import_address2 = require("bitcoinjs-lib/src/address");
 var import_axios5 = __toESM(require("axios"), 1);
-var import_react3 = _toESM(require("react"));
-var bitcoin16 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts3 = _toESM(require("usehooks-ts"));
+var import_react3 = require("react");
+var bitcoin18 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts3 = require("usehooks-ts");
 var bitcoin222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios6 = __toESM(require("axios"), 1);
 var ecc222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect3 = _toESM(require("sats-connect"));
-var import_address3 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect3 = require("sats-connect");
+var import_address3 = require("bitcoinjs-lib/src/address");
 var import_axios7 = __toESM(require("axios"), 1);
-var import_react4 = _toESM(require("react"));
-var bitcoin15 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts4 = _toESM(require("usehooks-ts"));
+var import_react4 = require("react");
+var bitcoin17 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts4 = require("usehooks-ts");
 var bitcoin2222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios8 = __toESM(require("axios"), 1);
 var ecc2222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect4 = _toESM(require("sats-connect"));
-var import_address4 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect4 = require("sats-connect");
+var import_address4 = require("bitcoinjs-lib/src/address");
 var import_axios9 = __toESM(require("axios"), 1);
-var import_react5 = _toESM(require("react"));
-var bitcoin14 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts5 = _toESM(require("usehooks-ts"));
+var import_react5 = require("react");
+var bitcoin16 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts5 = require("usehooks-ts");
 var bitcoin22222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios10 = __toESM(require("axios"), 1);
 var ecc22222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect5 = _toESM(require("sats-connect"));
-var import_address5 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect5 = require("sats-connect");
+var import_address5 = require("bitcoinjs-lib/src/address");
 var import_axios11 = __toESM(require("axios"), 1);
-var import_react6 = _toESM(require("react"));
-var bitcoin13 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts6 = _toESM(require("usehooks-ts"));
+var import_react6 = require("react");
+var bitcoin15 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts6 = require("usehooks-ts");
 var bitcoin222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios12 = __toESM(require("axios"), 1);
 var ecc222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect6 = _toESM(require("sats-connect"));
-var import_address6 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect6 = require("sats-connect");
+var import_address6 = require("bitcoinjs-lib/src/address");
 var import_axios13 = __toESM(require("axios"), 1);
-var import_react7 = _toESM(require("react"));
-var bitcoin12 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts7 = _toESM(require("usehooks-ts"));
+var import_react7 = require("react");
+var bitcoin14 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts7 = require("usehooks-ts");
 var bitcoin2222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios14 = __toESM(require("axios"), 1);
 var ecc2222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect7 = _toESM(require("sats-connect"));
-var import_address7 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect7 = require("sats-connect");
+var import_address7 = require("bitcoinjs-lib/src/address");
 var import_axios15 = __toESM(require("axios"), 1);
-var import_react8 = _toESM(require("react"));
-var bitcoin11 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts8 = _toESM(require("usehooks-ts"));
+var import_react8 = require("react");
+var bitcoin13 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts8 = require("usehooks-ts");
 var bitcoin22222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios16 = __toESM(require("axios"), 1);
 var ecc22222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect8 = _toESM(require("sats-connect"));
-var import_address8 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect8 = require("sats-connect");
+var import_address8 = require("bitcoinjs-lib/src/address");
 var import_axios17 = __toESM(require("axios"), 1);
-var import_react9 = _toESM(require("react"));
-var bitcoin10 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts9 = _toESM(require("usehooks-ts"));
+var import_react9 = require("react");
+var bitcoin12 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts9 = require("usehooks-ts");
 var bitcoin222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios18 = __toESM(require("axios"), 1);
 var ecc222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect9 = _toESM(require("sats-connect"));
-var import_address9 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect9 = require("sats-connect");
+var import_address9 = require("bitcoinjs-lib/src/address");
 var import_axios19 = __toESM(require("axios"), 1);
-var import_react10 = _toESM(require("react"));
-var bitcoin9 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts10 = _toESM(require("usehooks-ts"));
+var import_react10 = require("react");
+var bitcoin11 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts10 = require("usehooks-ts");
 var bitcoin2222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios20 = __toESM(require("axios"), 1);
 var ecc2222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect10 = _toESM(require("sats-connect"));
-var import_address10 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect10 = require("sats-connect");
+var import_address10 = require("bitcoinjs-lib/src/address");
 var import_axios21 = __toESM(require("axios"), 1);
-var import_react11 = _toESM(require("react"));
-var bitcoin8 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts11 = _toESM(require("usehooks-ts"));
+var import_react11 = require("react");
+var bitcoin10 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts11 = require("usehooks-ts");
 var bitcoin22222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios22 = __toESM(require("axios"), 1);
 var ecc22222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect11 = _toESM(require("sats-connect"));
-var import_address11 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect11 = require("sats-connect");
+var import_address11 = require("bitcoinjs-lib/src/address");
 var import_axios23 = __toESM(require("axios"), 1);
-var import_react12 = _toESM(require("react"));
-var bitcoin7 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts12 = _toESM(require("usehooks-ts"));
+var import_react12 = require("react");
+var bitcoin9 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts12 = require("usehooks-ts");
 var bitcoin222222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios24 = __toESM(require("axios"), 1);
 var ecc222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect12 = _toESM(require("sats-connect"));
-var import_address12 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect12 = require("sats-connect");
+var import_address12 = require("bitcoinjs-lib/src/address");
 var import_axios25 = __toESM(require("axios"), 1);
-var import_react13 = _toESM(require("react"));
-var bitcoin6 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts13 = _toESM(require("usehooks-ts"));
+var import_react13 = require("react");
+var bitcoin8 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts13 = require("usehooks-ts");
 var bitcoin2222222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios26 = __toESM(require("axios"), 1);
 var ecc2222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect13 = _toESM(require("sats-connect"));
-var import_address13 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect13 = require("sats-connect");
+var import_address13 = require("bitcoinjs-lib/src/address");
 var import_axios27 = __toESM(require("axios"), 1);
-var import_react14 = _toESM(require("react"));
-var bitcoin5 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts14 = _toESM(require("usehooks-ts"));
+var import_react14 = require("react");
+var bitcoin7 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts14 = require("usehooks-ts");
 var bitcoin22222222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios28 = __toESM(require("axios"), 1);
 var ecc22222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect14 = _toESM(require("sats-connect"));
-var import_address14 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect14 = require("sats-connect");
+var import_address14 = require("bitcoinjs-lib/src/address");
 var import_axios29 = __toESM(require("axios"), 1);
-var import_react15 = _toESM(require("react"));
-var bitcoin4 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts15 = _toESM(require("usehooks-ts"));
+var import_react15 = require("react");
+var bitcoin6 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts15 = require("usehooks-ts");
 var bitcoin222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios30 = __toESM(require("axios"), 1);
 var ecc222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect15 = _toESM(require("sats-connect"));
-var import_address15 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect15 = require("sats-connect");
+var import_address15 = require("bitcoinjs-lib/src/address");
 var import_axios31 = __toESM(require("axios"), 1);
-var import_react16 = _toESM(require("react"));
+var import_react16 = require("react");
+var bitcoin5 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts16 = require("usehooks-ts");
 var bitcoin2222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
-var import_usehooks_ts16 = _toESM(require("usehooks-ts"));
-var bitcoin3 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios32 = __toESM(require("axios"), 1);
 var ecc2222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
-var import_sats_connect16 = _toESM(require("sats-connect"));
-var import_address16 = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect16 = require("sats-connect");
+var import_address16 = require("bitcoinjs-lib/src/address");
 var import_axios33 = __toESM(require("axios"), 1);
-var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
-var import_react17 = _toESM(require("react"));
+var import_react17 = require("react");
+var bitcoin4 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts17 = require("usehooks-ts");
+var bitcoin22222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios34 = __toESM(require("axios"), 1);
-var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
-var import_react18 = _toESM(require("react"));
+var ecc22222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect17 = require("sats-connect");
+var import_address17 = require("bitcoinjs-lib/src/address");
 var import_axios35 = __toESM(require("axios"), 1);
-var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
-var import_react19 = _toESM(require("react"));
+var import_react18 = require("react");
+var bitcoin222222222222222222 = __toESM(require("bitcoinjs-lib"), 1);
+var import_usehooks_ts18 = require("usehooks-ts");
+var bitcoin3 = __toESM(require("bitcoinjs-lib"), 1);
 var import_axios36 = __toESM(require("axios"), 1);
-var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
-var import_react20 = _toESM(require("react"));
+var ecc222222222222222222 = __toESM(require("@bitcoinerlab/secp256k1"), 1);
+var import_sats_connect18 = require("sats-connect");
+var import_address18 = require("bitcoinjs-lib/src/address");
 var import_axios37 = __toESM(require("axios"), 1);
-var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
-var import_react21 = _toESM(require("react"));
+var import_jsx_runtime = require("react/jsx-runtime");
+var import_react19 = require("react");
 var import_axios38 = __toESM(require("axios"), 1);
-var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
-var import_react22 = _toESM(require("react"));
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_react20 = require("react");
 var import_axios39 = __toESM(require("axios"), 1);
-var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
-var import_react23 = _toESM(require("react"));
+var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_react21 = require("react");
 var import_axios40 = __toESM(require("axios"), 1);
-var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
-var import_react24 = _toESM(require("react"));
+var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_react22 = require("react");
 var import_axios41 = __toESM(require("axios"), 1);
-var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
-var import_react25 = _toESM(require("react"));
+var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_react23 = require("react");
 var import_axios42 = __toESM(require("axios"), 1);
-var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
-var import_react26 = _toESM(require("react"));
+var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_react24 = require("react");
 var import_axios43 = __toESM(require("axios"), 1);
-var import_jsx_runtime11 = _toESM(require("react/jsx-runtime"));
-var import_react27 = _toESM(require("react"));
+var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_react25 = require("react");
 var import_axios44 = __toESM(require("axios"), 1);
-var import_jsx_runtime12 = _toESM(require("react/jsx-runtime"));
-var import_react28 = _toESM(require("react"));
+var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_react26 = require("react");
 var import_axios45 = __toESM(require("axios"), 1);
-var import_jsx_runtime13 = _toESM(require("react/jsx-runtime"));
-var import_react29 = _toESM(require("react"));
+var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_react27 = require("react");
 var import_axios46 = __toESM(require("axios"), 1);
-var import_jsx_runtime14 = _toESM(require("react/jsx-runtime"));
-var import_react30 = _toESM(require("react"));
+var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_react28 = require("react");
 var import_axios47 = __toESM(require("axios"), 1);
-var import_jsx_runtime15 = _toESM(require("react/jsx-runtime"));
-var import_react31 = _toESM(require("react"));
+var import_jsx_runtime11 = require("react/jsx-runtime");
+var import_react29 = require("react");
 var import_axios48 = __toESM(require("axios"), 1);
-var import_jsx_runtime16 = _toESM(require("react/jsx-runtime"));
-var import_react32 = _toESM(require("react"));
+var import_jsx_runtime12 = require("react/jsx-runtime");
+var import_react30 = require("react");
 var import_axios49 = __toESM(require("axios"), 1);
+var import_jsx_runtime13 = require("react/jsx-runtime");
+var import_react31 = require("react");
+var import_axios50 = __toESM(require("axios"), 1);
+var import_jsx_runtime14 = require("react/jsx-runtime");
+var import_react32 = require("react");
+var import_axios51 = __toESM(require("axios"), 1);
+var import_jsx_runtime15 = require("react/jsx-runtime");
+var import_react33 = require("react");
+var import_axios52 = __toESM(require("axios"), 1);
+var import_jsx_runtime16 = require("react/jsx-runtime");
+var import_react34 = require("react");
+var import_axios53 = __toESM(require("axios"), 1);
+var import_jsx_runtime17 = require("react/jsx-runtime");
+var import_react35 = require("react");
+var import_axios54 = __toESM(require("axios"), 1);
+var import_jsx_runtime18 = require("react/jsx-runtime");
+var import_react36 = require("react");
+var import_axios55 = __toESM(require("axios"), 1);
+var import_jsx_runtime19 = require("react/jsx-runtime");
+var import_jsx_runtime20 = require("react/jsx-runtime");
+var import_jsx_runtime21 = require("react/jsx-runtime");
+var import_jsx_runtime22 = require("react/jsx-runtime");
+var import_jsx_runtime23 = require("react/jsx-runtime");
+var import_jsx_runtime24 = require("react/jsx-runtime");
+var import_jsx_runtime25 = require("react/jsx-runtime");
+var import_jsx_runtime26 = require("react/jsx-runtime");
+var import_jsx_runtime27 = require("react/jsx-runtime");
 var __async2 = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
@@ -896,6 +929,26 @@ var initialWalletContext22 = {
   isInscribing: false
 };
 bitcoin22.initEccLib(ecc22);
+var __async222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 var MAINNET422 = "mainnet";
 var initialWalletContext222 = {
   hasUnisat: false,
@@ -918,51 +971,51 @@ var initialWalletContext222 = {
   library: null,
   provider: null,
   accounts: [],
-  connect: (walletName) => __async22(void 0, null, function* () {
+  connect: (walletName) => __async222(void 0, null, function* () {
   }),
   disconnect: () => {
   },
-  requestAccounts: () => __async22(void 0, null, function* () {
+  requestAccounts: () => __async222(void 0, null, function* () {
     return [];
   }),
-  getNetwork: () => __async22(void 0, null, function* () {
+  getNetwork: () => __async222(void 0, null, function* () {
     return MAINNET422;
   }),
-  switchNetwork: (network) => __async22(void 0, null, function* () {
+  switchNetwork: (network) => __async222(void 0, null, function* () {
   }),
-  getPublicKey: () => __async22(void 0, null, function* () {
+  getPublicKey: () => __async222(void 0, null, function* () {
     return "";
   }),
-  getBalance: () => __async22(void 0, null, function* () {
+  getBalance: () => __async222(void 0, null, function* () {
     return "";
   }),
-  getInscriptions: () => __async22(void 0, null, function* () {
+  getInscriptions: () => __async222(void 0, null, function* () {
     return [];
   }),
-  sendBTC: (to, amount) => __async22(void 0, null, function* () {
+  sendBTC: (to, amount) => __async222(void 0, null, function* () {
     return "";
   }),
-  signMessage: (message) => __async22(void 0, null, function* () {
+  signMessage: (message) => __async222(void 0, null, function* () {
     return "";
   }),
-  signPsbt: (tx) => __async22(void 0, null, function* () {
+  signPsbt: (tx) => __async222(void 0, null, function* () {
     return {
       signedPsbtHex: "",
       signedPsbtBase64: "",
       txId: ""
     };
   }),
-  pushPsbt: (tx) => __async22(void 0, null, function* () {
+  pushPsbt: (tx) => __async222(void 0, null, function* () {
     return "";
   }),
-  inscribe: (content) => __async22(void 0, null, function* () {
+  inscribe: (content) => __async222(void 0, null, function* () {
     return "";
   }),
   isCreatingCommit: false,
   isInscribing: false
 };
 bitcoin222.initEccLib(ecc222);
-var __async222 = (__this, __arguments, generator) => {
+var __async2222 = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
       try {
@@ -1004,70 +1057,50 @@ var initialWalletContext2222 = {
   library: null,
   provider: null,
   accounts: [],
-  connect: (walletName) => __async222(void 0, null, function* () {
+  connect: (walletName) => __async2222(void 0, null, function* () {
   }),
   disconnect: () => {
   },
-  requestAccounts: () => __async222(void 0, null, function* () {
+  requestAccounts: () => __async2222(void 0, null, function* () {
     return [];
   }),
-  getNetwork: () => __async222(void 0, null, function* () {
+  getNetwork: () => __async2222(void 0, null, function* () {
     return MAINNET4222;
   }),
-  switchNetwork: (network) => __async222(void 0, null, function* () {
+  switchNetwork: (network) => __async2222(void 0, null, function* () {
   }),
-  getPublicKey: () => __async222(void 0, null, function* () {
+  getPublicKey: () => __async2222(void 0, null, function* () {
     return "";
   }),
-  getBalance: () => __async222(void 0, null, function* () {
+  getBalance: () => __async2222(void 0, null, function* () {
     return "";
   }),
-  getInscriptions: () => __async222(void 0, null, function* () {
+  getInscriptions: () => __async2222(void 0, null, function* () {
     return [];
   }),
-  sendBTC: (to, amount) => __async222(void 0, null, function* () {
+  sendBTC: (to, amount) => __async2222(void 0, null, function* () {
     return "";
   }),
-  signMessage: (message) => __async222(void 0, null, function* () {
+  signMessage: (message) => __async2222(void 0, null, function* () {
     return "";
   }),
-  signPsbt: (tx) => __async222(void 0, null, function* () {
+  signPsbt: (tx) => __async2222(void 0, null, function* () {
     return {
       signedPsbtHex: "",
       signedPsbtBase64: "",
       txId: ""
     };
   }),
-  pushPsbt: (tx) => __async222(void 0, null, function* () {
+  pushPsbt: (tx) => __async2222(void 0, null, function* () {
     return "";
   }),
-  inscribe: (content) => __async222(void 0, null, function* () {
+  inscribe: (content) => __async2222(void 0, null, function* () {
     return "";
   }),
   isCreatingCommit: false,
   isInscribing: false
 };
 bitcoin2222.initEccLib(ecc2222);
-var __async2222 = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 var MAINNET42222 = "mainnet";
 var initialWalletContext22222 = {
   hasUnisat: false,
@@ -2079,23 +2112,197 @@ var initialWalletContext2222222222222222 = {
   isCreatingCommit: false,
   isInscribing: false
 };
-bitcoin3.initEccLib(ecc2222222222222222);
-var LaserEyesContext = (0, import_react16.createContext)(initialWalletContext2222222222222222);
-var LaserEyesContext2 = (0, import_react15.createContext)(initialWalletContext222222222222222);
-var LaserEyesContext3 = (0, import_react14.createContext)(initialWalletContext22222222222222);
-var LaserEyesContext4 = (0, import_react13.createContext)(initialWalletContext2222222222222);
-var LaserEyesContext5 = (0, import_react12.createContext)(initialWalletContext222222222222);
-var LaserEyesContext6 = (0, import_react11.createContext)(initialWalletContext22222222222);
-var LaserEyesContext7 = (0, import_react10.createContext)(initialWalletContext2222222222);
-var LaserEyesContext8 = (0, import_react9.createContext)(initialWalletContext222222222);
-var LaserEyesContext9 = (0, import_react8.createContext)(initialWalletContext22222222);
-var LaserEyesContext10 = (0, import_react7.createContext)(initialWalletContext2222222);
-var LaserEyesContext11 = (0, import_react6.createContext)(initialWalletContext222222);
-var LaserEyesContext12 = (0, import_react5.createContext)(initialWalletContext22222);
-var LaserEyesContext13 = (0, import_react4.createContext)(initialWalletContext2222);
-var LaserEyesContext14 = (0, import_react3.createContext)(initialWalletContext222);
-var LaserEyesContext15 = (0, import_react2.createContext)(initialWalletContext22);
-var LaserEyesContext16 = (0, import_react.createContext)(initialWalletContext2);
+bitcoin2222222222222222.initEccLib(ecc2222222222222222);
+var __async2222222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET42222222222222222 = "mainnet";
+var initialWalletContext22222222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET42222222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async2222222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async2222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async2222222222222222(void 0, null, function* () {
+    return MAINNET42222222222222222;
+  }),
+  switchNetwork: (network) => __async2222222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async2222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async2222222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async2222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin22222222222222222.initEccLib(ecc22222222222222222);
+var __async22222222222222222 = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var MAINNET422222222222222222 = "mainnet";
+var initialWalletContext222222222222222222 = {
+  hasUnisat: false,
+  hasXverse: false,
+  hasOyl: false,
+  hasMagicEden: false,
+  hasOkx: false,
+  hasLeather: false,
+  hasPhantom: false,
+  hasWizz: false,
+  isInitializing: true,
+  connected: false,
+  isConnecting: false,
+  publicKey: "",
+  address: "",
+  paymentAddress: "",
+  paymentPublicKey: "",
+  balance: void 0,
+  network: MAINNET422222222222222222,
+  library: null,
+  provider: null,
+  accounts: [],
+  connect: (walletName) => __async22222222222222222(void 0, null, function* () {
+  }),
+  disconnect: () => {
+  },
+  requestAccounts: () => __async22222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  getNetwork: () => __async22222222222222222(void 0, null, function* () {
+    return MAINNET422222222222222222;
+  }),
+  switchNetwork: (network) => __async22222222222222222(void 0, null, function* () {
+  }),
+  getPublicKey: () => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getBalance: () => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  getInscriptions: () => __async22222222222222222(void 0, null, function* () {
+    return [];
+  }),
+  sendBTC: (to, amount) => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signMessage: (message) => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  signPsbt: (tx) => __async22222222222222222(void 0, null, function* () {
+    return {
+      signedPsbtHex: "",
+      signedPsbtBase64: "",
+      txId: ""
+    };
+  }),
+  pushPsbt: (tx) => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  inscribe: (content) => __async22222222222222222(void 0, null, function* () {
+    return "";
+  }),
+  isCreatingCommit: false,
+  isInscribing: false
+};
+bitcoin3.initEccLib(ecc222222222222222222);
+var LaserEyesContext = (0, import_react18.createContext)(initialWalletContext222222222222222222);
+var LaserEyesContext2 = (0, import_react17.createContext)(initialWalletContext22222222222222222);
+var LaserEyesContext3 = (0, import_react16.createContext)(initialWalletContext2222222222222222);
+var LaserEyesContext4 = (0, import_react15.createContext)(initialWalletContext222222222222222);
+var LaserEyesContext5 = (0, import_react14.createContext)(initialWalletContext22222222222222);
+var LaserEyesContext6 = (0, import_react13.createContext)(initialWalletContext2222222222222);
+var LaserEyesContext7 = (0, import_react12.createContext)(initialWalletContext222222222222);
+var LaserEyesContext8 = (0, import_react11.createContext)(initialWalletContext22222222222);
+var LaserEyesContext9 = (0, import_react10.createContext)(initialWalletContext2222222222);
+var LaserEyesContext10 = (0, import_react9.createContext)(initialWalletContext222222222);
+var LaserEyesContext11 = (0, import_react8.createContext)(initialWalletContext22222222);
+var LaserEyesContext12 = (0, import_react7.createContext)(initialWalletContext2222222);
+var LaserEyesContext13 = (0, import_react6.createContext)(initialWalletContext222222);
+var LaserEyesContext14 = (0, import_react5.createContext)(initialWalletContext22222);
+var LaserEyesContext15 = (0, import_react4.createContext)(initialWalletContext2222);
+var LaserEyesContext16 = (0, import_react3.createContext)(initialWalletContext222);
+var LaserEyesContext17 = (0, import_react2.createContext)(initialWalletContext22);
+var LaserEyesContext18 = (0, import_react.createContext)(initialWalletContext2);
 
 // example/lib/urls.ts
 var MEMPOOL_SPACE_URL3 = "https://mempool.space";
@@ -2104,42 +2311,42 @@ var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet";
 var getMempoolSpaceUrl3 = (network) => network === TESTNET3 ? MEMPOOL_SPACE_TESTNET_URL3 : network === SIGNET3 ? MEMPOOL_SPACE_SIGNET_URL2 : MEMPOOL_SPACE_URL3;
 
 // src/providers/LaserEyesProvider.tsx
-var import_jsx_runtime17 = _toESM(require("react/jsx-runtime"));
-var LaserEyesContext17 = (0, import_react33.createContext)(initialWalletContext);
+var import_jsx_runtime28 = require("react/jsx-runtime");
+var LaserEyesContext19 = (0, import_react37.createContext)(initialWalletContext);
 var useLaserEyes = () => {
-  return (0, import_react33.useContext)(LaserEyesContext17);
+  return (0, import_react37.useContext)(LaserEyesContext19);
 };
 var LaserEyesProvider = ({
   children,
   config
 }) => {
-  const selfRef = (0, import_react33.useRef)({
+  const selfRef = (0, import_react37.useRef)({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = (0, import_react33.useState)(null);
-  const [provider, setProvider] = (0, import_react33.useState)();
-  const [isInitializing, setIsInitializing] = (0, import_react33.useState)(true);
-  const [connected, setConnected] = (0, import_react33.useState)(false);
-  const [isConnecting, setIsConnecting] = (0, import_react33.useState)(false);
-  const [accounts, setAccounts] = (0, import_react33.useState)([]);
-  const [publicKey, setPublicKey] = (0, import_react33.useState)("");
-  const [paymentPublicKey, setPaymentPublicKey] = (0, import_react33.useState)("");
-  const [address3, setAddress] = (0, import_react33.useState)("");
-  const [paymentAddress, setPaymentAddress] = (0, import_react33.useState)("");
-  const [balance, setBalance] = (0, import_react33.useState)();
-  const [hasUnisat, setHasUnisat] = (0, import_react33.useState)(false);
-  const [hasXverse, setHasXverse] = (0, import_react33.useState)(false);
-  const [hasOyl, setHasOyl] = (0, import_react33.useState)(false);
-  const [hasMagicEden, setHasMagicEden] = (0, import_react33.useState)(false);
-  const [hasOkx, setHasOkx] = (0, import_react33.useState)(false);
-  const [hasLeather, setHasLeather] = (0, import_react33.useState)(false);
-  const [hasPhantom, setHasPhantom] = (0, import_react33.useState)(false);
-  const [hasWizz, setHasWizz] = (0, import_react33.useState)(false);
-  const [network, setNetwork] = (0, import_usehooks_ts17.useLocalStorage)("network", MAINNET, {
+  const [library, setLibrary] = (0, import_react37.useState)(null);
+  const [provider, setProvider] = (0, import_react37.useState)();
+  const [isInitializing, setIsInitializing] = (0, import_react37.useState)(true);
+  const [connected, setConnected] = (0, import_react37.useState)(false);
+  const [isConnecting, setIsConnecting] = (0, import_react37.useState)(false);
+  const [accounts, setAccounts] = (0, import_react37.useState)([]);
+  const [publicKey, setPublicKey] = (0, import_react37.useState)("");
+  const [paymentPublicKey, setPaymentPublicKey] = (0, import_react37.useState)("");
+  const [address3, setAddress] = (0, import_react37.useState)("");
+  const [paymentAddress, setPaymentAddress] = (0, import_react37.useState)("");
+  const [balance, setBalance] = (0, import_react37.useState)();
+  const [hasUnisat, setHasUnisat] = (0, import_react37.useState)(false);
+  const [hasXverse, setHasXverse] = (0, import_react37.useState)(false);
+  const [hasOyl, setHasOyl] = (0, import_react37.useState)(false);
+  const [hasMagicEden, setHasMagicEden] = (0, import_react37.useState)(false);
+  const [hasOkx, setHasOkx] = (0, import_react37.useState)(false);
+  const [hasLeather, setHasLeather] = (0, import_react37.useState)(false);
+  const [hasPhantom, setHasPhantom] = (0, import_react37.useState)(false);
+  const [hasWizz, setHasWizz] = (0, import_react37.useState)(false);
+  const [network, setNetwork] = (0, import_usehooks_ts19.useLocalStorage)("network", MAINNET, {
     initializeWithValue: false
   });
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     if (config) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
@@ -2156,7 +2363,7 @@ var LaserEyesProvider = ({
       setIsInitializing(false);
     }
   };
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const unisatLib = window == null ? void 0 : window.unisat;
       if (unisatLib) {
@@ -2169,7 +2376,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a;
       const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
@@ -2183,7 +2390,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const oylLib = window == null ? void 0 : window.oyl;
       if (oylLib) {
@@ -2196,7 +2403,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const magicEdenLib = window == null ? void 0 : window.magicEden;
       if (magicEdenLib) {
@@ -2209,7 +2416,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a, _b;
       let foundOkx;
@@ -2228,7 +2435,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, [network]);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const leatherLib = window == null ? void 0 : window.LeatherProvider;
       if (leatherLib) {
@@ -2241,7 +2448,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       var _a;
       const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
@@ -2258,7 +2465,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     const observer = new MutationObserver(() => {
       const wizzLib = window == null ? void 0 : window.wizz;
       if (wizzLib) {
@@ -2271,7 +2478,7 @@ var LaserEyesProvider = ({
       observer.disconnect();
     };
   }, []);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     checkInitializationComplete();
   }, [
     hasUnisat,
@@ -2283,10 +2490,10 @@ var LaserEyesProvider = ({
     hasPhantom,
     hasWizz
   ]);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     setBalance(void 0);
   }, [network]);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     if (provider !== UNISAT && provider !== WIZZ) {
       return;
     }
@@ -2300,7 +2507,7 @@ var LaserEyesProvider = ({
       library.removeListener("networkChanged", handleNetworkChanged);
     };
   }, [library]);
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     if (!isInitializing) {
       const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
         LOCAL_STORAGE_DEFAULT_WALLET
@@ -2311,7 +2518,7 @@ var LaserEyesProvider = ({
       }
     }
   }, [isInitializing]);
-  const connectUnisat = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
+  const connectUnisat = (0, import_react37.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
@@ -2335,7 +2542,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   }), [hasUnisat]);
-  const connectXverse = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
+  const connectXverse = (0, import_react37.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
       let xverseNetwork = getXverseNetwork((config == null ? void 0 : config.network) || MAINNET);
@@ -2369,7 +2576,7 @@ var LaserEyesProvider = ({
           throw new Error(`Can't lasereyes to ${XVERSE} wallet`);
         }
       };
-      yield (0, import_sats_connect17.getAddress)(getAddressOptions);
+      yield (0, import_sats_connect19.getAddress)(getAddressOptions);
       setConnected(true);
     } catch (error) {
       throw error;
@@ -2434,7 +2641,7 @@ var LaserEyesProvider = ({
         }
       };
       console.log(JSON.stringify(getAddressOptions));
-      yield (0, import_sats_connect17.getAddress)(getAddressOptions);
+      yield (0, import_sats_connect19.getAddress)(getAddressOptions);
       setConnected(true);
     } catch (error) {
       console.log("error", error);
@@ -2465,7 +2672,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectLeather = (0, import_react33.useCallback)(() => __async(void 0, null, function* () {
+  const connectLeather = (0, import_react37.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -2858,7 +3065,7 @@ var LaserEyesProvider = ({
           throw new Error("Transaction failed");
         return txId;
       } else if (provider === XVERSE) {
-        const response = yield (0, import_sats_connect17.request)("sendTransfer", {
+        const response = yield (0, import_sats_connect19.request)("sendTransfer", {
           recipients: [
             {
               address: to,
@@ -2869,7 +3076,7 @@ var LaserEyesProvider = ({
         if (response.status === "success") {
           return response.result.txid;
         } else {
-          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect19.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error sending BTC: " + response.error.message);
@@ -2922,7 +3129,7 @@ var LaserEyesProvider = ({
         if ((_a = response == null ? void 0 : response.result) == null ? void 0 : _a.txid) {
           return response.result.txid;
         } else {
-          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect19.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error sending BTC: " + response.error.message);
@@ -2948,14 +3155,14 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === XVERSE) {
-        const response = yield (0, import_sats_connect17.request)("signMessage", {
+        const response = yield (0, import_sats_connect19.request)("signMessage", {
           address: address3,
           message
         });
         if (response.status === "success") {
           return response.result.signature;
         } else {
-          if (response.error.code === import_sats_connect17.RpcErrorCode.USER_REJECTION) {
+          if (response.error.code === import_sats_connect19.RpcErrorCode.USER_REJECTION) {
             throw new Error("User rejected the request");
           } else {
             throw new Error("Error signing message: " + response.error.message);
@@ -2963,13 +3170,13 @@ var LaserEyesProvider = ({
         }
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
-        yield (0, import_sats_connect17.signMessage)({
+        yield (0, import_sats_connect19.signMessage)({
           getProvider: () => __async(void 0, null, function* () {
             return window.magicEden.bitcoin;
           }),
           payload: {
             network: {
-              type: import_sats_connect17.BitcoinNetworkType.Mainnet
+              type: import_sats_connect19.BitcoinNetworkType.Mainnet
             },
             address: paymentAddress,
             message
@@ -3013,11 +3220,11 @@ var LaserEyesProvider = ({
       if (!psbt)
         throw new Error("No PSBT provided");
       if (isHex(psbt)) {
-        psbtBase64 = bitcoin19.Psbt.fromHex(psbt).toBase64();
+        psbtBase64 = bitcoin21.Psbt.fromHex(psbt).toBase64();
         psbtHex = psbt;
       } else if (isBase64(psbt)) {
         psbtBase64 = psbt;
-        psbtHex = bitcoin19.Psbt.fromBase64(psbt).toHex();
+        psbtHex = bitcoin21.Psbt.fromBase64(psbt).toHex();
       } else {
         throw new Error("Invalid PSBT format");
       }
@@ -3025,7 +3232,7 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
-        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin21.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -3040,7 +3247,7 @@ var LaserEyesProvider = ({
           txId: void 0
         };
       } else if (provider === XVERSE) {
-        const toSignPsbt = bitcoin19.Psbt.fromBase64(String(psbtBase64), {
+        const toSignPsbt = bitcoin21.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network)
         });
         const inputs = toSignPsbt.data.inputs;
@@ -3058,7 +3265,7 @@ var LaserEyesProvider = ({
           for (var iter = __forAwait(inputs), more, temp, error; more = !(temp = yield iter.next()).done; more = false) {
             let input = temp.value;
             const { script } = input.witnessUtxo;
-            const addressFromScript = (0, import_address17.fromOutputScript)(
+            const addressFromScript = (0, import_address19.fromOutputScript)(
               script,
               getBitcoinNetwork(network)
             );
@@ -3101,7 +3308,7 @@ var LaserEyesProvider = ({
             if (response.txId) {
               txId = response.txId;
             } else if (response.psbtBase64) {
-              const signedPsbt = bitcoin19.Psbt.fromBase64(
+              const signedPsbt = bitcoin21.Psbt.fromBase64(
                 String(response.psbtBase64),
                 {
                   network: getBitcoinNetwork(network)
@@ -3113,7 +3320,7 @@ var LaserEyesProvider = ({
           },
           onCancel: () => console.log("Canceled")
         };
-        yield (0, import_sats_connect17.signTransaction)(signPsbtOptions);
+        yield (0, import_sats_connect19.signTransaction)(signPsbtOptions);
         return {
           signedPsbtHex,
           signedPsbtBase64,
@@ -3122,7 +3329,7 @@ var LaserEyesProvider = ({
       } else if (provider === OYL) {
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, true, true);
         console.log({ signedPsbt });
-        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin21.Psbt.fromHex(signedPsbt);
         if (broadcast) {
           const txId = yield pushPsbt(psbtSignedPsbt.toHex());
           return {
@@ -3138,7 +3345,7 @@ var LaserEyesProvider = ({
           };
         }
       } else if (provider === MAGIC_EDEN) {
-        const toSignPsbt = bitcoin19.Psbt.fromBase64(String(psbtBase64), {
+        const toSignPsbt = bitcoin21.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network)
         });
         const inputs = toSignPsbt.data.inputs;
@@ -3156,7 +3363,7 @@ var LaserEyesProvider = ({
           for (var iter2 = __forAwait(inputs), more2, temp2, error2; more2 = !(temp2 = yield iter2.next()).done; more2 = false) {
             let input = temp2.value;
             const { script } = input.witnessUtxo;
-            const addressFromScript = (0, import_address17.fromOutputScript)(
+            const addressFromScript = (0, import_address19.fromOutputScript)(
               script,
               getBitcoinNetwork(network)
             );
@@ -3200,7 +3407,7 @@ var LaserEyesProvider = ({
           },
           onFinish: (response) => {
             if (response.psbtBase64) {
-              const signedPsbt = bitcoin19.Psbt.fromBase64(
+              const signedPsbt = bitcoin21.Psbt.fromBase64(
                 String(response.psbtBase64),
                 {
                   network: getBitcoinNetwork(network)
@@ -3219,9 +3426,9 @@ var LaserEyesProvider = ({
             throw error3;
           }
         };
-        yield (0, import_sats_connect17.signTransaction)(signPsbtOptions);
+        yield (0, import_sats_connect19.signTransaction)(signPsbtOptions);
         if (broadcast) {
-          const signed = bitcoin19.Psbt.fromBase64(String(signedPsbtBase64));
+          const signed = bitcoin21.Psbt.fromBase64(String(signedPsbtBase64));
           const finalized = signed.finalizeAllInputs();
           const extracted = finalized.extractTransaction();
           const txId2 = yield pushPsbt(extracted.toHex());
@@ -3241,7 +3448,7 @@ var LaserEyesProvider = ({
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
-        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin21.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -3267,7 +3474,7 @@ var LaserEyesProvider = ({
         );
         const leatherHexResult = response.result;
         const signedTx = leatherHexResult.hex;
-        const signed = bitcoin19.Psbt.fromHex(String(signedTx));
+        const signed = bitcoin21.Psbt.fromHex(String(signedTx));
         if (finalize && broadcast) {
           const finalized = signed.finalizeAllInputs();
           const txId = yield pushPsbt(finalized.toHex());
@@ -3295,7 +3502,7 @@ var LaserEyesProvider = ({
           autoFinalized: finalize,
           broadcast: false
         });
-        const psbtSignedPsbt = bitcoin19.Psbt.fromHex(signedPsbt);
+        const psbtSignedPsbt = bitcoin21.Psbt.fromHex(signedPsbt);
         if (finalize && broadcast) {
           const txId = yield pushPsbt(signedPsbt);
           return {
@@ -3327,11 +3534,11 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else if (provider === MAGIC_EDEN) {
-        return yield import_axios50.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, psbt).then((res) => res.data);
+        return yield import_axios56.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === LEATHER) {
-        const decoded = bitcoin19.Psbt.fromHex(psbt);
+        const decoded = bitcoin21.Psbt.fromHex(psbt);
         const extracted = decoded.extractTransaction();
-        return yield import_axios50.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
+        return yield import_axios56.default.post(`${getMempoolSpaceUrl3(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
         return yield library == null ? void 0 : library.pushPsbt(psbt);
       } else {
@@ -3341,8 +3548,8 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-    LaserEyesContext17.Provider,
+  return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    LaserEyesContext19.Provider,
     {
       value: {
         library,
@@ -3385,36 +3592,36 @@ var LaserEyesProvider = ({
 };
 
 // src/hooks/useInscriber.ts
-var import_react34 = _toESM(require("react"));
+var import_react38 = require("react");
 
 // src/consts/inscribe.ts
 var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
 
 // src/hooks/useInscriber.ts
-var import_axios51 = __toESM(require("axios"));
+var import_axios57 = __toESM(require("axios"));
 var DESCRIBE_API_URL = "http://localhost:3000/api";
 var useInscriber = ({
   inscribeApiUrl = DESCRIBE_API_URL
 }) => {
   const { address: address3, paymentAddress, paymentPublicKey, publicKey, signPsbt } = useLaserEyes();
-  const [content, setContent] = (0, import_react34.useState)("");
-  const [mimeType, setMimeType] = (0, import_react34.useState)(MIME_TYPE_TEXT);
-  const [commitPsbtHex, setCommitPsbtHex] = (0, import_react34.useState)("");
-  const [commitPsbtBase64, setCommitPsbtBase64] = (0, import_react34.useState)("");
-  const [commitTxId, setCommitTxId] = (0, import_react34.useState)("");
-  const [feeRate, setFeeRate] = (0, import_react34.useState)(10);
-  const [totalFees, setTotalFees] = (0, import_react34.useState)(0);
-  const [inscriberAddress, setInscriberAddress] = (0, import_react34.useState)("");
-  const [inscriptionTxId, setInscriptionTxId] = (0, import_react34.useState)("");
-  const [previewUrl, setPreviewUrl] = (0, import_react34.useState)("");
-  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = (0, import_react34.useState)(false);
-  const [isInscribing, setIsInscribing] = (0, import_react34.useState)(false);
-  (0, import_react34.useEffect)(() => {
+  const [content, setContent] = (0, import_react38.useState)("");
+  const [mimeType, setMimeType] = (0, import_react38.useState)(MIME_TYPE_TEXT);
+  const [commitPsbtHex, setCommitPsbtHex] = (0, import_react38.useState)("");
+  const [commitPsbtBase64, setCommitPsbtBase64] = (0, import_react38.useState)("");
+  const [commitTxId, setCommitTxId] = (0, import_react38.useState)("");
+  const [feeRate, setFeeRate] = (0, import_react38.useState)(10);
+  const [totalFees, setTotalFees] = (0, import_react38.useState)(0);
+  const [inscriberAddress, setInscriberAddress] = (0, import_react38.useState)("");
+  const [inscriptionTxId, setInscriptionTxId] = (0, import_react38.useState)("");
+  const [previewUrl, setPreviewUrl] = (0, import_react38.useState)("");
+  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = (0, import_react38.useState)(false);
+  const [isInscribing, setIsInscribing] = (0, import_react38.useState)(false);
+  (0, import_react38.useEffect)(() => {
     setCommitPsbtHex("");
     setCommitPsbtBase64("");
     setCommitTxId("");
   }, [content, address3, mimeType, feeRate]);
-  const getCommitPsbt = (0, import_react34.useCallback)(() => __async(void 0, null, function* () {
+  const getCommitPsbt = (0, import_react38.useCallback)(() => __async(void 0, null, function* () {
     try {
       if (!content)
         throw new Error("missing content");
@@ -3427,7 +3634,7 @@ var useInscriber = ({
       if (!mimeType)
         throw new Error("missing mimeType");
       setIsFetchingCommitPsbt(true);
-      return yield import_axios51.default.post(`${inscribeApiUrl}/create-inscription`, {
+      return yield import_axios57.default.post(`${inscribeApiUrl}/create-inscription`, {
         content,
         paymentAddress,
         paymentPublicKey,
@@ -3461,7 +3668,7 @@ var useInscriber = ({
       throw e;
     }
   });
-  const inscribe = (0, import_react34.useCallback)(
+  const inscribe = (0, import_react38.useCallback)(
     (_0) => __async(void 0, [_0], function* ({
       content: providedContent,
       mimeType: providedMimeType,
@@ -3490,7 +3697,7 @@ var useInscriber = ({
         yield delay(1e4);
         if (!inscribeCommitTxId)
           throw new Error("missing commitTxId");
-        return yield import_axios51.default.post(`${inscribeApiUrl}/inscribe`, {
+        return yield import_axios57.default.post(`${inscribeApiUrl}/inscribe`, {
           content,
           mimeType,
           ordinalAddress: address3,
@@ -3545,7 +3752,7 @@ var useInscriber = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime29 = require("react/jsx-runtime");
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3557,7 +3764,7 @@ var OylLogo = (_a) => {
     "className"
   ]);
   if (variant === "first") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
       "svg",
       __spreadProps(__spreadValues({
         className,
@@ -3568,7 +3775,7 @@ var OylLogo = (_a) => {
         xmlns: "http://www.w3.org/2000/svg"
       }, props), {
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
             "rect",
             {
               width: "42",
@@ -3578,7 +3785,7 @@ var OylLogo = (_a) => {
               style: { fill: "#090A0C", fillOpacity: 1 }
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
             "path",
             {
               d: "M21 14C29.222 14 38 15.9676 38 20.9054C38 25.8622 29.222 28 21 28C12.778 28 4 26.0324 4 21.0946C4 16.1378 12.778 14 21 14ZM21.0397 25.3135C24.6939 25.3135 30.1752 24.3297 30.1752 21C30.1752 17.6703 24.6939 16.6865 21.0397 16.6865H20.9603C17.3061 16.6865 11.8248 17.6703 11.8248 21C11.8248 24.3297 17.3061 25.3135 20.9603 25.3135H21.0397Z",
@@ -3590,7 +3797,7 @@ var OylLogo = (_a) => {
       })
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3601,7 +3808,7 @@ var OylLogo = (_a) => {
       xmlns: "http://www.w3.org/2000/svg"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
           "rect",
           {
             width: "42",
@@ -3611,7 +3818,7 @@ var OylLogo = (_a) => {
             style: { fill: "white", fillOpacity: 1 }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
           "path",
           {
             d: "M21 14C29.222 14 38 15.9676 38 20.9054C38 25.8622 29.222 28 21 28C12.778 28 4 26.0324 4 21.0946C4 16.1378 12.778 14 21 14ZM21.0397 25.3135C24.6939 25.3135 30.1752 24.3297 30.1752 21C30.1752 17.6703 24.6939 16.6865 21.0397 16.6865H20.9603C17.3061 16.6865 11.8248 17.6703 11.8248 21C11.8248 24.3297 17.3061 25.3135 20.9603 25.3135H21.0397Z",
@@ -3625,7 +3832,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime30 = require("react/jsx-runtime");
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3637,7 +3844,7 @@ var LeatherLogo = (_a) => {
     "className"
   ]);
   if (variant === "first") {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
       "svg",
       __spreadProps(__spreadValues({
         className,
@@ -3648,8 +3855,8 @@ var LeatherLogo = (_a) => {
         xmlns: "http://www.w3.org/2000/svg"
       }, props), {
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#12100F" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#12100F" }),
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
             "path",
             {
               d: "M74.9171 52.7114C82.4766 51.5408 93.4087 43.5804 93.4087 37.3761C93.4087 35.5031 91.8968 34.2154 89.6871 34.2154C85.5004 34.2154 78.4061 40.5368 74.9171 52.7114ZM39.911 83.4991C30.0256 83.4991 29.2115 93.3324 39.0969 93.3324C43.5163 93.3324 48.8661 91.5764 51.6573 88.4157C47.5868 84.9038 44.2141 83.4991 39.911 83.4991ZM102.829 79.2848C103.41 95.7907 95.0369 105.039 80.8484 105.039C72.4748 105.039 68.2881 101.878 59.333 96.0249C54.681 101.176 45.8423 105.039 38.5154 105.039C13.2785 105.039 14.3252 72.8463 40.0273 72.8463C45.3771 72.8463 49.9128 74.2511 55.7277 77.88L59.5656 64.4177C43.7489 60.0864 35.8405 47.9118 43.6326 30.4693H56.1929C49.215 42.0586 53.9832 51.6578 62.822 52.7114C67.5903 35.7372 77.8246 22.509 91.4316 22.509C99.1074 22.509 105.155 27.5428 105.155 36.6737C105.155 51.3066 86.0819 63.2471 71.6607 64.4177L65.7295 85.3721C72.4748 93.2153 91.199 100.824 91.199 79.2848H102.829Z",
@@ -3660,7 +3867,7 @@ var LeatherLogo = (_a) => {
       })
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3671,8 +3878,8 @@ var LeatherLogo = (_a) => {
       xmlns: "http://www.w3.org/2000/svg"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#F5F1ED" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#F5F1ED" }),
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
           "path",
           {
             d: "M74.9171 52.7115C82.4766 51.5409 93.4087 43.5806 93.4087 37.3762C93.4087 35.5032 91.8968 34.2155 89.6871 34.2155C85.5004 34.2155 78.4061 40.5369 74.9171 52.7115ZM39.911 83.4992C30.0256 83.4992 29.2115 93.3325 39.0969 93.3325C43.5163 93.3325 48.8661 91.5766 51.6573 88.4159C47.5868 84.904 44.2141 83.4992 39.911 83.4992ZM102.829 79.2849C103.41 95.7908 95.0369 105.039 80.8484 105.039C72.4748 105.039 68.2881 101.878 59.333 96.025C54.681 101.176 45.8423 105.039 38.5154 105.039C13.2785 105.039 14.3252 72.8464 40.0273 72.8464C45.3771 72.8464 49.9128 74.2512 55.7277 77.8801L59.5656 64.4179C43.7489 60.0865 35.8405 47.9119 43.6326 30.4695H56.1929C49.215 42.0587 53.9832 51.6579 62.822 52.7115C67.5903 35.7373 77.8246 22.5092 91.4316 22.5092C99.1074 22.5092 105.155 27.5429 105.155 36.6738C105.155 51.3068 86.0819 63.2472 71.6607 64.4179L65.7295 85.3722C72.4748 93.2155 91.199 100.825 91.199 79.2849H102.829Z",
@@ -3685,7 +3892,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime31 = require("react/jsx-runtime");
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3697,7 +3904,7 @@ var PhantomLogo = (_a) => {
     "className"
   ]);
   if (variant === "first") {
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
       "svg",
       __spreadProps(__spreadValues({
         className,
@@ -3708,15 +3915,15 @@ var PhantomLogo = (_a) => {
         fill: "none"
       }, props), {
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("g", { clipPath: "url(#a)", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("g", { clipPath: "url(#a)", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
               "path",
               {
                 fill: "#AB9FF2",
                 d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
               "path",
               {
                 fill: "#FFFDF8",
@@ -3726,12 +3933,12 @@ var PhantomLogo = (_a) => {
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
+          /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
         ]
       })
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3742,15 +3949,15 @@ var PhantomLogo = (_a) => {
       fill: "none"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("g", { clipPath: "url(#a)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
             "path",
             {
               fill: "#FFFDF8",
               d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
             "path",
             {
               fill: "#AB9FF2",
@@ -3760,14 +3967,14 @@ var PhantomLogo = (_a) => {
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
       ]
     })
   );
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_jsx_runtime32 = require("react/jsx-runtime");
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3778,7 +3985,7 @@ var XverseLogo = (_a) => {
     "variant",
     "className"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3789,22 +3996,22 @@ var XverseLogo = (_a) => {
       xmlns: "http://www.w3.org/2000/svg"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("g", { clipPath: "url(#clip0_3_53)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("g", { clipPath: "url(#clip0_3_53)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
             "path",
             {
               d: "M32 0H10C4.47715 0 0 4.47715 0 10V32C0 37.5228 4.47715 42 10 42H32C37.5228 42 42 37.5228 42 32V10C42 4.47715 37.5228 0 32 0Z",
               fill: "#181818"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
             "path",
             {
               d: "M32 31.6745V27.6829C32 27.5233 31.9203 27.3636 31.8406 27.2438L14.8225 10.1597C14.7029 10.0399 14.5435 10 14.3841 10H10.3986C10.1993 10 10.0399 10.1597 10.0399 10.3592V14.0715C10.0399 14.2311 10.1196 14.3908 10.1993 14.5105L16.2971 20.6177C16.4565 20.7774 16.4565 20.977 16.2971 21.1366L10.1196 27.3237C10.0399 27.4035 10 27.4834 10 27.5632V31.6346C10 31.8342 10.1594 31.9939 10.3587 31.9939H17.0544C17.2536 31.9939 17.413 31.8342 17.413 31.6346V29.2396C17.413 29.1598 17.4529 29.0401 17.5326 29.0002L20.8406 25.6871C21 25.5275 21.1993 25.5275 21.3587 25.6871L27.4964 31.8342C27.6159 31.954 27.7753 31.9939 27.9348 31.9939H31.6413C31.8406 32.0337 32 31.8741 32 31.6745Z",
               fill: "white"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
             "path",
             {
               d: "M23.3406 15.0793H26.5592C26.7507 15.0793 26.9039 15.2333 26.9039 15.4257V18.658C26.9039 18.9658 27.2871 19.1197 27.4788 18.8888L31.8851 14.4637C31.9617 14.3867 32 14.3097 32 14.2328V10.3463C32 10.1539 31.8468 10 31.6552 10H27.7469C27.6703 10 27.5554 10.0385 27.5171 10.1154L23.1107 14.5021C22.8808 14.6945 23.0341 15.0793 23.3406 15.0793Z",
@@ -3812,14 +4019,14 @@ var XverseLogo = (_a) => {
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("clipPath", { id: "clip0_3_53", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("rect", { width: "42", height: "42", fill: "white" }) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("clipPath", { id: "clip0_3_53", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("rect", { width: "42", height: "42", fill: "white" }) }) })
       ]
     })
   );
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_jsx_runtime33 = require("react/jsx-runtime");
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3830,7 +4037,7 @@ var UnisatLogo = (_a) => {
     "variant",
     "className"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3841,29 +4048,29 @@ var UnisatLogo = (_a) => {
       fill: "none"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("g", { clipPath: "url(#a)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
             "path",
             {
               fill: "#000",
               d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
             "path",
             {
               fill: "url(#b)",
               d: "m25.517 9.483 5.759 5.611c.49.477.731.959.724 1.445-.008.486-.219.929-.631 1.33-.431.421-.897.634-1.395.644-.497.007-.992-.228-1.482-.705l-5.89-5.738c-.669-.652-1.315-1.114-1.936-1.385a2.873 2.873 0 0 0-1.96-.127c-.685.185-1.42.662-2.21 1.428-1.086 1.06-1.605 2.054-1.552 2.983.053.929.593 1.893 1.617 2.89l5.938 5.786c.496.482.74.964.732 1.443-.008.48-.22.923-.64 1.332-.419.408-.88.62-1.382.638-.502.016-1.001-.217-1.495-.7l-5.76-5.61c-.936-.912-1.613-1.776-2.029-2.59-.416-.815-.572-1.737-.464-2.765.097-.88.384-1.732.863-2.558.477-.827 1.161-1.671 2.048-2.537C15.43 9.268 16.438 8.48 17.4 7.93c.96-.55 1.889-.854 2.786-.917.899-.064 1.784.112 2.66.527.876.415 1.765 1.061 2.67 1.943h.002Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
             "path",
             {
               fill: "url(#c)",
               d: "m16.482 32.123-5.758-5.611c-.49-.479-.731-.959-.724-1.445.008-.486.219-.929.631-1.33.431-.421.897-.634 1.395-.644.498-.007.992.227 1.482.705l5.888 5.738c.671.652 1.315 1.114 1.936 1.385.622.27 1.276.312 1.962.127.685-.185 1.42-.662 2.21-1.43 1.086-1.06 1.605-2.054 1.552-2.983-.053-.929-.593-1.893-1.617-2.891l-3.164-3.056c-.496-.482-.74-.964-.732-1.443.008-.48.22-.923.64-1.332.419-.408.88-.62 1.382-.638.502-.016 1.002.217 1.496.7l2.983 2.88c.936.912 1.613 1.775 2.03 2.59.415.815.571 1.736.463 2.764a6.477 6.477 0 0 1-.863 2.559c-.477.826-1.16 1.67-2.048 2.536-1.057 1.03-2.066 1.819-3.027 2.368-.962.55-1.89.856-2.79.92-.898.063-1.784-.113-2.66-.527-.876-.415-1.765-1.062-2.67-1.944l.003.002Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
             "path",
             {
               fill: "url(#d)",
@@ -3871,8 +4078,8 @@ var UnisatLogo = (_a) => {
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("defs", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
             "linearGradient",
             {
               id: "b",
@@ -3882,14 +4089,14 @@ var UnisatLogo = (_a) => {
               y2: 20.772,
               gradientUnits: "userSpaceOnUse",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#201C1B" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.36, stopColor: "#77390D" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#F4B852" })
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { stopColor: "#201C1B" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.36, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 1, stopColor: "#F4B852" })
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
             "linearGradient",
             {
               id: "c",
@@ -3899,14 +4106,14 @@ var UnisatLogo = (_a) => {
               y2: 22.844,
               gradientUnits: "userSpaceOnUse",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#1F1D1C" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.37, stopColor: "#77390D" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#F4FB52" })
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { stopColor: "#1F1D1C" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.37, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 1, stopColor: "#F4FB52" })
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
             "radialGradient",
             {
               id: "d",
@@ -3916,14 +4123,14 @@ var UnisatLogo = (_a) => {
               gradientTransform: "matrix(2.11484 0 0 2.08019 20.073 15.567)",
               gradientUnits: "userSpaceOnUse",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#F4B852" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.33, stopColor: "#EA8101" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.64, stopColor: "#77390D" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#211C1D" })
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { stopColor: "#F4B852" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.33, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 0.64, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("stop", { offset: 1, stopColor: "#211C1D" })
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
         ] })
       ]
     })
@@ -3931,7 +4138,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime34 = require("react/jsx-runtime");
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3942,7 +4149,7 @@ var WizzLogo = (_a) => {
     "variant",
     "className"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -3953,37 +4160,37 @@ var WizzLogo = (_a) => {
       fill: "none"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("g", { clipPath: "url(#a)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
             "path",
             {
               fill: "#000",
               d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("g", { fillRule: "evenodd", clipPath: "url(#b)", clipRule: "evenodd", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("g", { fillRule: "evenodd", clipPath: "url(#b)", clipRule: "evenodd", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
               "path",
               {
                 fill: "#FFD815",
                 d: "m26.507 17.74-1.623-1.623-1.624 1.623 1.623 1.623 1.624 1.624 1.623-1.624-1.623-1.623Z"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
               "path",
               {
                 fill: "#FF9813",
                 d: "m26.507 8-1.624 1.623 1.624 1.624 1.623-1.624L26.507 8ZM33 14.493l-1.623-1.623-1.624 1.623 1.624 1.623L33 14.493ZM23.26 27.48l1.623 1.623 1.624-1.623-1.623-1.624-1.624 1.624ZM11.897 16.117l1.623 1.623 1.623-1.623-1.623-1.624-1.623 1.624ZM20.014 8 18.39 9.623l1.624 1.624 1.623-1.624L20.014 8ZM13.52 11.247l1.624 1.623 1.623-1.623-1.623-1.624-1.624 1.624ZM31.377 19.363l-1.624 1.623 1.624 1.624L33 20.987l-1.623-1.624ZM28.13 25.856l1.623 1.624 1.624-1.624-1.624-1.623-1.623 1.623Z"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
               "path",
               {
                 fill: "#5B5B72",
                 d: "m26.507 20.986-1.624-1.623-1.623 1.623-1.623-1.623-1.623-1.623 1.623-1.624-1.623-1.623-1.624-1.623-1.623 1.623 1.623 1.623-1.623 1.624 1.623 1.623-1.623 1.623-.812-.811-1.623 1.623 1.623 1.623-1.623 1.624-1.543 1.542-1.542 1.543-1.624 1.623L8 31.377 9.623 33l1.624-1.623 1.623-1.624 1.543-1.542.08-.08 1.462-1.463.08-.08 1.544-1.543 1.623 1.623 1.623-1.623-.811-.812 1.623-1.623 1.623 1.623 1.623-1.623 1.624 1.623 1.623-1.623-1.623-1.624Z"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
               "path",
               {
                 fill: "#FF9813",
@@ -3992,9 +4199,9 @@ var WizzLogo = (_a) => {
             )
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("defs", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { fill: "#fff", d: "M8 8h25v25H8z" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("path", { fill: "#fff", d: "M8 8h25v25H8z" }) })
         ] })
       ]
     })
@@ -4002,7 +4209,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_jsx_runtime35 = require("react/jsx-runtime");
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -4013,7 +4220,7 @@ var OkxLogo = (_a) => {
     "variant",
     "className"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       className,
@@ -4024,19 +4231,19 @@ var OkxLogo = (_a) => {
       fill: "none"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("g", { clipPath: "url(#a)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
             "path",
             {
               fill: "#000",
               d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("g", { fill: "#fff", clipPath: "url(#b)", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M24.578 17.052h-6.787a.523.523 0 0 0-.52.52v6.788c0 .286.235.52.52.52h6.787c.286 0 .521-.234.521-.52v-6.787a.523.523 0 0 0-.52-.521ZM16.733 9.223H9.946a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.285 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM32.424 9.223h-6.787a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.286 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM16.733 24.898H9.946a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.285 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52ZM32.424 24.898h-6.787a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.286 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52Z" }) })
+          /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("g", { fill: "#fff", clipPath: "url(#b)", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("path", { d: "M24.578 17.052h-6.787a.523.523 0 0 0-.52.52v6.788c0 .286.235.52.52.52h6.787c.286 0 .521-.234.521-.52v-6.787a.523.523 0 0 0-.52-.521ZM16.733 9.223H9.946a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.285 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM32.424 9.223h-6.787a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.286 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM16.733 24.898H9.946a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.285 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52ZM32.424 24.898h-6.787a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.286 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52Z" }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("defs", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
         ] })
       ]
     })
@@ -4044,7 +4251,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime36 = require("react/jsx-runtime");
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -4055,7 +4262,7 @@ var MagicEdenLogo = (_a) => {
     "variant",
     "className"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(
     "svg",
     __spreadProps(__spreadValues({
       xmlns: "http://www.w3.org/2000/svg",
@@ -4066,15 +4273,15 @@ var MagicEdenLogo = (_a) => {
       fill: "none"
     }, props), {
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("g", { clipPath: "url(#clip0_17_93)", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("g", { clipPath: "url(#clip0_17_93)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
             "path",
             {
               fill: "#070C34",
               d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
             "path",
             {
               fill: "url(#paint0_linear_17_93)",
@@ -4082,8 +4289,8 @@ var MagicEdenLogo = (_a) => {
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("defs", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(
             "linearGradient",
             {
               id: "paint0_linear_17_93",
@@ -4093,23 +4300,23 @@ var MagicEdenLogo = (_a) => {
               y2: "30.176",
               gradientUnits: "userSpaceOnUse",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.23", stopColor: "#FF0074" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.26", stopColor: "#FF0068" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.32", stopColor: "#FF0048" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.39", stopColor: "#FF0015" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.41", stopColor: "#FF0009" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.43", stopColor: "#FF0908" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.54", stopColor: "#FF4003" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.62", stopColor: "#FF6201" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.66", stopColor: "#FF6F00" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.72", stopColor: "#FF8700" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.83", stopColor: "#FFAB00" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.92", stopColor: "#FFC100" }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.98", stopColor: "#FFCA00" })
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.23", stopColor: "#FF0074" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.26", stopColor: "#FF0068" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.32", stopColor: "#FF0048" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.39", stopColor: "#FF0015" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.41", stopColor: "#FF0009" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.43", stopColor: "#FF0908" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.54", stopColor: "#FF4003" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.62", stopColor: "#FF6201" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.66", stopColor: "#FF6F00" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.72", stopColor: "#FF8700" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.83", stopColor: "#FFAB00" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.92", stopColor: "#FFC100" }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("stop", { offset: "0.98", stopColor: "#FFCA00" })
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("clipPath", { id: "clip0_17_93", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+          /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("clipPath", { id: "clip0_17_93", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
         ] })
       ]
     })
@@ -4117,7 +4324,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime37 = require("react/jsx-runtime");
 var WalletIcon = ({
   size,
   className,
@@ -4125,21 +4332,23 @@ var WalletIcon = ({
   walletName
 }) => {
   if (walletName === XVERSE) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(XverseLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(XverseLogo, { size, className, variant });
   } else if (walletName === WIZZ) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(WizzLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(WizzLogo, { size, className, variant });
   } else if (walletName === LEATHER) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LeatherLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(LeatherLogo, { size, className, variant });
   } else if (walletName === MAGIC_EDEN) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(MagicEdenLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(MagicEdenLogo, { size, className, variant });
   } else if (walletName === OKX) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OkxLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(OkxLogo, { size, className, variant });
   } else if (walletName === PHANTOM) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PhantomLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(PhantomLogo, { size, className, variant });
   } else if (walletName === UNISAT) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(UnisatLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(UnisatLogo, { size, className, variant });
   } else if (walletName === OYL) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OylLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(OylLogo, { size, className, variant });
+  } else {
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(LeatherLogo, { size, className, variant });
   }
 };
 // Annotate the CommonJS export names for ESM import in node:

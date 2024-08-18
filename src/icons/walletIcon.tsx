@@ -54,6 +54,8 @@ const WalletIcon = ({
     return <UnisatLogo size={size} className={className} variant={variant} />;
   } else if (walletName === OYL) {
     return <OylLogo size={size} className={className} variant={variant} />;
+  } else {
+    return <LeatherLogo size={size} className={className} variant={variant} />;
   }
 };
 
