@@ -233,6 +233,13 @@ interface MagicedenLogoProps extends React.SVGProps<SVGSVGElement> {
     size?: number;
     variant?: "first" | "second";
 }
-declare const MagicedenLogo: React.FC<MagicedenLogoProps>;
+declare const MagicEdenLogo: React.FC<MagicedenLogoProps>;
 
-export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicedenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
+declare const WalletIcon: ({ size, className, variant, walletName, }: {
+    size: number;
+    className?: string | undefined;
+    variant?: "first" | "second" | undefined;
+    walletName: typeof XVERSE | typeof WIZZ | typeof LEATHER | typeof MAGIC_EDEN | typeof OKX | typeof PHANTOM | typeof UNISAT | typeof OYL;
+}) => react_jsx_runtime.JSX.Element | undefined;
+
+export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };

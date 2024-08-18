@@ -98,7 +98,7 @@ __export(src_exports, {
   MEMPOOL_SPACE_SIGNET_URL: () => MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL: () => MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL: () => MEMPOOL_SPACE_URL,
-  MagicedenLogo: () => MagicedenLogo,
+  MagicEdenLogo: () => MagicEdenLogo,
   OKX: () => OKX,
   OKX_MAINNET: () => OKX_MAINNET,
   OKX_TESTNET: () => OKX_TESTNET,
@@ -126,6 +126,7 @@ __export(src_exports, {
   WIZZ: () => WIZZ,
   WIZZ_MAINNET: () => WIZZ_MAINNET,
   WIZZ_TESTNET: () => WIZZ_TESTNET,
+  WalletIcon: () => WalletIcon,
   WizzLogo: () => WizzLogo,
   XVERSE: () => XVERSE,
   XVERSE_MAINNET: () => XVERSE_MAINNET,
@@ -4044,7 +4045,7 @@ var OkxLogo = (_a) => {
 
 // src/icons/magiceden.tsx
 var import_jsx_runtime9 = require("react/jsx-runtime");
-var MagicedenLogo = (_a) => {
+var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
     variant = "first",
@@ -4114,6 +4115,33 @@ var MagicedenLogo = (_a) => {
     })
   );
 };
+
+// src/icons/walletIcon.tsx
+var import_jsx_runtime10 = require("react/jsx-runtime");
+var WalletIcon = ({
+  size,
+  className,
+  variant,
+  walletName
+}) => {
+  if (walletName === XVERSE) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(XverseLogo, { size, className, variant });
+  } else if (walletName === WIZZ) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(WizzLogo, { size, className, variant });
+  } else if (walletName === LEATHER) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LeatherLogo, { size, className, variant });
+  } else if (walletName === MAGIC_EDEN) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(MagicEdenLogo, { size, className, variant });
+  } else if (walletName === OKX) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OkxLogo, { size, className, variant });
+  } else if (walletName === PHANTOM) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PhantomLogo, { size, className, variant });
+  } else if (walletName === UNISAT) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(UnisatLogo, { size, className, variant });
+  } else if (walletName === OYL) {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OylLogo, { size, className, variant });
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   LEATHER,
@@ -4126,7 +4154,7 @@ var MagicedenLogo = (_a) => {
   MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL,
-  MagicedenLogo,
+  MagicEdenLogo,
   OKX,
   OKX_MAINNET,
   OKX_TESTNET,
@@ -4154,6 +4182,7 @@ var MagicedenLogo = (_a) => {
   WIZZ,
   WIZZ_MAINNET,
   WIZZ_TESTNET,
+  WalletIcon,
   WizzLogo,
   XVERSE,
   XVERSE_MAINNET,

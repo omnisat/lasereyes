@@ -4181,7 +4181,7 @@ var OkxLogo = (_a) => {
 
 // src/icons/magiceden.tsx
 import { jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
-var MagicedenLogo = (_a) => {
+var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
     variant = "first",
@@ -4251,6 +4251,33 @@ var MagicedenLogo = (_a) => {
     })
   );
 };
+
+// src/icons/walletIcon.tsx
+import { jsx as jsx10 } from "react/jsx-runtime";
+var WalletIcon = ({
+  size,
+  className,
+  variant,
+  walletName
+}) => {
+  if (walletName === XVERSE) {
+    return /* @__PURE__ */ jsx10(XverseLogo, { size, className, variant });
+  } else if (walletName === WIZZ) {
+    return /* @__PURE__ */ jsx10(WizzLogo, { size, className, variant });
+  } else if (walletName === LEATHER) {
+    return /* @__PURE__ */ jsx10(LeatherLogo, { size, className, variant });
+  } else if (walletName === MAGIC_EDEN) {
+    return /* @__PURE__ */ jsx10(MagicEdenLogo, { size, className, variant });
+  } else if (walletName === OKX) {
+    return /* @__PURE__ */ jsx10(OkxLogo, { size, className, variant });
+  } else if (walletName === PHANTOM) {
+    return /* @__PURE__ */ jsx10(PhantomLogo, { size, className, variant });
+  } else if (walletName === UNISAT) {
+    return /* @__PURE__ */ jsx10(UnisatLogo, { size, className, variant });
+  } else if (walletName === OYL) {
+    return /* @__PURE__ */ jsx10(OylLogo, { size, className, variant });
+  }
+};
 export {
   LEATHER,
   LEATHER_MAINNET,
@@ -4262,7 +4289,7 @@ export {
   MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL,
-  MagicedenLogo,
+  MagicEdenLogo,
   OKX,
   OKX_MAINNET,
   OKX_TESTNET,
@@ -4290,6 +4317,7 @@ export {
   WIZZ,
   WIZZ_MAINNET,
   WIZZ_TESTNET,
+  WalletIcon,
   WizzLogo,
   XVERSE,
   XVERSE_MAINNET,

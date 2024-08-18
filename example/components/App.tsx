@@ -12,6 +12,7 @@ import {
   LEATHER,
   PHANTOM,
   WIZZ,
+  WalletIcon,
 } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { cn, truncateString } from '@/lib/utils'
@@ -27,7 +28,7 @@ import { MdOutbound } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 const App = () => {
-  const wallets = [UNISAT, XVERSE, LEATHER]
+  const wallets = [UNISAT, XVERSE, LEATHER, MAGIC_EDEN, OKX, PHANTOM, WIZZ]
   const {
     address,
     paymentAddress,
@@ -137,6 +138,7 @@ const App = () => {
                   provider?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
+                <WalletIcon walletName={provider} size={24} />{' '}
                 {provider?.length > 0 ? provider : '--'}
               </span>
             </div>
