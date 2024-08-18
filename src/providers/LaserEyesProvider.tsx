@@ -68,7 +68,8 @@ import {
   signTransaction,
 } from "sats-connect";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { getMempoolSpaceUrl } from "../../example/lib/urls";
 
 const LaserEyesContext =
   createContext<LaserEyesContextType>(initialWalletContext);
@@ -121,7 +122,7 @@ const LaserEyesProvider = ({
   const [hasWizz, setHasWizz] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
-    typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+    typeof MAINNET | typeof TESTNET | typeof SIGNET
   >("network", MAINNET, {
     initializeWithValue: false,
   });
@@ -852,7 +853,7 @@ const LaserEyesProvider = ({
   };
 
   const switchNetwork = async (
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET
   ) => {
     try {
       if (!library) return;
@@ -1434,13 +1435,13 @@ const LaserEyesProvider = ({
         return await library?.pushPsbt(psbt);
       } else if (provider === MAGIC_EDEN) {
         return await axios
-          .post("https://mempool.space/api/tx", psbt)
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
           .then((res) => res.data);
       } else if (provider === LEATHER) {
         const decoded = bitcoin.Psbt.fromHex(psbt);
         const extracted = decoded.extractTransaction();
         return await axios
-          .post("https://mempool.space/api/tx", extracted.toHex())
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, extracted.toHex())
           .then((res) => res.data);
       } else if (provider === WIZZ) {
         return await library?.pushPsbt(psbt);

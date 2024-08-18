@@ -6,6 +6,8 @@ import * as bitcoin from 'bitcoinjs-lib';
 declare const XVERSE_NETWORK: "Mainnet" | "Testnet";
 declare const UNISAT_MAINNET = "livenet";
 declare const UNISAT_TESTNET = "testnet";
+declare const OP_WALLET_MAINNET = "livenet";
+declare const OP_WALLET_TESTNET = "testnet";
 declare const XVERSE_MAINNET = "Mainnet";
 declare const XVERSE_TESTNET = "Testnet";
 declare const XVERSE_SIGNET = "Signet";
@@ -85,7 +87,7 @@ type LaserEyesContextType = {
     paymentAddress: string;
     paymentPublicKey: string;
     balance: number | undefined;
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
     library: any;
     provider: any;
     accounts: string[];
@@ -101,7 +103,7 @@ type LaserEyesContextType = {
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;
-    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST) => Promise<void>;
+    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET) => Promise<void>;
     getPublicKey: () => Promise<string>;
     getBalance: () => Promise<string>;
     getInscriptions: () => Promise<any[]>;
@@ -115,7 +117,7 @@ type LaserEyesContextType = {
     pushPsbt: (tx: string) => Promise<string | undefined>;
 };
 type Config = {
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
 };
 interface CommitPsbtResponse {
     inscriberAddress: string;
