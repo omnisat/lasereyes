@@ -3,6 +3,9 @@ export const XVERSE_NETWORK: "Mainnet" | "Testnet" = "Mainnet";
 export const UNISAT_MAINNET = "livenet";
 export const UNISAT_TESTNET = "testnet";
 
+export const OP_WALLET_MAINNET = "livenet";
+export const OP_WALLET_TESTNET = "testnet";
+
 export const XVERSE_MAINNET = "Mainnet";
 export const XVERSE_TESTNET = "Testnet";
 export const XVERSE_SIGNET = "Signet";

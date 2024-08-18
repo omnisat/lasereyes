@@ -10,7 +10,7 @@ export type LaserEyesContextType = {
   paymentAddress: string;
   paymentPublicKey: string;
   balance: number | undefined;
-  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
   library: any;
   provider: any;
   accounts: string[];
@@ -30,7 +30,7 @@ export type LaserEyesContextType = {
   requestAccounts: () => Promise<string[]>;
   getNetwork: () => Promise<string | undefined>;
   switchNetwork: (
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET
   ) => Promise<void>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<string>;
@@ -53,7 +53,7 @@ export type LaserEyesContextType = {
 };
 
 export type Config = {
-  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST;
+  network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
 };
 
 export interface OYLBalanceResponse {

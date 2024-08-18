@@ -228,12 +228,6 @@ const WalletCard = ({
         broadcast
       )
 
-      if (signPsbtResponse?.txId) {
-        setUnsigned(undefined)
-        setSignedPsbt(undefined)
-        return
-      }
-
       // @ts-ignore
       setSigned(signPsbtResponse?.signedPsbtHex)
       if (!signPsbtResponse) {
@@ -242,6 +236,8 @@ const WalletCard = ({
 
       //@ts-ignore
       setSignedPsbt(signPsbtResponse)
+
+      console.log(signPsbtResponse)
 
       if (
         typeof signPsbtResponse.signedPsbtHex === 'string' &&
@@ -259,7 +255,8 @@ const WalletCard = ({
       }
 
       // @ts-ignore
-      if (signPsbtResponse?.txId) {
+      if (typeof signPsbtResponse.txId === 'string') {
+        setUnsigned(undefined)
         setSignedPsbt(undefined)
         toast.success(
           <span className={'flex flex-col gap-1 items-center justify-center'}>
