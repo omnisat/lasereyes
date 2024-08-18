@@ -1,7 +1,9 @@
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
@@ -18,6 +20,19 @@ var __spreadValues = (a, b) => {
         __defNormalProp(a, prop, b[prop]);
     }
   return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
 };
 var __export = (target, all) => {
   for (var name in all)
@@ -77,17 +92,21 @@ __export(src_exports, {
   LEATHER_MAINNET: () => LEATHER_MAINNET,
   LEATHER_TESTNET: () => LEATHER_TESTNET,
   LaserEyesProvider: () => LaserEyesProvider,
+  LeatherLogo: () => LeatherLogo,
   MAGIC_EDEN: () => MAGIC_EDEN,
   MAINNET: () => MAINNET,
   MEMPOOL_SPACE_SIGNET_URL: () => MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL: () => MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL: () => MEMPOOL_SPACE_URL,
+  MagicedenLogo: () => MagicedenLogo,
   OKX: () => OKX,
   OKX_MAINNET: () => OKX_MAINNET,
   OKX_TESTNET: () => OKX_TESTNET,
   OP_WALLET_MAINNET: () => OP_WALLET_MAINNET,
   OP_WALLET_TESTNET: () => OP_WALLET_TESTNET,
   OYL: () => OYL,
+  OkxLogo: () => OkxLogo,
+  OylLogo: () => OylLogo,
   P2PKH: () => P2PKH,
   P2PSH: () => P2PSH,
   P2SH: () => P2SH,
@@ -95,21 +114,25 @@ __export(src_exports, {
   P2WPKH: () => P2WPKH,
   P2WSH: () => P2WSH,
   PHANTOM: () => PHANTOM,
+  PhantomLogo: () => PhantomLogo,
   REGTEST: () => REGTEST,
   SIGNET: () => SIGNET,
   TESTNET: () => TESTNET,
   UNISAT: () => UNISAT,
   UNISAT_MAINNET: () => UNISAT_MAINNET,
   UNISAT_TESTNET: () => UNISAT_TESTNET,
+  UnisatLogo: () => UnisatLogo,
   WALLETS: () => WALLETS,
   WIZZ: () => WIZZ,
   WIZZ_MAINNET: () => WIZZ_MAINNET,
   WIZZ_TESTNET: () => WIZZ_TESTNET,
+  WizzLogo: () => WizzLogo,
   XVERSE: () => XVERSE,
   XVERSE_MAINNET: () => XVERSE_MAINNET,
   XVERSE_NETWORK: () => XVERSE_NETWORK,
   XVERSE_SIGNET: () => XVERSE_SIGNET,
   XVERSE_TESTNET: () => XVERSE_TESTNET,
+  XverseLogo: () => XverseLogo,
   createConfig: () => createConfig,
   createSendBtcPsbt: () => createSendBtcPsbt,
   delay: () => delay,
@@ -3519,23 +3542,599 @@ var useInscriber = ({
     reset
   };
 };
+
+// src/icons/oyl.tsx
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var OylLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  if (variant === "first") {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        className,
+        width: size,
+        height: size,
+        viewBox: "0 0 42 42",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "rect",
+            {
+              width: "42",
+              height: "42",
+              rx: "10",
+              fill: "#090A0C",
+              style: { fill: "#090A0C", fillOpacity: 1 }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "path",
+            {
+              d: "M21 14C29.222 14 38 15.9676 38 20.9054C38 25.8622 29.222 28 21 28C12.778 28 4 26.0324 4 21.0946C4 16.1378 12.778 14 21 14ZM21.0397 25.3135C24.6939 25.3135 30.1752 24.3297 30.1752 21C30.1752 17.6703 24.6939 16.6865 21.0397 16.6865H20.9603C17.3061 16.6865 11.8248 17.6703 11.8248 21C11.8248 24.3297 17.3061 25.3135 20.9603 25.3135H21.0397Z",
+              fill: "white",
+              style: { fill: "white", fillOpacity: 1 }
+            }
+          )
+        ]
+      })
+    );
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "rect",
+          {
+            width: "42",
+            height: "42",
+            rx: "10",
+            fill: "white",
+            style: { fill: "white", fillOpacity: 1 }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "path",
+          {
+            d: "M21 14C29.222 14 38 15.9676 38 20.9054C38 25.8622 29.222 28 21 28C12.778 28 4 26.0324 4 21.0946C4 16.1378 12.778 14 21 14ZM21.0397 25.3135C24.6939 25.3135 30.1752 24.3297 30.1752 21C30.1752 17.6703 24.6939 16.6865 21.0397 16.6865H20.9603C17.3061 16.6865 11.8248 17.6703 11.8248 21C11.8248 24.3297 17.3061 25.3135 20.9603 25.3135H21.0397Z",
+            fill: "#090A0C",
+            style: { fill: "#090A0C", fillOpacity: 1 }
+          }
+        )
+      ]
+    })
+  );
+};
+
+// src/icons/leather.tsx
+var import_jsx_runtime3 = require("react/jsx-runtime");
+var LeatherLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  if (variant === "first") {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        className,
+        width: size,
+        height: size,
+        viewBox: "0 0 128 128",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#12100F" }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "path",
+            {
+              d: "M74.9171 52.7114C82.4766 51.5408 93.4087 43.5804 93.4087 37.3761C93.4087 35.5031 91.8968 34.2154 89.6871 34.2154C85.5004 34.2154 78.4061 40.5368 74.9171 52.7114ZM39.911 83.4991C30.0256 83.4991 29.2115 93.3324 39.0969 93.3324C43.5163 93.3324 48.8661 91.5764 51.6573 88.4157C47.5868 84.9038 44.2141 83.4991 39.911 83.4991ZM102.829 79.2848C103.41 95.7907 95.0369 105.039 80.8484 105.039C72.4748 105.039 68.2881 101.878 59.333 96.0249C54.681 101.176 45.8423 105.039 38.5154 105.039C13.2785 105.039 14.3252 72.8463 40.0273 72.8463C45.3771 72.8463 49.9128 74.2511 55.7277 77.88L59.5656 64.4177C43.7489 60.0864 35.8405 47.9118 43.6326 30.4693H56.1929C49.215 42.0586 53.9832 51.6578 62.822 52.7114C67.5903 35.7372 77.8246 22.509 91.4316 22.509C99.1074 22.509 105.155 27.5428 105.155 36.6737C105.155 51.3066 86.0819 63.2471 71.6607 64.4177L65.7295 85.3721C72.4748 93.2153 91.199 100.824 91.199 79.2848H102.829Z",
+              fill: "#F5F1ED"
+            }
+          )
+        ]
+      })
+    );
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      width: size,
+      height: size,
+      viewBox: "0 0 128 128",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { width: "128", height: "128", rx: "26.8387", fill: "#F5F1ED" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          "path",
+          {
+            d: "M74.9171 52.7115C82.4766 51.5409 93.4087 43.5806 93.4087 37.3762C93.4087 35.5032 91.8968 34.2155 89.6871 34.2155C85.5004 34.2155 78.4061 40.5369 74.9171 52.7115ZM39.911 83.4992C30.0256 83.4992 29.2115 93.3325 39.0969 93.3325C43.5163 93.3325 48.8661 91.5766 51.6573 88.4159C47.5868 84.904 44.2141 83.4992 39.911 83.4992ZM102.829 79.2849C103.41 95.7908 95.0369 105.039 80.8484 105.039C72.4748 105.039 68.2881 101.878 59.333 96.025C54.681 101.176 45.8423 105.039 38.5154 105.039C13.2785 105.039 14.3252 72.8464 40.0273 72.8464C45.3771 72.8464 49.9128 74.2512 55.7277 77.8801L59.5656 64.4179C43.7489 60.0865 35.8405 47.9119 43.6326 30.4695H56.1929C49.215 42.0587 53.9832 51.6579 62.822 52.7115C67.5903 35.7373 77.8246 22.5092 91.4316 22.5092C99.1074 22.5092 105.155 27.5429 105.155 36.6738C105.155 51.3068 86.0819 63.2472 71.6607 64.4179L65.7295 85.3722C72.4748 93.2155 91.199 100.825 91.199 79.2849H102.829Z",
+            fill: "#12100F"
+          }
+        )
+      ]
+    })
+  );
+};
+
+// src/icons/phantom.tsx
+var import_jsx_runtime4 = require("react/jsx-runtime");
+var PhantomLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  if (variant === "first") {
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+      "svg",
+      __spreadProps(__spreadValues({
+        className,
+        xmlns: "http://www.w3.org/2000/svg",
+        width: size,
+        height: size,
+        viewBox: "0 0 42 42",
+        fill: "none"
+      }, props), {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("g", { clipPath: "url(#a)", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "path",
+              {
+                fill: "#AB9FF2",
+                d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "path",
+              {
+                fill: "#FFFDF8",
+                fillRule: "evenodd",
+                d: "M17.686 27.567c-1.676 2.569-4.484 5.819-8.22 5.819-1.767 0-3.466-.728-3.466-3.887C6 21.454 16.984 9 27.176 9c5.798 0 8.108 4.023 8.108 8.59 0 5.864-3.805 12.568-7.587 12.568-1.2 0-1.79-.659-1.79-1.704 0-.273.046-.568.137-.887-1.291 2.205-3.783 4.25-6.116 4.25-1.698 0-2.559-1.068-2.559-2.568 0-.545.114-1.113.317-1.681Zm8.78-10.135c0 1.331-.786 1.997-1.664 1.997-.892 0-1.664-.666-1.664-1.997s.772-1.996 1.664-1.996c.878 0 1.663.665 1.663 1.996Zm4.99 0c0 1.331-.785 1.997-1.663 1.997-.892 0-1.664-.666-1.664-1.997 0-1.33.772-1.996 1.664-1.996.878 0 1.664.665 1.664 1.996Z",
+                clipRule: "evenodd"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
+        ]
+      })
+    );
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "path",
+            {
+              fill: "#FFFDF8",
+              d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "path",
+            {
+              fill: "#AB9FF2",
+              fillRule: "evenodd",
+              d: "M17.686 27.567c-1.676 2.569-4.484 5.819-8.22 5.819-1.767 0-3.466-.728-3.466-3.887C6 21.454 16.984 9 27.176 9c5.798 0 8.108 4.023 8.108 8.59 0 5.864-3.805 12.568-7.587 12.568-1.2 0-1.79-.659-1.79-1.704 0-.273.046-.568.137-.887-1.291 2.205-3.783 4.25-6.116 4.25-1.698 0-2.559-1.068-2.559-2.568 0-.545.114-1.113.317-1.681Zm8.78-10.135c0 1.331-.786 1.997-1.664 1.997-.892 0-1.664-.666-1.664-1.997s.772-1.996 1.664-1.996c.878 0 1.663.665 1.663 1.996Zm4.99 0c0 1.331-.785 1.997-1.663 1.997-.892 0-1.664-.666-1.664-1.997 0-1.33.772-1.996 1.664-1.996.878 0 1.664.665 1.664 1.996Z",
+              clipRule: "evenodd"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }) })
+      ]
+    })
+  );
+};
+
+// src/icons/xverse.tsx
+var import_jsx_runtime5 = require("react/jsx-runtime");
+var XverseLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("g", { clipPath: "url(#clip0_3_53)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            "path",
+            {
+              d: "M32 0H10C4.47715 0 0 4.47715 0 10V32C0 37.5228 4.47715 42 10 42H32C37.5228 42 42 37.5228 42 32V10C42 4.47715 37.5228 0 32 0Z",
+              fill: "#181818"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            "path",
+            {
+              d: "M32 31.6745V27.6829C32 27.5233 31.9203 27.3636 31.8406 27.2438L14.8225 10.1597C14.7029 10.0399 14.5435 10 14.3841 10H10.3986C10.1993 10 10.0399 10.1597 10.0399 10.3592V14.0715C10.0399 14.2311 10.1196 14.3908 10.1993 14.5105L16.2971 20.6177C16.4565 20.7774 16.4565 20.977 16.2971 21.1366L10.1196 27.3237C10.0399 27.4035 10 27.4834 10 27.5632V31.6346C10 31.8342 10.1594 31.9939 10.3587 31.9939H17.0544C17.2536 31.9939 17.413 31.8342 17.413 31.6346V29.2396C17.413 29.1598 17.4529 29.0401 17.5326 29.0002L20.8406 25.6871C21 25.5275 21.1993 25.5275 21.3587 25.6871L27.4964 31.8342C27.6159 31.954 27.7753 31.9939 27.9348 31.9939H31.6413C31.8406 32.0337 32 31.8741 32 31.6745Z",
+              fill: "white"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            "path",
+            {
+              d: "M23.3406 15.0793H26.5592C26.7507 15.0793 26.9039 15.2333 26.9039 15.4257V18.658C26.9039 18.9658 27.2871 19.1197 27.4788 18.8888L31.8851 14.4637C31.9617 14.3867 32 14.3097 32 14.2328V10.3463C32 10.1539 31.8468 10 31.6552 10H27.7469C27.6703 10 27.5554 10.0385 27.5171 10.1154L23.1107 14.5021C22.8808 14.6945 23.0341 15.0793 23.3406 15.0793Z",
+              fill: "#EE7A30"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("clipPath", { id: "clip0_3_53", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("rect", { width: "42", height: "42", fill: "white" }) }) })
+      ]
+    })
+  );
+};
+
+// src/icons/unisat.tsx
+var import_jsx_runtime6 = require("react/jsx-runtime");
+var UnisatLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "path",
+            {
+              fill: "#000",
+              d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "path",
+            {
+              fill: "url(#b)",
+              d: "m25.517 9.483 5.759 5.611c.49.477.731.959.724 1.445-.008.486-.219.929-.631 1.33-.431.421-.897.634-1.395.644-.497.007-.992-.228-1.482-.705l-5.89-5.738c-.669-.652-1.315-1.114-1.936-1.385a2.873 2.873 0 0 0-1.96-.127c-.685.185-1.42.662-2.21 1.428-1.086 1.06-1.605 2.054-1.552 2.983.053.929.593 1.893 1.617 2.89l5.938 5.786c.496.482.74.964.732 1.443-.008.48-.22.923-.64 1.332-.419.408-.88.62-1.382.638-.502.016-1.001-.217-1.495-.7l-5.76-5.61c-.936-.912-1.613-1.776-2.029-2.59-.416-.815-.572-1.737-.464-2.765.097-.88.384-1.732.863-2.558.477-.827 1.161-1.671 2.048-2.537C15.43 9.268 16.438 8.48 17.4 7.93c.96-.55 1.889-.854 2.786-.917.899-.064 1.784.112 2.66.527.876.415 1.765 1.061 2.67 1.943h.002Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "path",
+            {
+              fill: "url(#c)",
+              d: "m16.482 32.123-5.758-5.611c-.49-.479-.731-.959-.724-1.445.008-.486.219-.929.631-1.33.431-.421.897-.634 1.395-.644.498-.007.992.227 1.482.705l5.888 5.738c.671.652 1.315 1.114 1.936 1.385.622.27 1.276.312 1.962.127.685-.185 1.42-.662 2.21-1.43 1.086-1.06 1.605-2.054 1.552-2.983-.053-.929-.593-1.893-1.617-2.891l-3.164-3.056c-.496-.482-.74-.964-.732-1.443.008-.48.22-.923.64-1.332.419-.408.88-.62 1.382-.638.502-.016 1.002.217 1.496.7l2.983 2.88c.936.912 1.613 1.775 2.03 2.59.415.815.571 1.736.463 2.764a6.477 6.477 0 0 1-.863 2.559c-.477.826-1.16 1.67-2.048 2.536-1.057 1.03-2.066 1.819-3.027 2.368-.962.55-1.89.856-2.79.92-.898.063-1.784-.113-2.66-.527-.876-.415-1.765-1.062-2.67-1.944l.003.002Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "path",
+            {
+              fill: "url(#d)",
+              d: "M20.073 17.645c1.168 0 2.115-.93 2.115-2.08 0-1.149-.947-2.08-2.115-2.08-1.168 0-2.115.931-2.115 2.08 0 1.15.947 2.08 2.115 2.08Z"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+            "linearGradient",
+            {
+              id: "b",
+              x1: 30.329,
+              x2: 12.579,
+              y1: 12.752,
+              y2: 20.772,
+              gradientUnits: "userSpaceOnUse",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#201C1B" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.36, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#F4B852" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+            "linearGradient",
+            {
+              id: "c",
+              x1: 12.163,
+              x2: 32.789,
+              y1: 29.085,
+              y2: 22.844,
+              gradientUnits: "userSpaceOnUse",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#1F1D1C" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.37, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.67, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#F4FB52" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+            "radialGradient",
+            {
+              id: "d",
+              cx: 0,
+              cy: 0,
+              r: 1,
+              gradientTransform: "matrix(2.11484 0 0 2.08019 20.073 15.567)",
+              gradientUnits: "userSpaceOnUse",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { stopColor: "#F4B852" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.33, stopColor: "#EA8101" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 0.64, stopColor: "#77390D" }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("stop", { offset: 1, stopColor: "#211C1D" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+        ] })
+      ]
+    })
+  );
+};
+
+// src/icons/wizz.tsx
+var import_jsx_runtime7 = require("react/jsx-runtime");
+var WizzLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            "path",
+            {
+              fill: "#000",
+              d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("g", { fillRule: "evenodd", clipPath: "url(#b)", clipRule: "evenodd", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "path",
+              {
+                fill: "#FFD815",
+                d: "m26.507 17.74-1.623-1.623-1.624 1.623 1.623 1.623 1.624 1.624 1.623-1.624-1.623-1.623Z"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "path",
+              {
+                fill: "#FF9813",
+                d: "m26.507 8-1.624 1.623 1.624 1.624 1.623-1.624L26.507 8ZM33 14.493l-1.623-1.623-1.624 1.623 1.624 1.623L33 14.493ZM23.26 27.48l1.623 1.623 1.624-1.623-1.623-1.624-1.624 1.624ZM11.897 16.117l1.623 1.623 1.623-1.623-1.623-1.624-1.623 1.624ZM20.014 8 18.39 9.623l1.624 1.624 1.623-1.624L20.014 8ZM13.52 11.247l1.624 1.623 1.623-1.623-1.623-1.624-1.624 1.624ZM31.377 19.363l-1.624 1.623 1.624 1.624L33 20.987l-1.623-1.624ZM28.13 25.856l1.623 1.624 1.624-1.624-1.624-1.623-1.623 1.623Z"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "path",
+              {
+                fill: "#5B5B72",
+                d: "m26.507 20.986-1.624-1.623-1.623 1.623-1.623-1.623-1.623-1.623 1.623-1.624-1.623-1.623-1.624-1.623-1.623 1.623 1.623 1.623-1.623 1.624 1.623 1.623-1.623 1.623-.812-.811-1.623 1.623 1.623 1.623-1.623 1.624-1.543 1.542-1.542 1.543-1.624 1.623L8 31.377 9.623 33l1.624-1.623 1.623-1.624 1.543-1.542.08-.08 1.462-1.463.08-.08 1.544-1.543 1.623 1.623 1.623-1.623-.811-.812 1.623-1.623 1.623 1.623 1.623-1.623 1.624 1.623 1.623-1.623-1.623-1.624Z"
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              "path",
+              {
+                fill: "#FF9813",
+                d: "m26.507 14.493-1.624-1.623-1.623 1.623-1.623-1.623-1.623 1.623 1.623 1.623-1.623 1.624 1.623 1.623 1.623 1.623 1.623-1.623-1.623-1.623 1.623-1.623 1.624 1.623 1.623-1.623-1.623-1.624Z"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { fill: "#fff", d: "M8 8h25v25H8z" }) })
+        ] })
+      ]
+    })
+  );
+};
+
+// src/icons/okx.tsx
+var import_jsx_runtime8 = require("react/jsx-runtime");
+var OkxLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      className,
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 42 42",
+      fill: "none"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("g", { clipPath: "url(#a)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            "path",
+            {
+              fill: "#000",
+              d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("g", { fill: "#fff", clipPath: "url(#b)", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M24.578 17.052h-6.787a.523.523 0 0 0-.52.52v6.788c0 .286.235.52.52.52h6.787c.286 0 .521-.234.521-.52v-6.787a.523.523 0 0 0-.52-.521ZM16.733 9.223H9.946a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.285 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM32.424 9.223h-6.787a.523.523 0 0 0-.521.521v6.787c0 .286.235.521.52.521h6.788c.286 0 .52-.235.52-.52V9.743a.523.523 0 0 0-.52-.52ZM16.733 24.898H9.946a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.285 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52ZM32.424 24.898h-6.787a.523.523 0 0 0-.521.52v6.788c0 .285.235.52.52.52h6.788c.286 0 .52-.235.52-.52v-6.788a.523.523 0 0 0-.52-.52Z" }) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("clipPath", { id: "a", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("clipPath", { id: "b", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+        ] })
+      ]
+    })
+  );
+};
+
+// src/icons/magiceden.tsx
+var import_jsx_runtime9 = require("react/jsx-runtime");
+var MagicedenLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      className,
+      viewBox: "0 0 42 42",
+      fill: "none"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("g", { clipPath: "url(#clip0_17_93)", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            "path",
+            {
+              fill: "#070C34",
+              d: "M32 0H10C4.477 0 0 4.477 0 10v22c0 5.523 4.477 10 10 10h22c5.523 0 10-4.477 10-10V10c0-5.523-4.477-10-10-10Z"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+            "path",
+            {
+              fill: "url(#paint0_linear_17_93)",
+              d: "m27.666 16.837 1.874 2.177c.215.245.404.446.483.562.56.55.874 1.293.874 2.07-.053.915-.657 1.54-1.213 2.205l-1.311 1.521-.685.79a.184.184 0 0 0 .046.281c.033.02.07.028.107.026h6.835c1.045 0 2.36.868 2.283 2.184 0 .597-.247 1.171-.68 1.595a2.36 2.36 0 0 1-1.637.664H23.936c-.704 0-2.598.076-3.128-1.521a1.841 1.841 0 0 1-.043-1.035 4.5 4.5 0 0 1 .72-1.404 65.543 65.543 0 0 1 1.695-2.343c.741-1.002 1.503-1.971 2.251-2.992a.19.19 0 0 0 .04-.116.19.19 0 0 0-.04-.116l-2.72-3.156a.192.192 0 0 0-.153-.073.192.192 0 0 0-.152.073c-.728.96-3.917 5.203-4.598 6.063-.68.86-2.355.907-3.283 0l-4.255-4.161a.197.197 0 0 0-.1-.053.195.195 0 0 0-.2.082.192.192 0 0 0-.032.106v8a2.678 2.678 0 0 1-.494 1.594c-.33.466-.804.823-1.352 1.014a2.375 2.375 0 0 1-2.111-.293 2.271 2.271 0 0 1-.72-.805A2.22 2.22 0 0 1 5 28.736V14.349a2.416 2.416 0 0 1 .548-1.422c.33-.406.785-.7 1.298-.841a2.632 2.632 0 0 1 2.502.664l6.54 6.381c.019.02.043.034.07.043a.197.197 0 0 0 .161-.013.188.188 0 0 0 .061-.054l4.646-6.27c.215-.254.485-.46.79-.601.304-.142.636-.217.976-.221H34.68c.33 0 .657.07.959.204a2.31 2.31 0 0 1 1.263 1.409c.096.309.122.633.079.952a2.288 2.288 0 0 1-.813 1.42c-.439.364-.996.56-1.572.551h-6.768a.188.188 0 0 0-.163.099.187.187 0 0 0-.022.095c0 .032.013.065.032.093h-.008Z"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+            "linearGradient",
+            {
+              id: "paint0_linear_17_93",
+              x1: "-0.315",
+              x2: "35.366",
+              y1: "9.343",
+              y2: "30.176",
+              gradientUnits: "userSpaceOnUse",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.23", stopColor: "#FF0074" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.26", stopColor: "#FF0068" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.32", stopColor: "#FF0048" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.39", stopColor: "#FF0015" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.41", stopColor: "#FF0009" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.43", stopColor: "#FF0908" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.54", stopColor: "#FF4003" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.62", stopColor: "#FF6201" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.66", stopColor: "#FF6F00" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.72", stopColor: "#FF8700" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.83", stopColor: "#FFAB00" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.92", stopColor: "#FFC100" }),
+                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("stop", { offset: "0.98", stopColor: "#FFCA00" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("clipPath", { id: "clip0_17_93", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("path", { fill: "#fff", d: "M0 0h42v42H0z" }) })
+        ] })
+      ]
+    })
+  );
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   LEATHER,
   LEATHER_MAINNET,
   LEATHER_TESTNET,
   LaserEyesProvider,
+  LeatherLogo,
   MAGIC_EDEN,
   MAINNET,
   MEMPOOL_SPACE_SIGNET_URL,
   MEMPOOL_SPACE_TESTNET_URL,
   MEMPOOL_SPACE_URL,
+  MagicedenLogo,
   OKX,
   OKX_MAINNET,
   OKX_TESTNET,
   OP_WALLET_MAINNET,
   OP_WALLET_TESTNET,
   OYL,
+  OkxLogo,
+  OylLogo,
   P2PKH,
   P2PSH,
   P2SH,
@@ -3543,21 +4142,25 @@ var useInscriber = ({
   P2WPKH,
   P2WSH,
   PHANTOM,
+  PhantomLogo,
   REGTEST,
   SIGNET,
   TESTNET,
   UNISAT,
   UNISAT_MAINNET,
   UNISAT_TESTNET,
+  UnisatLogo,
   WALLETS,
   WIZZ,
   WIZZ_MAINNET,
   WIZZ_TESTNET,
+  WizzLogo,
   XVERSE,
   XVERSE_MAINNET,
   XVERSE_NETWORK,
   XVERSE_SIGNET,
   XVERSE_TESTNET,
+  XverseLogo,
   createConfig,
   createSendBtcPsbt,
   delay,

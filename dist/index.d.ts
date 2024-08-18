@@ -1,5 +1,5 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import * as react from 'react';
+import * as React from 'react';
 import { ReactNode } from 'react';
 import * as bitcoin from 'bitcoinjs-lib';
 
@@ -161,19 +161,19 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     inscribeApiUrl: string;
 }) => {
     content: any;
-    setContent: react.Dispatch<any>;
-    setMimeType: react.Dispatch<react.SetStateAction<"text/plain;charset=utf-8">>;
+    setContent: React.Dispatch<any>;
+    setMimeType: React.Dispatch<React.SetStateAction<"text/plain;charset=utf-8">>;
     previewUrl: string;
-    setPreviewUrl: react.Dispatch<react.SetStateAction<string>>;
+    setPreviewUrl: React.Dispatch<React.SetStateAction<string>>;
     getCommitPsbt: () => Promise<CommitPsbtResponse>;
     isFetchingCommitPsbt: boolean;
     commitPsbtHex: string;
     commitPsbtBase64: string;
     handleSignCommit: (tx?: string) => Promise<string | undefined>;
     commitTxId: string;
-    setCommitTxId: react.Dispatch<react.SetStateAction<string>>;
+    setCommitTxId: React.Dispatch<React.SetStateAction<string>>;
     feeRate: number;
-    setFeeRate: react.Dispatch<react.SetStateAction<number>>;
+    setFeeRate: React.Dispatch<React.SetStateAction<number>>;
     totalFees: number;
     inscriberAddress: string;
     inscribe: ({ content: providedContent, mimeType: providedMimeType, ordinalAddress: providedAddress, commitTxId: providedCommitTxId, }: {
@@ -187,4 +187,52 @@ declare const useInscriber: ({ inscribeApiUrl, }: {
     reset: () => void;
 };
 
-export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, OYL, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
+interface OylLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const OylLogo: React.FC<OylLogoProps>;
+
+interface LeatherLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const LeatherLogo: React.FC<LeatherLogoProps>;
+
+interface PhantomLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const PhantomLogo: React.FC<PhantomLogoProps>;
+
+interface XverseLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const XverseLogo: React.FC<XverseLogoProps>;
+
+interface UnisatLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const UnisatLogo: React.FC<UnisatLogoProps>;
+
+interface WizzLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const WizzLogo: React.FC<WizzLogoProps>;
+
+interface OkxLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const OkxLogo: React.FC<OkxLogoProps>;
+
+interface MagicedenLogoProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+    variant?: "first" | "second";
+}
+declare const MagicedenLogo: React.FC<MagicedenLogoProps>;
+
+export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicedenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
