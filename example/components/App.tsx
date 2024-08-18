@@ -138,7 +138,7 @@ const App = () => {
                   provider?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
-                <WalletIcon walletName={provider} size={24} />{' '}
+                {provider && <WalletIcon walletName={provider} size={24} />}{' '}
                 {provider?.length > 0 ? provider : '--'}
               </span>
             </div>
