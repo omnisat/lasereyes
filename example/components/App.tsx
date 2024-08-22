@@ -3,32 +3,44 @@ import WalletCard from '@/components/WalletCard'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
 import {
-  useLaserEyes,
-  UNISAT,
-  XVERSE,
-  OYL,
-  MAGIC_EDEN,
-  OKX,
+  FRACTAL_TESTNET,
   LEATHER,
+  MAGIC_EDEN,
+  MAINNET,
+  OKX,
+  OYL,
   PHANTOM,
-  WIZZ,
+  SIGNET,
+  TESTNET,
+  UNISAT,
+  useLaserEyes,
   WalletIcon,
+  WIZZ,
+  XVERSE,
 } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
 import { cn, truncateString } from '@/lib/utils'
 import ClickToCopy from '@/components/ClickToCopy'
-import PollCard from '@/components/PollCard'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { getPackageVersion } from '@/lib/github'
-import { Badge, badgeVariants } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { MdOutbound } from 'react-icons/md'
+import { badgeVariants } from '@/components/ui/badge'
 import { FaExternalLinkAlt } from 'react-icons/fa'
+import { Select } from '@/components/ui/select'
 
-const App = () => {
-  const wallets = [LEATHER, UNISAT, XVERSE]
+const App = ({
+  setNetwork,
+}: {
+  setNetwork: (
+    network:
+      | typeof MAINNET
+      | typeof TESTNET
+      | typeof SIGNET
+      | typeof FRACTAL_TESTNET
+  ) => void
+}) => {
+  const wallets = [LEATHER, OYL, UNISAT, XVERSE]
   const {
     address,
     paymentAddress,
@@ -118,6 +130,15 @@ const App = () => {
             <span className={'text-md text-white font-black'}>
               {network?.length > 0 ? network : '--'}
             </span>
+            <Select>
+              <option
+                onClick={() => {
+                  setNetwork(SIGNET)
+                }}
+              >
+                Switch Network
+              </option>
+            </Select>
           </div>
         </div>
         <div

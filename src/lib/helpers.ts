@@ -1,6 +1,12 @@
 import * as bitcoin from "bitcoinjs-lib";
 
-import { MAINNET, REGTEST, SIGNET, TESTNET } from "../consts/networks";
+import {
+  FRACTAL_TESTNET,
+  MAINNET,
+  REGTEST,
+  SIGNET,
+  TESTNET,
+} from "../consts/networks";
 import axios from "axios";
 import { MempoolUtxo } from "../types";
 import { getMempoolSpaceUrl } from "./urls";
@@ -9,9 +15,14 @@ import * as ecc from "@bitcoinerlab/secp256k1";
 bitcoin.initEccLib(ecc);
 
 export const getBitcoinNetwork = (
-  network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof REGTEST
+    | typeof FRACTAL_TESTNET
 ) => {
-  if (network === TESTNET) {
+  if (network === TESTNET || network === FRACTAL_TESTNET) {
     return bitcoin.networks.testnet;
   } else if (network === SIGNET) {
     return bitcoin.networks.testnet;

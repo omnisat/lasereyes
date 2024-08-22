@@ -2,6 +2,7 @@ export const XVERSE_NETWORK: "Mainnet" | "Testnet" = "Mainnet";
 
 export const UNISAT_MAINNET = "livenet";
 export const UNISAT_TESTNET = "testnet";
+export const UNISAT_FRACTAL_TESTNET = "unknown";
 
 export const OP_WALLET_MAINNET = "livenet";
 export const OP_WALLET_TESTNET = "testnet";
@@ -21,6 +22,7 @@ export const LEATHER_TESTNET = "testnet";
 export const MAINNET = "mainnet";
 export const SIGNET = "signet";
 export const TESTNET = "testnet";
+export const FRACTAL_TESTNET = "fractal_testnet";
 export const REGTEST = "regtest";
 
 export const getXverseNetwork = (network: string) => {
@@ -39,6 +41,7 @@ export const getLeatherNetwork = (network: string) => {
 export const getUnisatNetwork = (network: string) => {
   if (network === MAINNET) return UNISAT_MAINNET;
   if (network === TESTNET) return UNISAT_TESTNET;
+  if (network === FRACTAL_TESTNET) return UNISAT_FRACTAL_TESTNET;
   return UNISAT_MAINNET;
 };
 
@@ -51,6 +54,7 @@ export const getWizzNetwork = (network: string) => {
 export const getNetworkForUnisat = (network: string) => {
   if (network === UNISAT_MAINNET) return MAINNET;
   if (network === UNISAT_TESTNET) return TESTNET;
+  if (network === UNISAT_FRACTAL_TESTNET) return FRACTAL_TESTNET;
   return MAINNET;
 };
 

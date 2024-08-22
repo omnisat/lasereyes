@@ -38,6 +38,7 @@ import {
   XVERSE,
 } from "../consts/wallets";
 import {
+  FRACTAL_TESTNET,
   getNetworkForOkx,
   getNetworkForUnisat,
   getNetworkForWizz,
@@ -122,7 +123,7 @@ const LaserEyesProvider = ({
   const [hasWizz, setHasWizz] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
-    typeof MAINNET | typeof TESTNET | typeof SIGNET
+    typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof FRACTAL_TESTNET
   >("network", MAINNET, {
     initializeWithValue: false,
   });
@@ -353,6 +354,7 @@ const LaserEyesProvider = ({
       if (!unisatAccounts) throw new Error("No accounts found");
       const unisatPubKey = await lib.getPublicKey();
       if (!unisatPubKey) throw new Error("No public key found");
+      const foundNetwork = await getNetwork();
       setAccounts(unisatAccounts);
       setAddress(unisatAccounts[0]);
       setPaymentAddress(unisatAccounts[0]);
@@ -484,7 +486,7 @@ const LaserEyesProvider = ({
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
       const lib =
-        network === TESTNET
+        network === TESTNET || network === FRACTAL_TESTNET
           ? (window as any).okxwallet.bitcoinTestnet
           : (window as any).okxwallet.bitcoin;
       const okxAccounts = await lib.requestAccounts();
@@ -631,8 +633,8 @@ const LaserEyesProvider = ({
         await connectUnisat();
       } else if (walletName === XVERSE) {
         await connectXverse();
-        // } else if (walletName === OYL) {
-        //   await connectOyl();
+      } else if (walletName === OYL) {
+        await connectOyl();
         // } else if (walletName === MAGIC_EDEN) {
         //   await connectMagicEden();
         // } else if (walletName === OKX) {
@@ -692,8 +694,11 @@ const LaserEyesProvider = ({
     network: typeof MAINNET | typeof TESTNET | typeof REGTEST
   ) => {
     try {
-      let foundNetwork: typeof MAINNET | typeof TESTNET | typeof REGTEST =
-        MAINNET;
+      let foundNetwork:
+        | typeof MAINNET
+        | typeof TESTNET
+        | typeof REGTEST
+        | typeof FRACTAL_TESTNET = MAINNET;
       if (provider === UNISAT) {
         foundNetwork = getNetworkForUnisat(network);
         setNetwork(foundNetwork);
@@ -805,7 +810,8 @@ const LaserEyesProvider = ({
         const unisatNetwork = await library?.getNetwork();
         const foundNetwork = getNetworkForUnisat(unisatNetwork) as
           | typeof MAINNET
-          | typeof TESTNET;
+          | typeof TESTNET
+          | typeof SIGNET;
         setNetwork(foundNetwork);
         return foundNetwork;
       } else if (provider === XVERSE) {
@@ -853,7 +859,11 @@ const LaserEyesProvider = ({
   };
 
   const switchNetwork = async (
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET
+    network:
+      | typeof MAINNET
+      | typeof TESTNET
+      | typeof SIGNET
+      | typeof FRACTAL_TESTNET
   ) => {
     try {
       if (!library) return;

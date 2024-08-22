@@ -1,16 +1,19 @@
 import { IMempoolUtxo } from '@/types/btc'
 import {
+  FRACTAL_TESTNET,
   MAINNET,
   P2PKH,
   P2TR,
   P2WPKH,
   P2WSH,
+  SIGNET,
   TESTNET,
 } from '@omnisat/lasereyes'
 import * as bitcoin from 'bitcoinjs-lib'
 import { Psbt } from 'bitcoinjs-lib'
 import * as ecc2 from '@bitcoinerlab/secp256k1'
 import axios from 'axios'
+import { getMempoolSpaceUrl } from '@/lib/urls'
 
 bitcoin.initEccLib(ecc2)
 
@@ -31,7 +34,11 @@ export async function createPsbt(
   inputs: IMempoolUtxo[],
   outputAddress: string,
   paymentPublicKey: string,
-  network: typeof MAINNET | typeof TESTNET
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof FRACTAL_TESTNET
 ) {
   if (!outputAddress) return
   const utxoWithMostValue = inputs.reduce((acc, utxo) => {
@@ -54,7 +61,7 @@ export async function createPsbt(
 
   if (getAddressType(outputAddress) === P2WPKH) {
     const txHexResponse = await axios(
-      `https://mempool.space/api/tx/${utxoWithMostValue.txid}/hex`
+      `${getMempoolSpaceUrl(network)}/api/tx/${utxoWithMostValue.txid}/hex`
     )
     const txHex = txHexResponse.data
     psbt.addInput({
@@ -94,7 +101,11 @@ export async function createPsbt(
 
 export function getRedeemScript(
   paymentPublicKey: string,
-  network: typeof MAINNET | typeof TESTNET
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof FRACTAL_TESTNET
 ) {
   const p2wpkh = bitcoin.payments.p2wpkh({
     pubkey: Buffer.from(paymentPublicKey, 'hex'),
@@ -151,7 +162,13 @@ export function getAddressType(address: string) {
   throw new Error('Invalid address')
 }
 
-export const getBitcoinNetwork = (network: typeof MAINNET | typeof TESTNET) => {
+export const getBitcoinNetwork = (
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof FRACTAL_TESTNET
+) => {
   if (network === TESTNET) {
     return bitcoin.networks.testnet
   } else {

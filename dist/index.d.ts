@@ -6,6 +6,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 declare const XVERSE_NETWORK: "Mainnet" | "Testnet";
 declare const UNISAT_MAINNET = "livenet";
 declare const UNISAT_TESTNET = "testnet";
+declare const UNISAT_FRACTAL_TESTNET = "unknown";
 declare const OP_WALLET_MAINNET = "livenet";
 declare const OP_WALLET_TESTNET = "testnet";
 declare const XVERSE_MAINNET = "Mainnet";
@@ -20,12 +21,13 @@ declare const LEATHER_TESTNET = "testnet";
 declare const MAINNET = "mainnet";
 declare const SIGNET = "signet";
 declare const TESTNET = "testnet";
+declare const FRACTAL_TESTNET = "fractal_testnet";
 declare const REGTEST = "regtest";
 declare const getXverseNetwork: (network: string) => "Mainnet" | "Testnet" | "Signet";
 declare const getLeatherNetwork: (network: string) => "testnet" | "mainnet";
-declare const getUnisatNetwork: (network: string) => "livenet" | "testnet";
+declare const getUnisatNetwork: (network: string) => "livenet" | "testnet" | "unknown";
 declare const getWizzNetwork: (network: string) => "livenet" | "testnet";
-declare const getNetworkForUnisat: (network: string) => "testnet" | "mainnet";
+declare const getNetworkForUnisat: (network: string) => "testnet" | "mainnet" | "fractal_testnet";
 declare const getNetworkForXverse: (network: string) => "testnet" | "mainnet";
 declare const getNetworkForLeather: (network: string) => "testnet" | "mainnet";
 declare const getNetworkForOkx: (network: string) => "testnet" | "mainnet";
@@ -87,7 +89,7 @@ type LaserEyesContextType = {
     paymentAddress: string;
     paymentPublicKey: string;
     balance: number | undefined;
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof FRACTAL_TESTNET;
     library: any;
     provider: any;
     accounts: string[];
@@ -103,7 +105,7 @@ type LaserEyesContextType = {
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;
-    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET) => Promise<void>;
+    switchNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof FRACTAL_TESTNET) => Promise<void>;
     getPublicKey: () => Promise<string>;
     getBalance: () => Promise<string>;
     getInscriptions: () => Promise<any[]>;
@@ -117,7 +119,7 @@ type LaserEyesContextType = {
     pushPsbt: (tx: string) => Promise<string | undefined>;
 };
 type Config = {
-    network: typeof MAINNET | typeof TESTNET | typeof SIGNET;
+    network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof FRACTAL_TESTNET;
 };
 interface CommitPsbtResponse {
     inscriberAddress: string;
@@ -142,7 +144,7 @@ interface DeScribeCreateResponse {
     totalFees: number;
 }
 
-declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST) => bitcoin.networks.Network;
+declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST | typeof FRACTAL_TESTNET) => bitcoin.networks.Network;
 declare const findOrdinalsAddress: (addresses: any) => any;
 declare const findPaymentAddress: (addresses: any) => any;
 declare const getBTCBalance: (address: string) => Promise<number>;
@@ -242,4 +244,4 @@ declare const WalletIcon: ({ size, className, variant, walletName, }: {
     walletName: typeof XVERSE | typeof WIZZ | typeof LEATHER | typeof MAGIC_EDEN | typeof OKX | typeof PHANTOM | typeof UNISAT | typeof OYL;
 }) => react_jsx_runtime.JSX.Element;
 
-export { DeScribeCreateResponse, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_MAINNET, UNISAT_TESTNET, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
+export { DeScribeCreateResponse, FRACTAL_TESTNET, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, UNISAT, UNISAT_FRACTAL_TESTNET, UNISAT_MAINNET, UNISAT_TESTNET, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_TESTNET, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
