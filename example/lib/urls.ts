@@ -1,5 +1,4 @@
-import { MAINNET, SIGNET, TESTNET } from '@omnisat/lasereyes'
-import { FRACTAL_TESTNET } from '../../src'
+import { MAINNET, SIGNET, TESTNET, FRACTAL_TESTNET } from '@omnisat/lasereyes'
 export const MEMPOOL_SPACE_URL = 'https://mempool.space'
 export const MEMPOOL_SPACE_TESTNET_URL = 'https://mempool.space/testnet'
 export const MEMPOOL_SPACE_SIGNET_URL = 'https://mempool.space/signet'
