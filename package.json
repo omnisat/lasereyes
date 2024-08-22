@@ -11,7 +11,7 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react && node postprocess.js",
+    "build": "tsup src/index.tsx --format esm,cjs --dts --external react ",
     "clean": "rimraf dist && rimraf src/**/*.d.ts src/**/*.d.ts.map src/**/*.js",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
   },

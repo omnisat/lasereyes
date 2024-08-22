@@ -68,9 +68,10 @@ import {
   signMessage as signMessageSatsConnect,
   signTransaction,
 } from "sats-connect";
+
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import axios from "axios";
-import { getMempoolSpaceUrl } from "../../example/lib/urls";
+import { getMempoolSpaceUrl } from "../lib/urls";
 
 const LaserEyesContext =
   createContext<LaserEyesContextType>(initialWalletContext);
