@@ -10,7 +10,6 @@ import {
   WIZZ,
   XVERSE,
   LEATHER,
-  useInscriber,
   WalletIcon,
 } from '@omnisat/lasereyes'
 import {
@@ -87,9 +86,6 @@ const WalletCard = ({
     switchNetwork,
   } = useLaserEyes()
 
-  const { inscribe, setContent, isFetchingCommitPsbt, isInscribing, reset } =
-    useInscriber({ inscribeApiUrl: 'https://de-scribe.vercel.app/api' })
-
   const [hasError, setHasError] = useState(false)
   const hasRun = useRef(false)
 
@@ -101,10 +97,6 @@ const WalletCard = ({
     paymentAddress,
     network as typeof MAINNET | typeof TESTNET
   )
-
-  useEffect(() => {
-    setContent('Laser_Eyes')
-  }, [])
 
   const hasWallet = {
     unisat: hasUnisat,
@@ -318,37 +310,6 @@ const WalletCard = ({
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
-      }
-    }
-  }
-
-  const inscribeText = async (text: string) => {
-    try {
-      setContent(text)
-      const txId = await inscribe({
-        content: text,
-        mimeType: MIME_TYPE_TEXT,
-        ordinalAddress: address,
-      })
-
-      toast.success(
-        <span className={'flex flex-col gap-1 items-center justify-center'}>
-          <span className={'font-black'}>
-            view inscription tx on ordpool.space
-          </span>
-          <a
-            target={'_blank'}
-            href={`${getOrdpoolSpaceUrl(network as typeof MAINNET | typeof TESTNET)}/tx/${txId}`}
-            className={'underline text-blue-600 text-xs'}
-          >
-            {txId}
-          </a>
-        </span>
-      )
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log(e)
-        toast.error(e.message)
       }
     }
   }
