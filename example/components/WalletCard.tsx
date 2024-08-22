@@ -15,7 +15,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -26,10 +25,8 @@ import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
-import { getMempoolSpaceUrl, getOrdpoolSpaceUrl } from '@/lib/urls'
+import { getMempoolSpaceUrl } from '@/lib/urls'
 import { clsx } from 'clsx'
-import { cn } from '@/lib/utils'
-import { MIME_TYPE_TEXT } from '../../src/consts/inscribe'
 
 const WalletCard = ({
   walletName,
