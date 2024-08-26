@@ -1285,7 +1285,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const signMessage = (message) => __async(void 0, null, function* () {
+  const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
     var _a;
     try {
       if (!library)
@@ -1306,6 +1306,8 @@ var LaserEyesProvider = ({
             throw new Error("Error signing message: " + response.error.message);
           }
         }
+      } else if (provider === OYL) {
+        return yield library == null ? void 0 : library.signMessage(message, toSignAddress, "bip322");
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
         yield signMessageSatsConnect({

@@ -1042,7 +1042,7 @@ const LaserEyesProvider = ({
     }
   };
 
-  const signMessage = async (message: string) => {
+  const signMessage = async (message: string, toSignAddress?: string) => {
     try {
       if (!library) return;
       if (provider === UNISAT) {
@@ -1062,6 +1062,8 @@ const LaserEyesProvider = ({
             throw new Error("Error signing message: " + response.error.message);
           }
         }
+      } else if (provider === OYL) {
+        return await library?.signMessage(message, toSignAddress, "bip322");
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
         await signMessageSatsConnect({
