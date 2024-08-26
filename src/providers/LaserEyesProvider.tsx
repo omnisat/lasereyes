@@ -224,7 +224,7 @@ const LaserEyesProvider = ({
   useEffect(() => {
     const observer = new MutationObserver(() => {
       let foundOkx;
-      if (network === TESTNET) {
+      if (network === TESTNET || network === FRACTAL_TESTNET) {
         foundOkx = (window as any)?.okxwallet?.bitcoinTestnet;
       } else if (network === MAINNET) {
         foundOkx = (window as any)?.okxwallet?.bitcoin;

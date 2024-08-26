@@ -130,15 +130,6 @@ const App = ({
             <span className={'text-md text-white font-black'}>
               {network?.length > 0 ? network : '--'}
             </span>
-            <Select>
-              <option
-                onClick={() => {
-                  setNetwork(SIGNET)
-                }}
-              >
-                Switch Network
-              </option>
-            </Select>
           </div>
         </div>
         <div
