@@ -1063,7 +1063,7 @@ const LaserEyesProvider = ({
           }
         }
       } else if (provider === OYL) {
-        return await library?.signMessage(message, toSignAddress, "bip322");
+        return await library?.signMessage(message, "bip322", toSignAddress);
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
         await signMessageSatsConnect({

@@ -1397,7 +1397,7 @@ var LaserEyesProvider = ({
           }
         }
       } else if (provider === OYL) {
-        return yield library == null ? void 0 : library.signMessage(message, toSignAddress, "bip322");
+        return yield library == null ? void 0 : library.signMessage(message, "bip322", toSignAddress);
       } else if (provider === MAGIC_EDEN) {
         let signedMessage;
         yield (0, import_sats_connect.signMessage)({
