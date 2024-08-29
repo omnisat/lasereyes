@@ -147,7 +147,7 @@ interface DeScribeCreateResponse {
 declare const getBitcoinNetwork: (network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof REGTEST | typeof FRACTAL_TESTNET) => bitcoin.networks.Network;
 declare const findOrdinalsAddress: (addresses: any) => any;
 declare const findPaymentAddress: (addresses: any) => any;
-declare const getBTCBalance: (address: string) => Promise<number>;
+declare const getBTCBalance: (address: string, network: typeof MAINNET | typeof TESTNET | typeof SIGNET | typeof FRACTAL_TESTNET) => Promise<number>;
 declare const satoshisToBTC: (satoshis: number) => string;
 declare const isBase64: (str: string) => boolean;
 declare const isHex: (str: string) => boolean;

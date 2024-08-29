@@ -293,7 +293,23 @@ import axios from "axios";
 // src/lib/urls.ts
 var MEMPOOL_SPACE_URL2 = "https://mempool.space";
 var MEMPOOL_SPACE_TESTNET_URL2 = "https://mempool.space/testnet";
-var getMempoolSpaceUrl2 = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL2 : MEMPOOL_SPACE_URL2;
+var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet/";
+var getMempoolSpaceUrl2 = (network) => {
+  switch (network) {
+    case MAINNET:
+      return MEMPOOL_SPACE_URL2;
+    case TESTNET:
+      return MEMPOOL_SPACE_TESTNET_URL2;
+    case SIGNET:
+      return MEMPOOL_SPACE_SIGNET_URL2;
+    default:
+      return MEMPOOL_SPACE_URL2;
+  }
+};
+var getMempoolApiAddressUrl = (network, address2) => {
+  const baseUrl = getMempoolSpaceUrl2(network);
+  return `${baseUrl}/api/address/${address2}`;
+};
 
 // src/lib/helpers.ts
 import * as ecc from "@bitcoinerlab/secp256k1";
@@ -319,9 +335,13 @@ var findPaymentAddress = (addresses) => {
     ({ purpose }) => purpose === "payment"
   );
 };
-var getBTCBalance = (address2) => __async(void 0, null, function* () {
+var getBTCBalance = (address2, network) => __async(void 0, null, function* () {
   try {
-    return yield axios.get(`https://blockchain.info/q/addressbalance/${address2}`).then((response) => response.data);
+    const url = getMempoolApiAddressUrl(network, address2);
+    return yield axios.get(url).then((response) => {
+      const acct = response.data;
+      return acct.chain_stats.funded_txo_sum - acct.chain_stats.spent_txo_sum;
+    });
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
@@ -701,7 +721,7 @@ var LaserEyesProvider = ({
             setProvider(XVERSE);
             setLibrary(window.BitcoinProvider);
           }
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+          getBTCBalance(foundPaymentAddress.address, network).then((totalBalance) => {
             setBalance(totalBalance);
           });
         },
@@ -732,7 +752,7 @@ var LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
-      getBTCBalance(result[1]).then((totalBalance) => {
+      getBTCBalance(result[1], network).then((totalBalance) => {
         setBalance(totalBalance);
       });
     } catch (error) {
@@ -765,7 +785,7 @@ var LaserEyesProvider = ({
             setProvider(MAGIC_EDEN);
             setLibrary(window.magicEden.bitcoin);
           }
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+          getBTCBalance(foundPaymentAddress.address, network).then((totalBalance) => {
             setBalance(totalBalance);
           });
         },
@@ -833,7 +853,7 @@ var LaserEyesProvider = ({
       setPaymentPublicKey(String(segwitAddress == null ? void 0 : segwitAddress.publicKey));
       setLibrary(lib);
       setProvider(LEATHER);
-      const balance2 = yield getBTCBalance(String(segwitAddress == null ? void 0 : segwitAddress.address));
+      const balance2 = yield getBTCBalance(String(segwitAddress == null ? void 0 : segwitAddress.address), network);
       setBalance(balance2);
       handleAccountsChanged(leatherAccountsParsed);
       setConnected(true);
@@ -870,7 +890,7 @@ var LaserEyesProvider = ({
       setPaymentPublicKey(paymentAccount == null ? void 0 : paymentAccount.publicKey);
       setLibrary(lib);
       setProvider(PHANTOM);
-      const balance2 = yield getBTCBalance(String(paymentAccount == null ? void 0 : paymentAccount.address));
+      const balance2 = yield getBTCBalance(String(paymentAccount == null ? void 0 : paymentAccount.address), network);
       setBalance(balance2);
       setConnected(true);
     } catch (error) {
@@ -1149,18 +1169,18 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library.getBalance();
       } else if (provider === XVERSE) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === OYL) {
         const balanceResponse = yield library.getBalance();
         return balanceResponse.btc.total * 1e8;
       } else if (provider === MAGIC_EDEN) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === OKX) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === LEATHER) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === PHANTOM) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === WIZZ) {
         const balanceResponse = yield library.getBalance();
         return balanceResponse.total * 1e8;

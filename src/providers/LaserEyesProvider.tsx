@@ -395,7 +395,7 @@ const LaserEyesProvider = ({
             setLibrary((window as any).BitcoinProvider);
           }
 
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+          getBTCBalance(foundPaymentAddress.address, network).then((totalBalance) => {
             setBalance(totalBalance);
           });
         },
@@ -429,7 +429,7 @@ const LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
-      getBTCBalance(result[1]).then((totalBalance) => {
+      getBTCBalance(result[1], network).then((totalBalance) => {
         setBalance(totalBalance);
       });
     } catch (error) {
@@ -463,7 +463,7 @@ const LaserEyesProvider = ({
             setLibrary((window as any).magicEden.bitcoin);
           }
 
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
+          getBTCBalance(foundPaymentAddress.address, network).then((totalBalance) => {
             setBalance(totalBalance);
           });
         },
@@ -543,7 +543,7 @@ const LaserEyesProvider = ({
       setPaymentPublicKey(String(segwitAddress?.publicKey));
       setLibrary(lib);
       setProvider(LEATHER);
-      const balance = await getBTCBalance(String(segwitAddress?.address));
+      const balance = await getBTCBalance(String(segwitAddress?.address), network);
       setBalance(balance);
       handleAccountsChanged(leatherAccountsParsed);
       setConnected(true);
@@ -585,7 +585,7 @@ const LaserEyesProvider = ({
       setPaymentPublicKey(paymentAccount?.publicKey!);
       setLibrary(lib);
       setProvider(PHANTOM);
-      const balance = await getBTCBalance(String(paymentAccount?.address!));
+      const balance = await getBTCBalance(String(paymentAccount?.address!), network);
       setBalance(balance);
       setConnected(true);
     } catch (error) {
@@ -909,18 +909,18 @@ const LaserEyesProvider = ({
       if (provider === UNISAT) {
         return await library.getBalance();
       } else if (provider === XVERSE) {
-        return await getBTCBalance(paymentAddress);
+        return await getBTCBalance(paymentAddress, network);
       } else if (provider === OYL) {
         const balanceResponse: OYLBalanceResponse = await library.getBalance();
         return balanceResponse.btc.total * 100000000;
       } else if (provider === MAGIC_EDEN) {
-        return await getBTCBalance(paymentAddress);
+        return await getBTCBalance(paymentAddress, network);
       } else if (provider === OKX) {
-        return await getBTCBalance(paymentAddress);
+        return await getBTCBalance(paymentAddress, network);
       } else if (provider === LEATHER) {
-        return await getBTCBalance(paymentAddress);
+        return await getBTCBalance(paymentAddress, network);
       } else if (provider === PHANTOM) {
-        return await getBTCBalance(paymentAddress);
+        return await getBTCBalance(paymentAddress, network);
       } else if (provider === WIZZ) {
         const balanceResponse: WizzBalanceResponse = await library.getBalance();
         return balanceResponse.total * 100000000;

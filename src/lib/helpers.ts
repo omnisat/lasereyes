@@ -8,8 +8,8 @@ import {
   TESTNET,
 } from "../consts/networks";
 import axios from "axios";
-import { MempoolUtxo } from "../types";
-import { getMempoolSpaceUrl } from "./urls";
+import { AddressStats, MempoolUtxo } from "../types";
+import { getMempoolApiAddressUrl, getMempoolSpaceUrl } from "./urls";
 import * as ecc from "@bitcoinerlab/secp256k1";
 
 bitcoin.initEccLib(ecc);
@@ -45,11 +45,20 @@ export const findPaymentAddress = (addresses: any) => {
   );
 };
 
-export const getBTCBalance = async (address: string): Promise<number> => {
+export const getBTCBalance = async (
+  address: string,
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof SIGNET
+    | typeof FRACTAL_TESTNET
+): Promise<number> => {
   try {
-    return await axios
-      .get(`https://blockchain.info/q/addressbalance/${address}`)
-      .then((response) => response.data);
+    const url = getMempoolApiAddressUrl(network, address);
+    return await axios.get(url).then((response) => {
+      const acct: AddressStats = response.data;
+      return acct.chain_stats.funded_txo_sum - acct.chain_stats.spent_txo_sum;
+    });
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
