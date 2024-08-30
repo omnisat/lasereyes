@@ -59,7 +59,9 @@ export async function createPsbt(
     throw new Error('Invalid output address')
   }
 
-  if (getAddressType(outputAddress) === P2WPKH) {
+  console.log('getAddressType(outputAddress)', getAddressType(outputAddress))
+
+  if (getAddressType(outputAddress) === P2PKH) {
     const txHexResponse = await axios(
       `${getMempoolSpaceUrl(network)}/api/tx/${utxoWithMostValue.txid}/hex`
     )

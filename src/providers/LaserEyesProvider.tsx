@@ -65,6 +65,7 @@ import {
   GetAddressOptions,
   request,
   RpcErrorCode,
+  sendBtcTransaction,
   signMessage as signMessageSatsConnect,
   signTransaction,
 } from "sats-connect";
@@ -636,8 +637,8 @@ const LaserEyesProvider = ({
         await connectXverse();
       } else if (walletName === OYL) {
         await connectOyl();
-        // } else if (walletName === MAGIC_EDEN) {
-        //   await connectMagicEden();
+      } else if (walletName === MAGIC_EDEN) {
+        await connectMagicEden();
         // } else if (walletName === OKX) {
         //   await connectOkx();
       } else if (walletName === LEATHER) {
@@ -993,20 +994,31 @@ const LaserEyesProvider = ({
         // @ts-ignore
         return psbt.txId;
       } else if (provider === MAGIC_EDEN) {
-        const { psbtHex, psbtBase64 } = await createSendBtcPsbt(
-          address,
-          paymentAddress,
-          to,
-          amount,
-          paymentPublicKey,
-          //@ts-ignore
-          network,
-          7
-        );
-        const psbt = await signPsbt(psbtBase64, true, true);
-        if (!psbt) throw new Error("Error sending BTC");
+        let sendResponse: { txid: string };
+        await sendBtcTransaction({
+          getProvider: async () => library,
+          payload: {
+            network: {
+              type: getXverseNetwork(network) as BitcoinNetworkType,
+            },
+            recipients: [
+              {
+                address: to,
+                amountSats: BigInt(amount),
+              },
+            ],
+            senderAddress: paymentAddress!,
+          },
+          onFinish: (response) => {
+            // @ts-ignore
+            sendResponse = response;
+          },
+          onCancel: () => alert("Canceled"),
+        });
         // @ts-ignore
-        return psbt.txId;
+        if (!sendResponse) throw new Error("Error sending BTC");
+        // @ts-ignore
+        return sendResponse.txid;
       } else if (provider === OKX) {
         const txId = await library?.sendBitcoin(to, amount);
         if (!txId) throw new Error("Transaction failed");
@@ -1287,14 +1299,13 @@ const LaserEyesProvider = ({
         }
 
         let txId, signedPsbtHex, signedPsbtBase64;
-
-        const xverseNetwork = getXverseNetwork(network);
+        const magicEdenNetwork = getXverseNetwork(network);
 
         const signPsbtOptions = {
-          getProvider: async () => (window as any).magicEden.bitcoin,
+          getProvider: async () => library,
           payload: {
             network: {
-              type: xverseNetwork,
+              type: magicEdenNetwork,
             },
             message: "Sign Transaction",
             psbtBase64: toSignPsbt.toBase64(),
