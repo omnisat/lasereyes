@@ -439,6 +439,7 @@ function delay(ms) {
 import {
   BitcoinNetworkType,
   getAddress,
+  MessageSigningProtocols,
   request,
   RpcErrorCode,
   sendBtcTransaction,
@@ -1334,7 +1335,8 @@ var LaserEyesProvider = ({
               type: BitcoinNetworkType.Mainnet
             },
             address: paymentAddress,
-            message
+            message,
+            protocol: MessageSigningProtocols.BIP322
           },
           onFinish: (response) => {
             signedMessage = response;

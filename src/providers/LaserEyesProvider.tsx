@@ -29,7 +29,6 @@ import {
   MAGIC_EDEN,
   OKX,
   OYL,
-  P2PKH,
   P2TR,
   P2WPKH,
   PHANTOM,
@@ -63,6 +62,7 @@ import {
   BitcoinNetworkType,
   getAddress,
   GetAddressOptions,
+  MessageSigningProtocols,
   request,
   RpcErrorCode,
   sendBtcTransaction,
@@ -1087,6 +1087,7 @@ const LaserEyesProvider = ({
             },
             address: paymentAddress,
             message: message,
+            protocol: MessageSigningProtocols.BIP322,
           },
           onFinish: (response) => {
             signedMessage = response;
