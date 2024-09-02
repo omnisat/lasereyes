@@ -1325,6 +1325,7 @@ var LaserEyesProvider = ({
         const tempAddy = toSignAddress || paymentAddress;
         return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
       } else if (provider === MAGIC_EDEN) {
+        const tempAddy = toSignAddress || paymentAddress;
         let signedMessage;
         yield signMessageSatsConnect({
           getProvider: () => __async(void 0, null, function* () {
@@ -1334,7 +1335,7 @@ var LaserEyesProvider = ({
             network: {
               type: BitcoinNetworkType.Mainnet
             },
-            address: paymentAddress,
+            address: tempAddy,
             message,
             protocol: MessageSigningProtocols.BIP322
           },

@@ -50,7 +50,7 @@ export type LaserEyesContextType = {
   getBalance: () => Promise<string>;
   getInscriptions: () => Promise<any[]>;
   sendBTC: (to: string, amount: number) => Promise<string>;
-  signMessage: (message: string) => Promise<string>;
+  signMessage: (message: string, toSignAddress?: string) => Promise<string>;
   signPsbt: (
     tx: string,
     finalize?: boolean,
