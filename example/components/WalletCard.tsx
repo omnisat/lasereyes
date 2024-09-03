@@ -206,7 +206,7 @@ const WalletCard = ({
                 <div className={'text-xs'}>{response?.token}</div>
                 <Link
                   href={
-                    'https://github.com/omnisat/lasereyes/tree/main/example/app/api'
+                    'https://github.com/omnisat/lasereyes/blob/main/example/app/api/authorize/route.ts#L20'
                   }
                   target={'_blank'}
                   className={
