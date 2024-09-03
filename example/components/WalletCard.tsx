@@ -194,7 +194,6 @@ const WalletCard = ({
       const response = await axios
         .post('/api/authorize', { message, signature, address })
         .then((res) => res.data)
-      console.log(response)
       if (typeof signature === 'string') {
         toast.success(
           <div className={'flex flex-col gap-2 items-center'}>
