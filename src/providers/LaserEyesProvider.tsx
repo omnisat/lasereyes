@@ -1102,10 +1102,16 @@ const LaserEyesProvider = ({
       } else if (provider === OKX) {
         return await library?.signMessage(message);
       } else if (provider === LEATHER) {
+        const paymentType = toSignAddress === address ? P2TR : P2WPKH;
+        if (toSignAddress !== address && toSignAddress !== paymentAddress) {
+          throw new Error("Invalid address to sign message");
+        }
+
         const signed = await library?.request("signMessage", {
           message: message,
-          paymentType: P2WPKH,
+          paymentType,
         });
+        console.log("signed", signed);
         return signed?.result?.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);

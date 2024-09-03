@@ -1396,8 +1396,9 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === XVERSE) {
+        const tempAddy = toSignAddress || paymentAddress;
         const response = yield (0, import_sats_connect.request)("signMessage", {
-          address: address2,
+          address: tempAddy,
           message
         });
         if (response.status === "success") {
@@ -1438,10 +1439,15 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.signMessage(message);
       } else if (provider === LEATHER) {
+        const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
+        if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
+          throw new Error("Invalid address to sign message");
+        }
         const signed = yield library == null ? void 0 : library.request("signMessage", {
           message,
-          paymentType: P2WPKH
+          paymentType
         });
+        console.log("signed", signed);
         return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);

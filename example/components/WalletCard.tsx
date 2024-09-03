@@ -27,6 +27,11 @@ import { createPsbt } from '@/lib/btc'
 import useUtxos from '@/hooks/useUtxos'
 import { getMempoolSpaceUrl } from '@/lib/urls'
 import { clsx } from 'clsx'
+import axios from 'axios'
+import Link from 'next/link'
+import { ImNewTab } from 'react-icons/im'
+import { Verifier } from 'bip322-js'
+import { BTC_MESSAGE_TO_SIGN } from '@/lib/const'
 
 const WalletCard = ({
   walletName,
@@ -184,16 +189,36 @@ const WalletCard = ({
   const sign = async (message: string) => {
     setSignature('')
     try {
-      const signature = await signMessage(message)
+      const signature = await signMessage(message, address)
       setSignature(signature)
+      const response = await axios
+        .post('/api/authorize', { message, signature, address: paymentAddress })
+        .then((res) => res.data)
+      console.log(response)
       if (typeof signature === 'string') {
         toast.success(
           <div className={'flex flex-col gap-2 items-center'}>
             <span className={'font-black'}>signed message</span>{' '}
             <div className={'text-xs'}>{signature}</div>
+            {response?.token && (
+              <div className={'flex flex-col gap-2 items-center'}>
+                <span className={'font-black'}>issued token from api</span>{' '}
+                <div className={'text-xs'}>{response?.token}</div>
+                <Link
+                  href={
+                    'https://github.com/omnisat/lasereyes/tree/main/example/app/api'
+                  }
+                  target={'_blank'}
+                  className={
+                    'flex flex-row gap-2 font-black hover:text-orange-400 items-center justify-center'
+                  }
+                >
+                  View token generation source <ImNewTab />
+                </Link>
+              </div>
+            )}
           </div>
         )
-        return
       }
     } catch (error) {
       if (error instanceof Error) {
