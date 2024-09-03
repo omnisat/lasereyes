@@ -192,7 +192,7 @@ const WalletCard = ({
       const signature = await signMessage(message, address)
       setSignature(signature)
       const response = await axios
-        .post('/api/authorize', { message, signature, address: paymentAddress })
+        .post('/api/authorize', { message, signature, address })
         .then((res) => res.data)
       console.log(response)
       if (typeof signature === 'string') {
