@@ -1060,8 +1060,9 @@ const LaserEyesProvider = ({
       if (provider === UNISAT) {
         return await library?.signMessage(message);
       } else if (provider === XVERSE) {
+        const tempAddy = toSignAddress || paymentAddress;
         const response = await request("signMessage", {
-          address,
+          address: tempAddy,
           message,
         });
 
