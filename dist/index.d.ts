@@ -101,7 +101,7 @@ type LaserEyesContextType = {
     hasLeather: boolean;
     hasPhantom: boolean;
     hasWizz: boolean;
-    connect: (walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN) => Promise<void>;
+    connect: (walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN | typeof LEATHER | typeof MAGIC_EDEN | typeof OYL) => Promise<void>;
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;

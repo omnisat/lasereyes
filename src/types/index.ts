@@ -1,4 +1,4 @@
-import { MAGIC_EDEN, UNISAT, XVERSE } from "../consts/wallets";
+import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
   FRACTAL_TESTNET,
   MAINNET,
@@ -34,7 +34,13 @@ export type LaserEyesContextType = {
   hasWizz: boolean;
 
   connect: (
-    walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN
+    walletName:
+      | typeof UNISAT
+      | typeof XVERSE
+      | typeof MAGIC_EDEN
+      | typeof LEATHER
+      | typeof MAGIC_EDEN
+      | typeof OYL
   ) => Promise<void>;
   disconnect: () => void;
   requestAccounts: () => Promise<string[]>;

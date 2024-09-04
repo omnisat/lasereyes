@@ -30,8 +30,6 @@ import { clsx } from 'clsx'
 import axios from 'axios'
 import Link from 'next/link'
 import { ImNewTab } from 'react-icons/im'
-import { Verifier } from 'bip322-js'
-import { BTC_MESSAGE_TO_SIGN } from '@/lib/const'
 
 const WalletCard = ({
   walletName,
