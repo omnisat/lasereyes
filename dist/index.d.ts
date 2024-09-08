@@ -139,13 +139,6 @@ interface MempoolUtxo {
     };
     value: number;
 }
-interface CommitPsbtResponse {
-    inscriberAddress: string;
-    psbtHex: string;
-    psbtBase64: string;
-    feeRate: number;
-    totalFees: number;
-}
 
 declare const createConfig: (config: Config) => Config;
 
@@ -170,36 +163,6 @@ declare function createSendBtcPsbt(address: string, paymentAddress: string, reci
 }>;
 declare function getRedeemScript(paymentPublicKey: string, network: typeof MAINNET | typeof TESTNET | typeof TESTNET4 | typeof SIGNET | typeof FRACTAL_MAINNET | typeof FRACTAL_TESTNET): Buffer | undefined;
 declare function delay(ms: number): Promise<unknown>;
-
-declare const useInscriber: ({ inscribeApiUrl, }: {
-    inscribeApiUrl: string;
-}) => {
-    content: any;
-    setContent: React.Dispatch<any>;
-    setMimeType: React.Dispatch<React.SetStateAction<"text/plain;charset=utf-8">>;
-    previewUrl: string;
-    setPreviewUrl: React.Dispatch<React.SetStateAction<string>>;
-    getCommitPsbt: () => Promise<CommitPsbtResponse>;
-    isFetchingCommitPsbt: boolean;
-    commitPsbtHex: string;
-    commitPsbtBase64: string;
-    handleSignCommit: (tx?: string) => Promise<string | undefined>;
-    commitTxId: string;
-    setCommitTxId: React.Dispatch<React.SetStateAction<string>>;
-    feeRate: number;
-    setFeeRate: React.Dispatch<React.SetStateAction<number>>;
-    totalFees: number;
-    inscriberAddress: string;
-    inscribe: ({ content: providedContent, mimeType: providedMimeType, ordinalAddress: providedAddress, commitTxId: providedCommitTxId, }: {
-        content?: any;
-        mimeType?: string | undefined;
-        ordinalAddress?: string | undefined;
-        commitTxId?: string | undefined;
-    }) => Promise<string>;
-    isInscribing: boolean;
-    inscriptionTxId: string;
-    reset: () => void;
-};
 
 interface OylLogoProps extends React.SVGProps<SVGSVGElement> {
     size?: number;
@@ -256,4 +219,4 @@ declare const WalletIcon: ({ size, className, variant, walletName, }: {
     walletName: typeof XVERSE | typeof WIZZ | typeof LEATHER | typeof MAGIC_EDEN | typeof OKX | typeof PHANTOM | typeof UNISAT | typeof OYL;
 }) => react_jsx_runtime.JSX.Element;
 
-export { FRACTAL_MAINNET, FRACTAL_TESTNET, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, TESTNET4, UNISAT, UNISAT_FRACTAL_MAINNET, UNISAT_FRACTAL_TESTNET, UNISAT_MAINNET, UNISAT_SIGNET, UNISAT_TESTNET, UNISAT_TESTNET4, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_SIGNET, WIZZ_TESTNET, WIZZ_TESTNET4, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useInscriber, useLaserEyes };
+export { FRACTAL_MAINNET, FRACTAL_TESTNET, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, TESTNET4, UNISAT, UNISAT_FRACTAL_MAINNET, UNISAT_FRACTAL_TESTNET, UNISAT_MAINNET, UNISAT_SIGNET, UNISAT_TESTNET, UNISAT_TESTNET4, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_SIGNET, WIZZ_TESTNET, WIZZ_TESTNET4, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };

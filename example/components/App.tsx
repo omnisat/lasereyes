@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
+import { RxReload } from 'react-icons/rx'
 
 const App = ({
   setNetwork,
@@ -54,6 +55,7 @@ const App = ({
     publicKey,
     paymentPublicKey,
     network,
+    getBalance,
     switchNetwork,
     provider,
     balance,
@@ -327,7 +329,11 @@ const App = ({
                   publicKey?.length > 0 ? 'text-white' : 'text-gray-500'
                 )}
               >
-                {balance !== undefined ? total : '--'} BTC
+                {balance !== undefined ? total : '--'} BTC{' '}
+                <RxReload
+                  className={'cursor-pointer text-gray-600'}
+                  onClick={getBalance}
+                />
               </span>
             </div>
           </div>
