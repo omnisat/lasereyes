@@ -10,6 +10,10 @@ import {
   WIZZ,
   XVERSE,
   LEATHER,
+  FRACTAL_MAINNET,
+  FRACTAL_TESTNET,
+  SIGNET,
+  TESTNET4,
   WalletIcon,
 } from '@omnisat/lasereyes'
 import {
@@ -31,7 +35,6 @@ import axios from 'axios'
 import Link from 'next/link'
 import { ImNewTab } from 'react-icons/im'
 import { cn } from '@/lib/utils'
-import { FRACTAL_MAINNET, FRACTAL_TESTNET, SIGNET, TESTNET4 } from '../../src'
 
 const WalletCard = ({
   walletName,
