@@ -546,6 +546,9 @@ var LaserEyesProvider = ({
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
+          if (config.network !== foundNetwork) {
+            switchNetwork(network);
+          }
         } catch (e) {
           disconnect();
         }
