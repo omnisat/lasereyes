@@ -27,8 +27,14 @@ import { Input } from '@/components/ui/input'
 import { getPackageVersion } from '@/lib/github'
 import { badgeVariants } from '@/components/ui/badge'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import { Select } from '@/components/ui/select'
-import { PiChefHat } from 'react-icons/pi'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { toast } from 'sonner'
 
 const App = ({
   setNetwork,
@@ -48,6 +54,7 @@ const App = ({
     publicKey,
     paymentPublicKey,
     network,
+    switchNetwork,
     provider,
     balance,
   } = useLaserEyes()
@@ -79,6 +86,22 @@ const App = ({
 
   // @ts-ignore
   const total = satoshisToBTC(balance)
+
+  const switchNet = async (
+    network:
+      | typeof MAINNET
+      | typeof TESTNET
+      | typeof SIGNET
+      | typeof FRACTAL_TESTNET
+  ) => {
+    try {
+      await switchNetwork(network)
+      setNetwork(network)
+    } catch (e) {
+      // @ts-ignore
+      toast.error(e.message)
+    }
+  }
 
   return (
     <div
@@ -128,9 +151,21 @@ const App = ({
         <div className={'flex flex-row items-center gap-4 '}>
           <div className={'grow'} />
           <div className={'flex flex-col p-4 items-center'}>
-            <span className={'text-md text-white font-black'}>
-              {network?.length > 0 ? network : '--'}
-            </span>
+            <Select onValueChange={(e) => switchNet(e as any)}>
+              <SelectTrigger className="">
+                <SelectValue
+                  placeholder={network?.length > 0 ? network : '--'}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="mainnet">mainnet</SelectItem>
+                <SelectItem value="testnet">testnet</SelectItem>
+                <SelectItem value="testnet4">testnet4</SelectItem>
+                <SelectItem value="signet">signet</SelectItem>
+                <SelectItem value="fractal mainnet">fractal_mainnet</SelectItem>
+                <SelectItem value="fractal testnet">fractal_testnet</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <div

@@ -54,7 +54,11 @@ export const getBTCBalance = async (
     | typeof FRACTAL_TESTNET
 ): Promise<number> => {
   try {
-    const utxos: MempoolUtxo[] = await getAddressUtxos(address, network);
+    const utxos: MempoolUtxo[] | undefined = await getAddressUtxos(
+      address,
+      network
+    );
+    if (!utxos) return 0;
     return utxos.reduce((acc, utxo) => acc + utxo.value, 0);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
@@ -105,6 +109,18 @@ export async function getAddressUtxos(
     | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
 ) {
+  if (address.startsWith("t")) {
+    console.log("starts with t");
+    if (network === MAINNET) {
+      return [];
+    }
+    if (network === FRACTAL_MAINNET) {
+      return [];
+    }
+    if (network === FRACTAL_TESTNET) {
+      return [];
+    }
+  }
   return (await axios
     .get(`${getMempoolSpaceUrl(network)}/api/address/${address}/utxo`)
     .then((response) => response.data)) as Array<MempoolUtxo>;
@@ -126,7 +142,14 @@ export async function createSendBtcPsbt(
   feeRate: number = 7
 ) {
   const isTaprootOnly = address === paymentAddress;
-  const utxos: MempoolUtxo[] = await getAddressUtxos(paymentAddress, network);
+  const utxos: MempoolUtxo[] | undefined = await getAddressUtxos(
+    paymentAddress,
+    network
+  );
+
+  if (!utxos) {
+    throw new Error("No UTXOs found");
+  }
 
   const sortedUtxos = utxos.sort(
     (a: { value: number }, b: { value: number }) => b.value - a.value
