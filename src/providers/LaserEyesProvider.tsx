@@ -133,12 +133,10 @@ const LaserEyesProvider = ({
     | typeof SIGNET
     | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
-  >("network", config?.network ?? MAINNET, {
-    initializeWithValue: false,
-  });
+  >("network", config?.network || MAINNET);
 
   useEffect(() => {
-    if (config) {
+    if (config && config.network) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
@@ -511,9 +509,10 @@ const LaserEyesProvider = ({
     }
   };
 
-  const connectOkx = async () => {
+  const connectOkx = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
+      console.log("connecting", network);
       const lib =
         network === TESTNET ||
         network === TESTNET4 ||
@@ -527,6 +526,18 @@ const LaserEyesProvider = ({
       if (!okxAccounts) throw new Error("No accounts found");
       setAccounts([okxAccounts]);
       setAddress(okxAccounts.address);
+      if (
+        String(okxAccounts.address)?.startsWith("tb") &&
+        network !== TESTNET &&
+        network !== TESTNET4 &&
+        network !== SIGNET
+      ) {
+        console.log("err");
+        throw new Error(
+          `Please switch networks to ${network} in the wallet settings.`
+        );
+      }
+
       setPaymentAddress(okxAccounts.address);
       setPublicKey(okxAccounts.publicKey);
       setPaymentPublicKey(okxAccounts.publicKey);
@@ -539,7 +550,7 @@ const LaserEyesProvider = ({
       console.log("error", error);
       throw error;
     }
-  };
+  }, [hasOkx, network]);
 
   const connectLeather = useCallback(async () => {
     try {
@@ -567,13 +578,13 @@ const LaserEyesProvider = ({
       );
 
       if (
-        String(taprootAddress)?.startsWith("tb") &&
+        String(taprootAddress?.address)?.startsWith("tb") &&
         network !== TESTNET &&
         network !== TESTNET4 &&
         network !== SIGNET
       ) {
         throw new Error(
-          "Please switch networks to testnet in the wallet settings."
+          `Please switch networks to ${network} in the wallet settings.`
         );
       }
 
@@ -893,6 +904,9 @@ const LaserEyesProvider = ({
           name: string;
           network: string;
         };
+        if (!unisatNetwork) {
+          return config?.network ?? MAINNET;
+        }
         return getNetworkForUnisat(unisatNetwork.enum) as
           | typeof MAINNET
           | typeof TESTNET
@@ -1030,9 +1044,6 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        if (network === TESTNET) {
-          return await getBTCBalance(paymentAddress, network);
-        }
         return await library.getBalance();
       } else if (provider === XVERSE) {
         return await getBTCBalance(paymentAddress, network);

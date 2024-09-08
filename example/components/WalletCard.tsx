@@ -10,6 +10,10 @@ import {
   WIZZ,
   XVERSE,
   LEATHER,
+  FRACTAL_MAINNET,
+  FRACTAL_TESTNET,
+  SIGNET,
+  TESTNET4,
   WalletIcon,
 } from '@omnisat/lasereyes'
 import {
@@ -96,7 +100,13 @@ const WalletCard = ({
   const [signed, setSigned] = useState<string | undefined>()
   const { utxos, loading, fetch } = useUtxos(
     paymentAddress,
-    network as typeof MAINNET | typeof TESTNET
+    network as
+      | typeof MAINNET
+      | typeof TESTNET
+      | typeof TESTNET4
+      | typeof SIGNET
+      | typeof FRACTAL_MAINNET
+      | typeof FRACTAL_TESTNET
   )
 
   const hasWallet = {

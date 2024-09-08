@@ -19,7 +19,7 @@ export default function Home() {
     | typeof SIGNET
     | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
-  >(SIGNET)
+  >(MAINNET)
   return (
     <LaserEyesProvider config={{ network }}>
       <App setNetwork={setNetwork} />

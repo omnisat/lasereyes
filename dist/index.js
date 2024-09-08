@@ -461,7 +461,12 @@ var findPaymentAddress = (addresses) => {
 };
 var getBTCBalance = (address2, network) => __async(void 0, null, function* () {
   try {
-    const utxos = yield getAddressUtxos(address2, network);
+    const utxos = yield getAddressUtxos(
+      address2,
+      network
+    );
+    if (!utxos)
+      return 0;
     return utxos.reduce((acc, utxo) => acc + utxo.value, 0);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
@@ -493,13 +498,30 @@ function estimateTxSize(taprootInputCount, nonTaprootInputCount, outputCount) {
 }
 function getAddressUtxos(address2, network) {
   return __async(this, null, function* () {
+    if (address2.startsWith("t")) {
+      if (network === MAINNET) {
+        return [];
+      }
+      if (network === FRACTAL_MAINNET) {
+        return [];
+      }
+      if (network === FRACTAL_TESTNET) {
+        return [];
+      }
+    }
     return yield import_axios.default.get(`${getMempoolSpaceUrl2(network)}/api/address/${address2}/utxo`).then((response) => response.data);
   });
 }
 function createSendBtcPsbt(address2, paymentAddress, recipientAddress, amount, paymentPublicKey, network, feeRate = 7) {
   return __async(this, null, function* () {
     const isTaprootOnly = address2 === paymentAddress;
-    const utxos = yield getAddressUtxos(paymentAddress, network);
+    const utxos = yield getAddressUtxos(
+      paymentAddress,
+      network
+    );
+    if (!utxos) {
+      throw new Error("No UTXOs found");
+    }
     const sortedUtxos = utxos.sort(
       (a, b) => b.value - a.value
     );
@@ -591,7 +613,6 @@ var LaserEyesProvider = ({
   children,
   config
 }) => {
-  var _a;
   const selfRef = (0, import_react.useRef)({
     accounts: []
   });
@@ -615,11 +636,9 @@ var LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = (0, import_react.useState)(false);
   const [hasPhantom, setHasPhantom] = (0, import_react.useState)(false);
   const [hasWizz, setHasWizz] = (0, import_react.useState)(false);
-  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET, {
-    initializeWithValue: false
-  });
+  const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (config == null ? void 0 : config.network) || MAINNET);
   (0, import_react.useEffect)(() => {
-    if (config) {
+    if (config && config.network) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
@@ -652,8 +671,8 @@ var LaserEyesProvider = ({
   }, []);
   (0, import_react.useEffect)(() => {
     const observer = new MutationObserver(() => {
-      var _a2;
-      const xverseLib = (_a2 = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a2.BitcoinProvider;
+      var _a;
+      const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
       if (xverseLib) {
         setHasXverse(true);
         observer.disconnect();
@@ -692,10 +711,10 @@ var LaserEyesProvider = ({
   }, []);
   (0, import_react.useEffect)(() => {
     const observer = new MutationObserver(() => {
-      var _a2, _b;
+      var _a, _b;
       let foundOkx;
       if (network === TESTNET || network === TESTNET4 || network === SIGNET || network === FRACTAL_TESTNET) {
-        foundOkx = (_a2 = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a2.bitcoinTestnet;
+        foundOkx = (_a = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
       } else if (network === MAINNET || network === FRACTAL_MAINNET) {
         foundOkx = (_b = window == null ? void 0 : window.okxwallet) == null ? void 0 : _b.bitcoin;
       }
@@ -724,8 +743,8 @@ var LaserEyesProvider = ({
   }, []);
   (0, import_react.useEffect)(() => {
     const observer = new MutationObserver(() => {
-      var _a2;
-      const phantomLib = (_a2 = window == null ? void 0 : window.phantom) == null ? void 0 : _a2.bitcoin;
+      var _a;
+      const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
       if (phantomLib && phantomLib.isPhantom) {
         setHasPhantom(true);
         observer.disconnect();
@@ -933,15 +952,23 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const connectOkx = () => __async(void 0, null, function* () {
+  const connectOkx = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
+    var _a;
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
+      console.log("connecting", network);
       const lib = network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET ? window.okxwallet.bitcoinTestnet : network === SIGNET ? window.okxwallet.bitcoinSignet : window.okxwallet.bitcoin;
       const okxAccounts = yield lib.connect();
       if (!okxAccounts)
         throw new Error("No accounts found");
       setAccounts([okxAccounts]);
       setAddress(okxAccounts.address);
+      if (((_a = String(okxAccounts.address)) == null ? void 0 : _a.startsWith("tb")) && network !== TESTNET && network !== TESTNET4 && network !== SIGNET) {
+        console.log("err");
+        throw new Error(
+          `Please switch networks to ${network} in the wallet settings.`
+        );
+      }
       setPaymentAddress(okxAccounts.address);
       setPublicKey(okxAccounts.publicKey);
       setPaymentPublicKey(okxAccounts.publicKey);
@@ -954,9 +981,9 @@ var LaserEyesProvider = ({
       console.log("error", error);
       throw error;
     }
-  });
+  }), [hasOkx, network]);
   const connectLeather = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
-    var _a2;
+    var _a;
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -974,9 +1001,9 @@ var LaserEyesProvider = ({
       const segwitAddress = addresses.find(
         (address3) => address3.type === P2WPKH
       );
-      if (((_a2 = String(taprootAddress)) == null ? void 0 : _a2.startsWith("tb")) && network !== TESTNET && network !== TESTNET4 && network !== SIGNET) {
+      if (((_a = String(taprootAddress == null ? void 0 : taprootAddress.address)) == null ? void 0 : _a.startsWith("tb")) && network !== TESTNET && network !== TESTNET4 && network !== SIGNET) {
         throw new Error(
-          "Please switch networks to testnet in the wallet settings."
+          `Please switch networks to ${network} in the wallet settings.`
         );
       }
       setAccounts(leatherAccountsParsed);
@@ -1234,10 +1261,13 @@ var LaserEyesProvider = ({
     }
   });
   const getNetwork = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
-    var _a2;
+    var _a, _b;
     try {
       if (provider === UNISAT) {
         const unisatNetwork = yield library == null ? void 0 : library.getChain();
+        if (!unisatNetwork) {
+          return (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET;
+        }
         return getNetworkForUnisat(unisatNetwork.enum);
       } else if (provider === XVERSE) {
         if (address2.slice(0, 1) === "t") {
@@ -1300,7 +1330,7 @@ var LaserEyesProvider = ({
         const wizzNetwork = yield library == null ? void 0 : library.getNetwork();
         return getNetworkForWizz(wizzNetwork);
       }
-      return (_a2 = config == null ? void 0 : config.network) != null ? _a2 : MAINNET;
+      return (_b = config == null ? void 0 : config.network) != null ? _b : MAINNET;
     } catch (error) {
       throw error;
     }
@@ -1354,9 +1384,6 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
-        if (network === TESTNET) {
-          return yield getBTCBalance(paymentAddress, network);
-        }
         return yield library.getBalance();
       } else if (provider === XVERSE) {
         return yield getBTCBalance(paymentAddress, network);
@@ -1399,7 +1426,7 @@ var LaserEyesProvider = ({
     }
   });
   const sendBTC = (to, amount) => __async(void 0, null, function* () {
-    var _a2;
+    var _a;
     try {
       if (amount <= 0)
         throw new Error("Amount must be greater than 0");
@@ -1485,7 +1512,7 @@ var LaserEyesProvider = ({
             }
           ]
         });
-        if ((_a2 = response == null ? void 0 : response.result) == null ? void 0 : _a2.txid) {
+        if ((_a = response == null ? void 0 : response.result) == null ? void 0 : _a.txid) {
           return response.result.txid;
         } else {
           if (response.error.code === import_sats_connect.RpcErrorCode.USER_REJECTION) {
@@ -1507,7 +1534,7 @@ var LaserEyesProvider = ({
     }
   });
   const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
-    var _a2;
+    var _a;
     try {
       if (!library)
         return;
@@ -1565,7 +1592,7 @@ var LaserEyesProvider = ({
           message,
           paymentType
         });
-        return (_a2 = signed == null ? void 0 : signed.result) == null ? void 0 : _a2.signature;
+        return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
