@@ -140,15 +140,15 @@ const LaserEyesProvider = ({
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
-          if (config.network !== foundNetwork) {
-            switchNetwork(network);
-          }
+          // if (config.network !== foundNetwork) {
+          //   switchNetwork(network);
+          // }
         } catch (e) {
           disconnect();
         }
       });
     }
-  }, [config, library]);
+  }, [config]);
 
   const checkInitializationComplete = () => {
     if (
@@ -997,7 +997,6 @@ const LaserEyesProvider = ({
       | typeof FRACTAL_TESTNET
   ) => {
     try {
-      console.log({ network });
       if (!library) return;
       if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network);

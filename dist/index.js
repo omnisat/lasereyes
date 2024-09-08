@@ -435,7 +435,7 @@ var MEMPOOL_SPACE_TESTNET_URL2 = "https://mempool.space/testnet";
 var MEMPOOL_SPACE_TESTNET4_URL = "https://mempool.space/testnet4";
 var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet";
 var MEMPOOL_SPACE_FRACTAL_MAINNET_URL = "https://mempool.fractalbitcoin.io";
-var MEMPOOL_SPACE_FRACTAL_TESTNET_URL = "https://mempool-testnet.fractalbitcoin.io/";
+var MEMPOOL_SPACE_FRACTAL_TESTNET_URL = "https://mempool-testnet.fractalbitcoin.io";
 var getMempoolSpaceUrl2 = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL2 : network === TESTNET4 ? MEMPOOL_SPACE_TESTNET4_URL : network === SIGNET ? MEMPOOL_SPACE_SIGNET_URL2 : network === FRACTAL_MAINNET ? MEMPOOL_SPACE_FRACTAL_MAINNET_URL : network === FRACTAL_TESTNET ? MEMPOOL_SPACE_FRACTAL_TESTNET_URL : MEMPOOL_SPACE_URL2;
 
 // src/lib/helpers.ts
@@ -641,15 +641,12 @@ var LaserEyesProvider = ({
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
-          if (config.network !== foundNetwork) {
-            switchNetwork(network);
-          }
         } catch (e) {
           disconnect();
         }
       });
     }
-  }, [config, library]);
+  }, [config]);
   const checkInitializationComplete = () => {
     if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
       setIsInitializing(false);
@@ -1336,7 +1333,6 @@ var LaserEyesProvider = ({
   }), [address2, provider, library]);
   const switchNetwork = (network2) => __async(void 0, null, function* () {
     try {
-      console.log({ network: network2 });
       if (!library)
         return;
       if (provider === UNISAT) {
