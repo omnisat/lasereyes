@@ -1,8 +1,11 @@
 export const XVERSE_NETWORK: "Mainnet" | "Testnet" = "Mainnet";
 
-export const UNISAT_MAINNET = "livenet";
-export const UNISAT_TESTNET = "testnet";
-export const UNISAT_FRACTAL_TESTNET = "unknown";
+export const UNISAT_MAINNET = "BITCOIN_MAINNET";
+export const UNISAT_TESTNET = "BITCOIN_TESTNET";
+export const UNISAT_TESTNET4 = "BITCOIN_TESTNET4";
+export const UNISAT_SIGNET = "BITCOIN_SIGNET";
+export const UNISAT_FRACTAL_MAINNET = "FRACTAL_BITCOIN_MAINNET";
+export const UNISAT_FRACTAL_TESTNET = "FRACTAL_BITCOIN_TESTNET";
 
 export const OP_WALLET_MAINNET = "livenet";
 export const OP_WALLET_TESTNET = "testnet";
@@ -16,12 +19,16 @@ export const OKX_TESTNET = "testnet";
 
 export const WIZZ_MAINNET = "livenet";
 export const WIZZ_TESTNET = "testnet";
+export const WIZZ_TESTNET4 = "testnet4";
+export const WIZZ_SIGNET = "signet";
 
 export const LEATHER_MAINNET = "mainnet";
 export const LEATHER_TESTNET = "testnet";
 export const MAINNET = "mainnet";
 export const SIGNET = "signet";
 export const TESTNET = "testnet";
+export const TESTNET4 = "testnet4";
+export const FRACTAL_MAINNET = "fractal_mainnet";
 export const FRACTAL_TESTNET = "fractal_testnet";
 export const REGTEST = "regtest";
 
@@ -41,6 +48,9 @@ export const getLeatherNetwork = (network: string) => {
 export const getUnisatNetwork = (network: string) => {
   if (network === MAINNET) return UNISAT_MAINNET;
   if (network === TESTNET) return UNISAT_TESTNET;
+  if (network === TESTNET4) return UNISAT_TESTNET4;
+  if (network === SIGNET) return UNISAT_SIGNET;
+  if (network === FRACTAL_MAINNET) return UNISAT_FRACTAL_MAINNET;
   if (network === FRACTAL_TESTNET) return UNISAT_FRACTAL_TESTNET;
   return UNISAT_MAINNET;
 };
@@ -48,12 +58,19 @@ export const getUnisatNetwork = (network: string) => {
 export const getWizzNetwork = (network: string) => {
   if (network === MAINNET) return WIZZ_MAINNET;
   if (network === TESTNET) return WIZZ_TESTNET;
+  if (network === TESTNET4) return WIZZ_TESTNET4;
+  if (network === SIGNET) return WIZZ_SIGNET;
+  if (network === FRACTAL_TESTNET) return WIZZ_TESTNET;
+  if (network === FRACTAL_MAINNET) return WIZZ_MAINNET;
   return WIZZ_MAINNET;
 };
 
 export const getNetworkForUnisat = (network: string) => {
   if (network === UNISAT_MAINNET) return MAINNET;
   if (network === UNISAT_TESTNET) return TESTNET;
+  if (network === UNISAT_TESTNET4) return TESTNET4;
+  if (network === UNISAT_SIGNET) return SIGNET;
+  if (network === UNISAT_FRACTAL_MAINNET) return FRACTAL_MAINNET;
   if (network === UNISAT_FRACTAL_TESTNET) return FRACTAL_TESTNET;
   return MAINNET;
 };
@@ -79,6 +96,11 @@ export const getNetworkForOkx = (network: string) => {
 export const getNetworkForWizz = (network: string) => {
   if (network === WIZZ_MAINNET) return MAINNET;
   if (network === WIZZ_TESTNET) return TESTNET;
+  if (network === WIZZ_TESTNET4) return TESTNET4;
+  if (network === WIZZ_SIGNET) return SIGNET;
+  if (network === FRACTAL_TESTNET) return TESTNET;
+  if (network === FRACTAL_MAINNET) return MAINNET;
+
   return MAINNET;
 };
 
