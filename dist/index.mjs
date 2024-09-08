@@ -394,7 +394,6 @@ function estimateTxSize(taprootInputCount, nonTaprootInputCount, outputCount) {
 function getAddressUtxos(address2, network) {
   return __async(this, null, function* () {
     if (address2.startsWith("t")) {
-      console.log("starts with t");
       if (network === MAINNET) {
         return [];
       }

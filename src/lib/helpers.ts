@@ -110,7 +110,6 @@ export async function getAddressUtxos(
     | typeof FRACTAL_TESTNET
 ) {
   if (address.startsWith("t")) {
-    console.log("starts with t");
     if (network === MAINNET) {
       return [];
     }
