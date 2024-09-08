@@ -84,8 +84,8 @@ var MAINNET = "mainnet";
 var SIGNET = "signet";
 var TESTNET = "testnet";
 var TESTNET4 = "testnet4";
-var FRACTAL_MAINNET = "fractal_mainnet";
-var FRACTAL_TESTNET = "fractal_testnet";
+var FRACTAL_MAINNET = "fractal mainnet";
+var FRACTAL_TESTNET = "fractal testnet";
 var REGTEST = "regtest";
 var getXverseNetwork = (network) => {
   if (network === MAINNET)
@@ -1241,10 +1241,12 @@ var LaserEyesProvider = ({
   }), [address2, provider, library]);
   const switchNetwork = (network2) => __async(void 0, null, function* () {
     try {
+      console.log({ network: network2 });
       if (!library)
         return;
       if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network2);
+        console.log("wantedNetwork", wantedNetwork);
         yield library == null ? void 0 : library.switchChain(wantedNetwork);
         setNetwork(network2);
       } else if (provider === WIZZ) {
@@ -1283,7 +1285,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const getBalance = () => __async(void 0, null, function* () {
+  const getBalance = useCallback(() => __async(void 0, null, function* () {
     try {
       if (!library)
         return;
@@ -1318,14 +1320,14 @@ var LaserEyesProvider = ({
         return bal;
       } else if (provider === WIZZ) {
         const balanceResponse = yield library.getBalance();
-        const bal = balanceResponse.total * 1e8;
+        const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
       }
     } catch (error) {
       throw error;
     }
-  });
+  }), [provider, library, paymentAddress, network]);
   const getInscriptions = () => __async(void 0, null, function* () {
     try {
       if (!library)
@@ -1843,11 +1845,11 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OYL) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OKX) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === MAGIC_EDEN) {
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === LEATHER) {
@@ -1855,7 +1857,7 @@ var LaserEyesProvider = ({
         const extracted = decoded.extractTransaction();
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }

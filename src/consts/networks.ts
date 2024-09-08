@@ -28,8 +28,8 @@ export const MAINNET = "mainnet";
 export const SIGNET = "signet";
 export const TESTNET = "testnet";
 export const TESTNET4 = "testnet4";
-export const FRACTAL_MAINNET = "fractal_mainnet";
-export const FRACTAL_TESTNET = "fractal_testnet";
+export const FRACTAL_MAINNET = "fractal mainnet";
+export const FRACTAL_TESTNET = "fractal testnet";
 export const REGTEST = "regtest";
 
 export const getXverseNetwork = (network: string) => {
