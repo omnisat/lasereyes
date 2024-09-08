@@ -1288,23 +1288,39 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
-        return yield library.getBalance();
+        const bal = yield library.getBalance();
+        setBalance(bal.total);
+        return bal.total;
       } else if (provider === XVERSE) {
-        return yield getBTCBalance(paymentAddress, network);
+        const bal = yield getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === OYL) {
         const balanceResponse = yield library.getBalance();
-        return balanceResponse.btc.total * 1e8;
+        const bal = balanceResponse.btc.total * 1e8;
+        setBalance(bal);
+        return bal;
       } else if (provider === MAGIC_EDEN) {
-        return yield getBTCBalance(paymentAddress, network);
+        const bal = yield getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === OKX) {
-        return yield getBTCBalance(paymentAddress, network);
+        const bal = yield getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === LEATHER) {
-        return yield getBTCBalance(paymentAddress, network);
+        const bal = yield getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === PHANTOM) {
-        return yield getBTCBalance(paymentAddress, network);
+        const bal = yield getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === WIZZ) {
         const balanceResponse = yield library.getBalance();
-        return balanceResponse.total * 1e8;
+        const bal = balanceResponse.total * 1e8;
+        setBalance(bal);
+        return bal;
       }
     } catch (error) {
       throw error;
@@ -1888,166 +1904,6 @@ var LaserEyesProvider = ({
       children
     }
   );
-};
-
-// src/hooks/useInscriber.ts
-import { useCallback as useCallback2, useEffect as useEffect2, useState as useState2 } from "react";
-
-// src/consts/inscribe.ts
-var MIME_TYPE_TEXT = "text/plain;charset=utf-8";
-
-// src/hooks/useInscriber.ts
-import axios3 from "axios";
-var DESCRIBE_API_URL = "http://localhost:3000/api";
-var useInscriber = ({
-  inscribeApiUrl = DESCRIBE_API_URL
-}) => {
-  const { address: address2, paymentAddress, paymentPublicKey, publicKey, signPsbt } = useLaserEyes();
-  const [content, setContent] = useState2("");
-  const [mimeType, setMimeType] = useState2(MIME_TYPE_TEXT);
-  const [commitPsbtHex, setCommitPsbtHex] = useState2("");
-  const [commitPsbtBase64, setCommitPsbtBase64] = useState2("");
-  const [commitTxId, setCommitTxId] = useState2("");
-  const [feeRate, setFeeRate] = useState2(10);
-  const [totalFees, setTotalFees] = useState2(0);
-  const [inscriberAddress, setInscriberAddress] = useState2("");
-  const [inscriptionTxId, setInscriptionTxId] = useState2("");
-  const [previewUrl, setPreviewUrl] = useState2("");
-  const [isFetchingCommitPsbt, setIsFetchingCommitPsbt] = useState2(false);
-  const [isInscribing, setIsInscribing] = useState2(false);
-  useEffect2(() => {
-    setCommitPsbtHex("");
-    setCommitPsbtBase64("");
-    setCommitTxId("");
-  }, [content, address2, mimeType, feeRate]);
-  const getCommitPsbt = useCallback2(() => __async(void 0, null, function* () {
-    try {
-      if (!content)
-        throw new Error("missing content");
-      if (!paymentAddress)
-        throw new Error("missing paymentAddress");
-      if (!paymentPublicKey)
-        throw new Error("missing paymentPublicKey");
-      if (!feeRate)
-        throw new Error("missing feeRate");
-      if (!mimeType)
-        throw new Error("missing mimeType");
-      setIsFetchingCommitPsbt(true);
-      return yield axios3.post(`${inscribeApiUrl}/create-inscription`, {
-        content,
-        paymentAddress,
-        paymentPublicKey,
-        feeRate,
-        mimeType
-      }).then((res) => res.data).then((data) => {
-        setCommitPsbtHex(data.psbtHex);
-        setCommitPsbtBase64(data.psbtBase64);
-        setFeeRate(feeRate);
-        setTotalFees(data.totalFees);
-        setInscriberAddress(data.inscriberAddress);
-        return data;
-      });
-    } catch (e) {
-      console.error(e);
-      throw new Error(e.response.data);
-    } finally {
-      setIsFetchingCommitPsbt(false);
-    }
-  }), [paymentAddress, paymentPublicKey, content, feeRate, mimeType, publicKey]);
-  const handleSignCommit = (tx) => __async(void 0, null, function* () {
-    try {
-      const toBeSigned = tx != null ? tx : commitPsbtHex;
-      if (!toBeSigned)
-        throw new Error("missing tx");
-      const signedResponse = yield signPsbt(toBeSigned, true, true);
-      setCommitTxId(signedResponse == null ? void 0 : signedResponse.txId);
-      return signedResponse == null ? void 0 : signedResponse.txId;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  });
-  const inscribe = useCallback2(
-    (_0) => __async(void 0, [_0], function* ({
-      content: providedContent,
-      mimeType: providedMimeType,
-      ordinalAddress: providedAddress,
-      commitTxId: providedCommitTxId
-    }) {
-      try {
-        const inscribeContent = providedContent != null ? providedContent : content;
-        const inscribeMimeType = providedMimeType != null ? providedMimeType : mimeType;
-        const inscribeOutputAddress = providedAddress != null ? providedAddress : address2;
-        let inscribeCommitTxId = providedCommitTxId != null ? providedCommitTxId : commitTxId;
-        if (!inscribeContent)
-          throw new Error("missing content");
-        if (!inscribeMimeType)
-          throw new Error("missing mimeType");
-        if (!inscribeOutputAddress)
-          throw new Error("missing address");
-        setIsInscribing(true);
-        if (!inscribeCommitTxId) {
-          const signed = yield getCommitPsbt();
-          inscribeCommitTxId = yield handleSignCommit(signed.psbtBase64);
-          if (!inscribeCommitTxId)
-            throw new Error("failed to broadcast commit");
-          console.log("tempCommitTxId", inscribeCommitTxId);
-        }
-        yield delay(1e4);
-        if (!inscribeCommitTxId)
-          throw new Error("missing commitTxId");
-        return yield axios3.post(`${inscribeApiUrl}/inscribe`, {
-          content,
-          mimeType,
-          ordinalAddress: address2,
-          commitTxId: inscribeCommitTxId
-        }).then((res) => res.data).then((data) => {
-          setInscriptionTxId(data);
-          return data;
-        });
-      } catch (e) {
-        console.error(e);
-        throw e;
-      } finally {
-        setIsInscribing(false);
-      }
-    }),
-    [address2, commitTxId, content, mimeType]
-  );
-  const reset = () => {
-    setContent("");
-    setMimeType(MIME_TYPE_TEXT);
-    setCommitPsbtHex("");
-    setCommitPsbtBase64("");
-    setCommitTxId("");
-    setFeeRate(10);
-    setTotalFees(0);
-    setInscriberAddress("");
-    setInscriptionTxId("");
-    setPreviewUrl("");
-  };
-  return {
-    content,
-    setContent,
-    setMimeType,
-    previewUrl,
-    setPreviewUrl,
-    getCommitPsbt,
-    isFetchingCommitPsbt,
-    commitPsbtHex,
-    commitPsbtBase64,
-    handleSignCommit,
-    commitTxId,
-    setCommitTxId,
-    feeRate,
-    setFeeRate,
-    totalFees,
-    inscriberAddress,
-    inscribe,
-    isInscribing,
-    inscriptionTxId,
-    reset
-  };
 };
 
 // src/icons/oyl.tsx
@@ -2729,6 +2585,5 @@ export {
   isBase64,
   isHex,
   satoshisToBTC,
-  useInscriber,
   useLaserEyes
 };

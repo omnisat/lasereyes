@@ -1044,23 +1044,39 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        return await library.getBalance();
+        const bal = await library.getBalance();
+        setBalance(bal.total);
+        return bal.total;
       } else if (provider === XVERSE) {
-        return await getBTCBalance(paymentAddress, network);
+        const bal = await getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === OYL) {
         const balanceResponse: OYLBalanceResponse = await library.getBalance();
-        return balanceResponse.btc.total * 100000000;
+        const bal = balanceResponse.btc.total * 100000000;
+        setBalance(bal);
+        return bal;
       } else if (provider === MAGIC_EDEN) {
-        return await getBTCBalance(paymentAddress, network);
+        const bal = await getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === OKX) {
-        return await getBTCBalance(paymentAddress, network);
+        const bal = await getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === LEATHER) {
-        return await getBTCBalance(paymentAddress, network);
+        const bal = await getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === PHANTOM) {
-        return await getBTCBalance(paymentAddress, network);
+        const bal = await getBTCBalance(paymentAddress, network);
+        setBalance(bal);
+        return bal;
       } else if (provider === WIZZ) {
         const balanceResponse: WizzBalanceResponse = await library.getBalance();
-        return balanceResponse.total * 100000000;
+        const bal = balanceResponse.total * 100000000;
+        setBalance(bal);
+        return bal;
       }
     } catch (error) {
       throw error;
