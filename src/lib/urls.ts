@@ -14,7 +14,7 @@ export const MEMPOOL_SPACE_SIGNET_URL = "https://mempool.space/signet";
 export const MEMPOOL_SPACE_FRACTAL_MAINNET_URL =
   "https://mempool.fractalbitcoin.io";
 export const MEMPOOL_SPACE_FRACTAL_TESTNET_URL =
-  "https://mempool-testnet.fractalbitcoin.io/";
+  "https://mempool-testnet.fractalbitcoin.io";
 
 export const getMempoolSpaceUrl = (
   network:

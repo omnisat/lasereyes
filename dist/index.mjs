@@ -84,8 +84,8 @@ var MAINNET = "mainnet";
 var SIGNET = "signet";
 var TESTNET = "testnet";
 var TESTNET4 = "testnet4";
-var FRACTAL_MAINNET = "fractal_mainnet";
-var FRACTAL_TESTNET = "fractal_testnet";
+var FRACTAL_MAINNET = "fractal mainnet";
+var FRACTAL_TESTNET = "fractal testnet";
 var REGTEST = "regtest";
 var getXverseNetwork = (network) => {
   if (network === MAINNET)
@@ -331,7 +331,7 @@ var MEMPOOL_SPACE_TESTNET_URL2 = "https://mempool.space/testnet";
 var MEMPOOL_SPACE_TESTNET4_URL = "https://mempool.space/testnet4";
 var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet";
 var MEMPOOL_SPACE_FRACTAL_MAINNET_URL = "https://mempool.fractalbitcoin.io";
-var MEMPOOL_SPACE_FRACTAL_TESTNET_URL = "https://mempool-testnet.fractalbitcoin.io/";
+var MEMPOOL_SPACE_FRACTAL_TESTNET_URL = "https://mempool-testnet.fractalbitcoin.io";
 var getMempoolSpaceUrl2 = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL2 : network === TESTNET4 ? MEMPOOL_SPACE_TESTNET4_URL : network === SIGNET ? MEMPOOL_SPACE_SIGNET_URL2 : network === FRACTAL_MAINNET ? MEMPOOL_SPACE_FRACTAL_MAINNET_URL : network === FRACTAL_TESTNET ? MEMPOOL_SPACE_FRACTAL_TESTNET_URL : MEMPOOL_SPACE_URL2;
 
 // src/lib/helpers.ts
@@ -546,15 +546,12 @@ var LaserEyesProvider = ({
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
-          if (config.network !== foundNetwork) {
-            switchNetwork(network);
-          }
         } catch (e) {
           disconnect();
         }
       });
     }
-  }, [config, library]);
+  }, [config]);
   const checkInitializationComplete = () => {
     if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
       setIsInitializing(false);
@@ -1245,6 +1242,7 @@ var LaserEyesProvider = ({
         return;
       if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network2);
+        console.log("wantedNetwork", wantedNetwork);
         yield library == null ? void 0 : library.switchChain(wantedNetwork);
         setNetwork(network2);
       } else if (provider === WIZZ) {
@@ -1283,7 +1281,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const getBalance = () => __async(void 0, null, function* () {
+  const getBalance = useCallback(() => __async(void 0, null, function* () {
     try {
       if (!library)
         return;
@@ -1318,14 +1316,14 @@ var LaserEyesProvider = ({
         return bal;
       } else if (provider === WIZZ) {
         const balanceResponse = yield library.getBalance();
-        const bal = balanceResponse.total * 1e8;
+        const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
       }
     } catch (error) {
       throw error;
     }
-  });
+  }), [provider, library, paymentAddress, network]);
   const getInscriptions = () => __async(void 0, null, function* () {
     try {
       if (!library)
@@ -1843,11 +1841,11 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OYL) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OKX) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === MAGIC_EDEN) {
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === LEATHER) {
@@ -1855,7 +1853,7 @@ var LaserEyesProvider = ({
         const extracted = decoded.extractTransaction();
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
-        return yield library == null ? void 0 : library.pushPsbt(psbt);
+        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }

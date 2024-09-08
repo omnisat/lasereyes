@@ -140,15 +140,15 @@ const LaserEyesProvider = ({
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
-          if (config.network !== foundNetwork) {
-            switchNetwork(network);
-          }
+          // if (config.network !== foundNetwork) {
+          //   switchNetwork(network);
+          // }
         } catch (e) {
           disconnect();
         }
       });
     }
-  }, [config, library]);
+  }, [config]);
 
   const checkInitializationComplete = () => {
     if (
@@ -1000,6 +1000,7 @@ const LaserEyesProvider = ({
       if (!library) return;
       if (provider === UNISAT) {
         const wantedNetwork = getUnisatNetwork(network);
+        console.log("wantedNetwork", wantedNetwork);
         await library?.switchChain(wantedNetwork);
         setNetwork(network);
       } else if (provider === WIZZ) {
@@ -1040,7 +1041,7 @@ const LaserEyesProvider = ({
     }
   };
 
-  const getBalance = async () => {
+  const getBalance = useCallback(async () => {
     try {
       if (!library) return;
       if (provider === UNISAT) {
@@ -1074,14 +1075,14 @@ const LaserEyesProvider = ({
         return bal;
       } else if (provider === WIZZ) {
         const balanceResponse: WizzBalanceResponse = await library.getBalance();
-        const bal = balanceResponse.total * 100000000;
+        const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
       }
     } catch (error) {
       throw error;
     }
-  };
+  }, [provider, library, paymentAddress, network]);
 
   const getInscriptions = async () => {
     try {
@@ -1612,11 +1613,17 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        return await library?.pushPsbt(psbt);
+        return await axios
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
+          .then((res) => res.data);
       } else if (provider === OYL) {
-        return (await library?.pushPsbt(psbt)) as string;
+        return await axios
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
+          .then((res) => res.data);
       } else if (provider === OKX) {
-        return await library?.pushPsbt(psbt);
+        return await axios
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
+          .then((res) => res.data);
       } else if (provider === MAGIC_EDEN) {
         return await axios
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
@@ -1628,7 +1635,9 @@ const LaserEyesProvider = ({
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, extracted.toHex())
           .then((res) => res.data);
       } else if (provider === WIZZ) {
-        return await library?.pushPsbt(psbt);
+        return await axios
+          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
+          .then((res) => res.data);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
