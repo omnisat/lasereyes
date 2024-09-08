@@ -48,7 +48,7 @@ const App = ({
       | typeof FRACTAL_TESTNET
   ) => void
 }) => {
-  const wallets = [LEATHER, MAGIC_EDEN, OKX, OYL, PHANTOM, UNISAT, WIZZ, XVERSE]
+  const wallets = [LEATHER, MAGIC_EDEN, OKX, OYL, UNISAT, WIZZ, XVERSE]
   const {
     address,
     paymentAddress,
