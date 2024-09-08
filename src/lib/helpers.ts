@@ -1,11 +1,12 @@
 import * as bitcoin from "bitcoinjs-lib";
 
 import {
+  FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   MAINNET,
-  REGTEST,
   SIGNET,
   TESTNET,
+  TESTNET4,
 } from "../consts/networks";
 import axios from "axios";
 import { MempoolUtxo } from "../types";
@@ -18,16 +19,13 @@ export const getBitcoinNetwork = (
   network:
     | typeof MAINNET
     | typeof TESTNET
+    | typeof TESTNET4
     | typeof SIGNET
-    | typeof REGTEST
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
 ) => {
-  if (network === TESTNET || network === FRACTAL_TESTNET) {
+  if (network === TESTNET || network === TESTNET4 || network === SIGNET) {
     return bitcoin.networks.testnet;
-  } else if (network === SIGNET) {
-    return bitcoin.networks.testnet;
-  } else if (network === REGTEST) {
-    return bitcoin.networks.regtest;
   } else {
     return bitcoin.networks.bitcoin;
   }
@@ -45,11 +43,19 @@ export const findPaymentAddress = (addresses: any) => {
   );
 };
 
-export const getBTCBalance = async (address: string): Promise<number> => {
+export const getBTCBalance = async (
+  address: string,
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof TESTNET4
+    | typeof SIGNET
+    | typeof FRACTAL_MAINNET
+    | typeof FRACTAL_TESTNET
+): Promise<number> => {
   try {
-    return await axios
-      .get(`https://blockchain.info/q/addressbalance/${address}`)
-      .then((response) => response.data);
+    const utxos: MempoolUtxo[] = await getAddressUtxos(address, network);
+    return utxos.reduce((acc, utxo) => acc + utxo.value, 0);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
@@ -89,22 +95,38 @@ export function estimateTxSize(
   return baseTxSize + totalInputSize + totalOutputSize;
 }
 
+export async function getAddressUtxos(
+  address: string,
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof TESTNET4
+    | typeof SIGNET
+    | typeof FRACTAL_MAINNET
+    | typeof FRACTAL_TESTNET
+) {
+  return (await axios
+    .get(`${getMempoolSpaceUrl(network)}/api/address/${address}/utxo`)
+    .then((response) => response.data)) as Array<MempoolUtxo>;
+}
+
 export async function createSendBtcPsbt(
   address: string,
   paymentAddress: string,
   recipientAddress: string,
   amount: number,
   paymentPublicKey: string,
-  network: typeof MAINNET | typeof TESTNET,
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof TESTNET4
+    | typeof SIGNET
+    | typeof FRACTAL_MAINNET
+    | typeof FRACTAL_TESTNET,
   feeRate: number = 7
 ) {
   const isTaprootOnly = address === paymentAddress;
-  const mempoolUrl = `${getMempoolSpaceUrl(
-    network
-  )}/api/address/${paymentAddress}/utxo`;
-  const utxos: MempoolUtxo[] = await axios
-    .get(mempoolUrl)
-    .then((response) => response.data);
+  const utxos: MempoolUtxo[] = await getAddressUtxos(paymentAddress, network);
 
   const sortedUtxos = utxos.sort(
     (a: { value: number }, b: { value: number }) => b.value - a.value
@@ -166,7 +188,13 @@ export async function createSendBtcPsbt(
 
 export function getRedeemScript(
   paymentPublicKey: string,
-  network: typeof MAINNET | typeof TESTNET
+  network:
+    | typeof MAINNET
+    | typeof TESTNET
+    | typeof TESTNET4
+    | typeof SIGNET
+    | typeof FRACTAL_MAINNET
+    | typeof FRACTAL_TESTNET
 ) {
   const p2wpkh = bitcoin.payments.p2wpkh({
     pubkey: Buffer.from(paymentPublicKey, "hex"),

@@ -1,6 +1,6 @@
 import { MAINNET, SIGNET, TESTNET, FRACTAL_TESTNET } from '@omnisat/lasereyes'
 export const MEMPOOL_SPACE_URL = 'https://mempool.space'
-export const MEMPOOL_SPACE_TESTNET_URL = 'https://mempool.space/testnet'
+export const MEMPOOL_SPACE_TESTNET_URL = 'https://mempool.space/testnet4'
 export const MEMPOOL_SPACE_SIGNET_URL = 'https://mempool.space/signet'
 export const MEMPOOL_SPACE_FRACTAL_TESTNET_URL =
   'https://mempool-testnet.fractalbitcoin.io'

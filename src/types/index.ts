@@ -1,10 +1,12 @@
 import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "../consts/wallets";
 import {
+  FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   MAINNET,
   REGTEST,
   SIGNET,
   TESTNET,
+  TESTNET4,
 } from "../consts/networks";
 
 export type LaserEyesContextType = {
@@ -19,7 +21,9 @@ export type LaserEyesContextType = {
   network:
     | typeof MAINNET
     | typeof TESTNET
+    | typeof TESTNET4
     | typeof SIGNET
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET;
   library: any;
   provider: any;
@@ -49,7 +53,9 @@ export type LaserEyesContextType = {
     network:
       | typeof MAINNET
       | typeof TESTNET
+      | typeof TESTNET4
       | typeof SIGNET
+      | typeof FRACTAL_MAINNET
       | typeof FRACTAL_TESTNET
   ) => Promise<void>;
   getPublicKey: () => Promise<string>;
@@ -76,7 +82,9 @@ export type Config = {
   network:
     | typeof MAINNET
     | typeof TESTNET
+    | typeof TESTNET4
     | typeof SIGNET
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET;
 };
 

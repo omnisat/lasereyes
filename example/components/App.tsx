@@ -28,6 +28,7 @@ import { getPackageVersion } from '@/lib/github'
 import { badgeVariants } from '@/components/ui/badge'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { Select } from '@/components/ui/select'
+import { PiChefHat } from 'react-icons/pi'
 
 const App = ({
   setNetwork,
@@ -40,7 +41,7 @@ const App = ({
       | typeof FRACTAL_TESTNET
   ) => void
 }) => {
-  const wallets = [LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE]
+  const wallets = [LEATHER, MAGIC_EDEN, OKX, OYL, PHANTOM, UNISAT, WIZZ, XVERSE]
   const {
     address,
     paymentAddress,

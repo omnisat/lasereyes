@@ -25,7 +25,9 @@ export const satoshisToBTC = (satoshis: number): string => {
 }
 
 export const getBtcJsNetwork = (network: string): bitcoin.networks.Network => {
-  return network === 'mainnet'
+  return network === 'mainnet' ||
+    network === 'fractal_mainnet' ||
+    network === 'fractal_testnet'
     ? bitcoin.networks.bitcoin
     : bitcoin.networks.testnet
 }
@@ -59,8 +61,6 @@ export async function createPsbt(
     throw new Error('Invalid output address')
   }
 
-  console.log('getAddressType(outputAddress)', getAddressType(outputAddress))
-
   if (getAddressType(outputAddress) === P2PKH) {
     const txHexResponse = await axios(
       `${getMempoolSpaceUrl(network)}/api/tx/${utxoWithMostValue.txid}/hex`
@@ -90,8 +90,6 @@ export async function createPsbt(
   if (utxoWithMostValue.value - 546 < 1000) {
     throw new Error("Couldn't create test psbt: Insufficient funds")
   }
-
-  console.log(utxoWithMostValue.value)
 
   psbt.addOutput({
     address: outputAddress,

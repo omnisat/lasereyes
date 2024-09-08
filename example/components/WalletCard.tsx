@@ -30,6 +30,7 @@ import { clsx } from 'clsx'
 import axios from 'axios'
 import Link from 'next/link'
 import { ImNewTab } from 'react-icons/im'
+import { cn } from '@/lib/utils'
 
 const WalletCard = ({
   walletName,
@@ -178,6 +179,7 @@ const WalletCard = ({
       // @ts-ignore
       await connect(walletName)
     } catch (error) {
+      console.log('error!', error)
       if (error instanceof Error) {
         toast.error(error.message)
       }
@@ -355,7 +357,13 @@ const WalletCard = ({
       <CardContent>
         <div className={'flex flex-col gap-4'}>
           <div className={'flex flex-row space-between items-center gap-6'}>
-            <Badge variant={isConnected ? 'success' : 'secondary'}>
+            <Badge
+              variant={isConnected ? 'success' : 'outline'}
+              className={cn(
+                'text-gray-500 border-gray-500',
+                isConnected ? 'text-white ' : ''
+              )}
+            >
               {isConnected ? 'connected' : 'disconnected'}
             </Badge>
             <Button

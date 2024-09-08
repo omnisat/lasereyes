@@ -61,9 +61,12 @@ var __forAwait = (obj, it, method) => {
 
 // src/consts/networks.ts
 var XVERSE_NETWORK = "Mainnet";
-var UNISAT_MAINNET = "livenet";
-var UNISAT_TESTNET = "testnet";
-var UNISAT_FRACTAL_TESTNET = "unknown";
+var UNISAT_MAINNET = "BITCOIN_MAINNET";
+var UNISAT_TESTNET = "BITCOIN_TESTNET";
+var UNISAT_TESTNET4 = "BITCOIN_TESTNET4";
+var UNISAT_SIGNET = "BITCOIN_SIGNET";
+var UNISAT_FRACTAL_MAINNET = "FRACTAL_BITCOIN_MAINNET";
+var UNISAT_FRACTAL_TESTNET = "FRACTAL_BITCOIN_TESTNET";
 var OP_WALLET_MAINNET = "livenet";
 var OP_WALLET_TESTNET = "testnet";
 var XVERSE_MAINNET = "Mainnet";
@@ -73,11 +76,15 @@ var OKX_MAINNET = "livenet";
 var OKX_TESTNET = "testnet";
 var WIZZ_MAINNET = "livenet";
 var WIZZ_TESTNET = "testnet";
+var WIZZ_TESTNET4 = "testnet4";
+var WIZZ_SIGNET = "signet";
 var LEATHER_MAINNET = "mainnet";
 var LEATHER_TESTNET = "testnet";
 var MAINNET = "mainnet";
 var SIGNET = "signet";
 var TESTNET = "testnet";
+var TESTNET4 = "testnet4";
+var FRACTAL_MAINNET = "fractal_mainnet";
 var FRACTAL_TESTNET = "fractal_testnet";
 var REGTEST = "regtest";
 var getXverseNetwork = (network) => {
@@ -101,6 +108,12 @@ var getUnisatNetwork = (network) => {
     return UNISAT_MAINNET;
   if (network === TESTNET)
     return UNISAT_TESTNET;
+  if (network === TESTNET4)
+    return UNISAT_TESTNET4;
+  if (network === SIGNET)
+    return UNISAT_SIGNET;
+  if (network === FRACTAL_MAINNET)
+    return UNISAT_FRACTAL_MAINNET;
   if (network === FRACTAL_TESTNET)
     return UNISAT_FRACTAL_TESTNET;
   return UNISAT_MAINNET;
@@ -110,6 +123,14 @@ var getWizzNetwork = (network) => {
     return WIZZ_MAINNET;
   if (network === TESTNET)
     return WIZZ_TESTNET;
+  if (network === TESTNET4)
+    return WIZZ_TESTNET4;
+  if (network === SIGNET)
+    return WIZZ_SIGNET;
+  if (network === FRACTAL_TESTNET)
+    return WIZZ_TESTNET;
+  if (network === FRACTAL_MAINNET)
+    return WIZZ_MAINNET;
   return WIZZ_MAINNET;
 };
 var getNetworkForUnisat = (network) => {
@@ -117,6 +138,12 @@ var getNetworkForUnisat = (network) => {
     return MAINNET;
   if (network === UNISAT_TESTNET)
     return TESTNET;
+  if (network === UNISAT_TESTNET4)
+    return TESTNET4;
+  if (network === UNISAT_SIGNET)
+    return SIGNET;
+  if (network === UNISAT_FRACTAL_MAINNET)
+    return FRACTAL_MAINNET;
   if (network === UNISAT_FRACTAL_TESTNET)
     return FRACTAL_TESTNET;
   return MAINNET;
@@ -147,6 +174,14 @@ var getNetworkForWizz = (network) => {
     return MAINNET;
   if (network === WIZZ_TESTNET)
     return TESTNET;
+  if (network === WIZZ_TESTNET4)
+    return TESTNET4;
+  if (network === WIZZ_SIGNET)
+    return SIGNET;
+  if (network === FRACTAL_TESTNET)
+    return TESTNET;
+  if (network === FRACTAL_MAINNET)
+    return MAINNET;
   return MAINNET;
 };
 var MEMPOOL_SPACE_URL = "https://mempool.space";
@@ -293,18 +328,18 @@ import axios from "axios";
 // src/lib/urls.ts
 var MEMPOOL_SPACE_URL2 = "https://mempool.space";
 var MEMPOOL_SPACE_TESTNET_URL2 = "https://mempool.space/testnet";
-var getMempoolSpaceUrl2 = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL2 : MEMPOOL_SPACE_URL2;
+var MEMPOOL_SPACE_TESTNET4_URL = "https://mempool.space/testnet4";
+var MEMPOOL_SPACE_SIGNET_URL2 = "https://mempool.space/signet";
+var MEMPOOL_SPACE_FRACTAL_MAINNET_URL = "https://mempool.fractalbitcoin.io";
+var MEMPOOL_SPACE_FRACTAL_TESTNET_URL = "https://mempool-testnet.fractalbitcoin.io/";
+var getMempoolSpaceUrl2 = (network) => network === TESTNET ? MEMPOOL_SPACE_TESTNET_URL2 : network === TESTNET4 ? MEMPOOL_SPACE_TESTNET4_URL : network === SIGNET ? MEMPOOL_SPACE_SIGNET_URL2 : network === FRACTAL_MAINNET ? MEMPOOL_SPACE_FRACTAL_MAINNET_URL : network === FRACTAL_TESTNET ? MEMPOOL_SPACE_FRACTAL_TESTNET_URL : MEMPOOL_SPACE_URL2;
 
 // src/lib/helpers.ts
 import * as ecc from "@bitcoinerlab/secp256k1";
 bitcoin.initEccLib(ecc);
 var getBitcoinNetwork = (network) => {
-  if (network === TESTNET || network === FRACTAL_TESTNET) {
+  if (network === TESTNET || network === TESTNET4 || network === SIGNET) {
     return bitcoin.networks.testnet;
-  } else if (network === SIGNET) {
-    return bitcoin.networks.testnet;
-  } else if (network === REGTEST) {
-    return bitcoin.networks.regtest;
   } else {
     return bitcoin.networks.bitcoin;
   }
@@ -319,9 +354,10 @@ var findPaymentAddress = (addresses) => {
     ({ purpose }) => purpose === "payment"
   );
 };
-var getBTCBalance = (address2) => __async(void 0, null, function* () {
+var getBTCBalance = (address2, network) => __async(void 0, null, function* () {
   try {
-    return yield axios.get(`https://blockchain.info/q/addressbalance/${address2}`).then((response) => response.data);
+    const utxos = yield getAddressUtxos(address2, network);
+    return utxos.reduce((acc, utxo) => acc + utxo.value, 0);
   } catch (error) {
     console.error("Error fetching BTC balance:", error);
     throw new Error("Failed to fetch BTC balance");
@@ -350,13 +386,15 @@ function estimateTxSize(taprootInputCount, nonTaprootInputCount, outputCount) {
   const totalOutputSize = outputCount * outputSize;
   return baseTxSize + totalInputSize + totalOutputSize;
 }
+function getAddressUtxos(address2, network) {
+  return __async(this, null, function* () {
+    return yield axios.get(`${getMempoolSpaceUrl2(network)}/api/address/${address2}/utxo`).then((response) => response.data);
+  });
+}
 function createSendBtcPsbt(address2, paymentAddress, recipientAddress, amount, paymentPublicKey, network, feeRate = 7) {
   return __async(this, null, function* () {
     const isTaprootOnly = address2 === paymentAddress;
-    const mempoolUrl = `${getMempoolSpaceUrl2(
-      network
-    )}/api/address/${paymentAddress}/utxo`;
-    const utxos = yield axios.get(mempoolUrl).then((response) => response.data);
+    const utxos = yield getAddressUtxos(paymentAddress, network);
     const sortedUtxos = utxos.sort(
       (a, b) => b.value - a.value
     );
@@ -457,6 +495,7 @@ var LaserEyesProvider = ({
   children,
   config
 }) => {
+  var _a;
   const selfRef = useRef({
     accounts: []
   });
@@ -480,17 +519,19 @@ var LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = useState(false);
   const [hasPhantom, setHasPhantom] = useState(false);
   const [hasWizz, setHasWizz] = useState(false);
-  const [network, setNetwork] = useLocalStorage("network", MAINNET, {
+  const [network, setNetwork] = useLocalStorage("network", (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET, {
     initializeWithValue: false
   });
   useEffect(() => {
     if (config) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
-        if (config.network !== foundNetwork) {
-          switchNetwork(network);
-        } else if (network !== foundNetwork) {
-          setNetwork(network);
+        try {
+          if (config.network !== foundNetwork) {
+            switchNetwork(network);
+          }
+        } catch (e) {
+          disconnect();
         }
       });
     }
@@ -515,8 +556,8 @@ var LaserEyesProvider = ({
   }, []);
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      var _a;
-      const xverseLib = (_a = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a.BitcoinProvider;
+      var _a2;
+      const xverseLib = (_a2 = window == null ? void 0 : window.XverseProviders) == null ? void 0 : _a2.BitcoinProvider;
       if (xverseLib) {
         setHasXverse(true);
         observer.disconnect();
@@ -555,11 +596,11 @@ var LaserEyesProvider = ({
   }, []);
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      var _a, _b;
+      var _a2, _b;
       let foundOkx;
-      if (network === TESTNET || network === FRACTAL_TESTNET) {
-        foundOkx = (_a = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
-      } else if (network === MAINNET) {
+      if (network === TESTNET || network === TESTNET4 || network === SIGNET || network === FRACTAL_TESTNET) {
+        foundOkx = (_a2 = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a2.bitcoinTestnet;
+      } else if (network === MAINNET || network === FRACTAL_MAINNET) {
         foundOkx = (_b = window == null ? void 0 : window.okxwallet) == null ? void 0 : _b.bitcoin;
       }
       if (foundOkx) {
@@ -587,8 +628,8 @@ var LaserEyesProvider = ({
   }, []);
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      var _a;
-      const phantomLib = (_a = window == null ? void 0 : window.phantom) == null ? void 0 : _a.bitcoin;
+      var _a2;
+      const phantomLib = (_a2 = window == null ? void 0 : window.phantom) == null ? void 0 : _a2.bitcoin;
       if (phantomLib && phantomLib.isPhantom) {
         setHasPhantom(true);
         observer.disconnect();
@@ -665,13 +706,20 @@ var LaserEyesProvider = ({
       const unisatPubKey = yield lib.getPublicKey();
       if (!unisatPubKey)
         throw new Error("No public key found");
-      const foundNetwork = yield getNetwork();
       setAccounts(unisatAccounts);
       setAddress(unisatAccounts[0]);
       setPaymentAddress(unisatAccounts[0]);
       setPublicKey(unisatPubKey);
       setPaymentPublicKey(unisatPubKey);
       setLibrary(lib);
+      yield getNetwork().then((network2) => {
+        if (config.network !== network2) {
+          switchNetwork(network2);
+        }
+      });
+      getBTCBalance(unisatAccounts[0], network).then((totalBalance) => {
+        setBalance(totalBalance);
+      });
       setProvider(UNISAT);
       setConnected(true);
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
@@ -679,7 +727,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       throw error;
     }
-  }), [hasUnisat]);
+  }), [hasUnisat, network]);
   const connectXverse = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, XVERSE);
@@ -703,9 +751,11 @@ var LaserEyesProvider = ({
             setProvider(XVERSE);
             setLibrary(window.BitcoinProvider);
           }
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
-            setBalance(totalBalance);
-          });
+          getBTCBalance(foundPaymentAddress.address, network).then(
+            (totalBalance) => {
+              setBalance(totalBalance);
+            }
+          );
         },
         onCancel: () => {
           throw new Error(`User canceled lasereyes to ${XVERSE} wallet`);
@@ -734,7 +784,7 @@ var LaserEyesProvider = ({
       setProvider(OYL);
       handleAccountsChanged(result);
       setConnected(true);
-      getBTCBalance(result[1]).then((totalBalance) => {
+      getBTCBalance(result[1], network).then((totalBalance) => {
         setBalance(totalBalance);
       });
     } catch (error) {
@@ -767,9 +817,11 @@ var LaserEyesProvider = ({
             setProvider(MAGIC_EDEN);
             setLibrary(window.magicEden.bitcoin);
           }
-          getBTCBalance(foundPaymentAddress.address).then((totalBalance) => {
-            setBalance(totalBalance);
-          });
+          getBTCBalance(foundPaymentAddress.address, network).then(
+            (totalBalance) => {
+              setBalance(totalBalance);
+            }
+          );
         },
         onCancel: () => {
           throw new Error(`User canceled lasereyes to ${MAGIC_EDEN} wallet`);
@@ -778,7 +830,6 @@ var LaserEyesProvider = ({
           throw new Error(`Can't lasereyes to ${MAGIC_EDEN} wallet`);
         }
       };
-      console.log(JSON.stringify(getAddressOptions));
       yield getAddress(getAddressOptions);
       setConnected(true);
     } catch (error) {
@@ -789,28 +840,27 @@ var LaserEyesProvider = ({
   const connectOkx = () => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
-      const lib = network === TESTNET || network === FRACTAL_TESTNET ? window.okxwallet.bitcoinTestnet : window.okxwallet.bitcoin;
-      const okxAccounts = yield lib.requestAccounts();
+      const lib = network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET ? window.okxwallet.bitcoinTestnet : network === SIGNET ? window.okxwallet.bitcoinSignet : window.okxwallet.bitcoin;
+      const okxAccounts = yield lib.connect();
       if (!okxAccounts)
         throw new Error("No accounts found");
-      const okxPubKey = yield lib.getPublicKey();
-      if (!okxPubKey)
-        throw new Error("No public key found");
-      setAccounts(okxAccounts);
-      setAddress(okxAccounts[0]);
-      setPaymentAddress(okxAccounts[0]);
-      setPublicKey(okxPubKey);
-      setPaymentPublicKey(okxPubKey);
+      setAccounts([okxAccounts]);
+      setAddress(okxAccounts.address);
+      setPaymentAddress(okxAccounts.address);
+      setPublicKey(okxAccounts.publicKey);
+      setPaymentPublicKey(okxAccounts.publicKey);
       setLibrary(lib);
       setProvider(OKX);
       setConnected(true);
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
       setBalance(balance2 == null ? void 0 : balance2.total);
     } catch (error) {
+      console.log("error", error);
       throw error;
     }
   });
   const connectLeather = useCallback(() => __async(void 0, null, function* () {
+    var _a2;
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
       const lib = window.LeatherProvider;
@@ -828,6 +878,11 @@ var LaserEyesProvider = ({
       const segwitAddress = addresses.find(
         (address3) => address3.type === P2WPKH
       );
+      if (((_a2 = String(taprootAddress)) == null ? void 0 : _a2.startsWith("tb")) && network !== TESTNET && network !== TESTNET4 && network !== SIGNET) {
+        throw new Error(
+          "Please switch networks to testnet in the wallet settings."
+        );
+      }
       setAccounts(leatherAccountsParsed);
       setAddress(String(taprootAddress == null ? void 0 : taprootAddress.address));
       setPublicKey(String(taprootAddress == null ? void 0 : taprootAddress.publicKey));
@@ -835,20 +890,18 @@ var LaserEyesProvider = ({
       setPaymentPublicKey(String(segwitAddress == null ? void 0 : segwitAddress.publicKey));
       setLibrary(lib);
       setProvider(LEATHER);
-      const balance2 = yield getBTCBalance(String(segwitAddress == null ? void 0 : segwitAddress.address));
+      const balance2 = yield getBTCBalance(
+        String(segwitAddress == null ? void 0 : segwitAddress.address),
+        network
+      );
       setBalance(balance2);
       handleAccountsChanged(leatherAccountsParsed);
       setConnected(true);
       yield getNetwork().then((network2) => {
-        if (!network2) {
-          setNetwork(MAINNET);
-        } else {
-          setNetwork(network2);
-        }
       });
       setConnected(true);
     } catch (error) {
-      new Error(`Can't lasereyes to ${LEATHER} wallet`);
+      throw error;
     }
   }), [hasLeather]);
   const connectPhantom = () => __async(void 0, null, function* () {
@@ -872,7 +925,10 @@ var LaserEyesProvider = ({
       setPaymentPublicKey(paymentAccount == null ? void 0 : paymentAccount.publicKey);
       setLibrary(lib);
       setProvider(PHANTOM);
-      const balance2 = yield getBTCBalance(String(paymentAccount == null ? void 0 : paymentAccount.address));
+      const balance2 = yield getBTCBalance(
+        String(paymentAccount == null ? void 0 : paymentAccount.address),
+        network
+      );
       setBalance(balance2);
       setConnected(true);
     } catch (error) {
@@ -896,9 +952,14 @@ var LaserEyesProvider = ({
       setPaymentPublicKey(wizzPubKey);
       setLibrary(lib);
       setProvider(WIZZ);
+      yield getNetwork().then((network2) => {
+        if (config.network !== network2) {
+          switchNetwork(network2);
+        }
+      });
+      const balance2 = yield getBTCBalance(String(wizzAccounts[0]), network);
+      setBalance(balance2);
       setConnected(true);
-      const balance2 = yield lib == null ? void 0 : lib.getBalance();
-      setBalance(balance2 == null ? void 0 : balance2.total);
     } catch (error) {
       throw error;
     }
@@ -916,8 +977,14 @@ var LaserEyesProvider = ({
         yield connectOyl();
       } else if (walletName === MAGIC_EDEN) {
         yield connectMagicEden();
+      } else if (walletName === OKX) {
+        yield connectOkx();
       } else if (walletName === LEATHER) {
         yield connectLeather();
+      } else if (walletName === PHANTOM) {
+        yield connectPhantom();
+      } else if (walletName === WIZZ) {
+        yield connectWizz();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -925,6 +992,7 @@ var LaserEyesProvider = ({
     } catch (error) {
       setIsConnecting(false);
       disconnect();
+      console.log("e", error == null ? void 0 : error.message);
       throw error;
     } finally {
       setIsConnecting(false);
@@ -961,7 +1029,7 @@ var LaserEyesProvider = ({
   };
   const handleNetworkChanged = (network2) => {
     try {
-      let foundNetwork = MAINNET;
+      let foundNetwork;
       if (provider === UNISAT) {
         foundNetwork = getNetworkForUnisat(network2);
         setNetwork(foundNetwork);
@@ -970,10 +1038,12 @@ var LaserEyesProvider = ({
         throw new Error("Not implemented");
       } else if (provider === WIZZ) {
         foundNetwork = getNetworkForWizz(network2);
-        setNetwork(foundNetwork);
         connect(provider);
       } else {
-        throw new Error("The connected wallet doesn't support this method..");
+        disconnect();
+        throw new Error(
+          "The connected wallet doesn't support programmatic network changes.."
+        );
       }
     } catch (error) {
       throw error;
@@ -982,7 +1052,7 @@ var LaserEyesProvider = ({
   const requestAccounts = () => __async(void 0, null, function* () {
     try {
       if (!library)
-        return;
+        throw new Error("No wallet connected");
       if (provider === UNISAT) {
         return yield library.requestAccounts();
       } else if (provider === XVERSE) {
@@ -1011,6 +1081,9 @@ var LaserEyesProvider = ({
       } else if (provider === OYL) {
         return yield library.requestAccounts();
       } else if (provider === OKX) {
+        if (network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET) {
+          return yield library.connect();
+        }
         return yield library.requestAccounts();
       } else if (provider === LEATHER) {
         localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, LEATHER);
@@ -1036,6 +1109,11 @@ var LaserEyesProvider = ({
         setProvider(LEATHER);
         handleAccountsChanged(leatherAccountsParsed);
         setConnected(true);
+        const balance2 = yield getBTCBalance(
+          String(segwitAddress == null ? void 0 : segwitAddress.address),
+          network
+        );
+        setBalance(balance2);
         yield getNetwork().then((network2) => {
           if (!network2) {
             setNetwork(MAINNET);
@@ -1059,19 +1137,23 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const getNetwork = () => __async(void 0, null, function* () {
-    var _a;
+  const getNetwork = useCallback(() => __async(void 0, null, function* () {
+    var _a2;
     try {
-      if (!library)
-        return;
       if (provider === UNISAT) {
-        const unisatNetwork = yield library == null ? void 0 : library.getNetwork();
-        const foundNetwork = getNetworkForUnisat(unisatNetwork);
-        setNetwork(foundNetwork);
-        return foundNetwork;
+        const unisatNetwork = yield library == null ? void 0 : library.getChain();
+        return getNetworkForUnisat(unisatNetwork.enum);
       } else if (provider === XVERSE) {
         if (address2.slice(0, 1) === "t") {
-          return TESTNET;
+          if (network === TESTNET) {
+            return TESTNET;
+          } else if (network === TESTNET4) {
+            return TESTNET4;
+          } else if (network === SIGNET) {
+            return SIGNET;
+          } else if (network === FRACTAL_TESTNET) {
+            return FRACTAL_TESTNET;
+          }
         }
         return MAINNET;
       } else if (provider === OYL) {
@@ -1085,12 +1167,32 @@ var LaserEyesProvider = ({
         }
         return MAINNET;
       } else if (provider === OKX) {
+        if (address2.slice(0, 1) === "t") {
+          if (network === TESTNET) {
+            return TESTNET;
+          } else if (network === TESTNET4) {
+            return TESTNET4;
+          } else if (network === SIGNET) {
+            return SIGNET;
+          } else if (network === FRACTAL_TESTNET) {
+            return FRACTAL_TESTNET;
+          }
+          return TESTNET;
+        }
         const okxNetwork = yield library == null ? void 0 : library.getNetwork();
         const foundNetwork = getNetworkForOkx(okxNetwork);
         setNetwork(foundNetwork);
       } else if (provider === LEATHER) {
         if (address2.slice(0, 1) === "t") {
-          return TESTNET;
+          if (network === TESTNET) {
+            return TESTNET;
+          } else if (network === TESTNET4) {
+            return TESTNET4;
+          } else if (network === SIGNET) {
+            return SIGNET;
+          } else if (network === FRACTAL_TESTNET) {
+            return FRACTAL_TESTNET;
+          }
         }
         return MAINNET;
       } else if (provider === PHANTOM) {
@@ -1100,28 +1202,33 @@ var LaserEyesProvider = ({
         return MAINNET;
       } else if (provider === WIZZ) {
         const wizzNetwork = yield library == null ? void 0 : library.getNetwork();
-        const foundNetwork = getNetworkForWizz(wizzNetwork);
-        setNetwork(foundNetwork);
+        return getNetworkForWizz(wizzNetwork);
       }
-      return (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET;
+      return (_a2 = config == null ? void 0 : config.network) != null ? _a2 : MAINNET;
     } catch (error) {
       throw error;
     }
-  });
+  }), [address2, provider, library]);
   const switchNetwork = (network2) => __async(void 0, null, function* () {
     try {
       if (!library)
         return;
       if (provider === UNISAT) {
-        const wantedNetwork = getWizzNetwork(network2);
-        yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
+        const wantedNetwork = getUnisatNetwork(network2);
+        yield library == null ? void 0 : library.switchChain(wantedNetwork);
         setNetwork(network2);
       } else if (provider === WIZZ) {
+        if (network2 === FRACTAL_TESTNET || network2 === FRACTAL_MAINNET) {
+          return yield library.switchNetwork(WIZZ_MAINNET);
+        }
         const wantedNetwork = getNetworkForWizz(network2);
         yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
         setNetwork(network2);
       } else {
-        throw new Error("The connected wallet doesn't support this method..");
+        disconnect();
+        throw new Error(
+          "The connected wallet doesn't support programmatic network changes.."
+        );
       }
     } catch (error) {
       throw error;
@@ -1151,20 +1258,23 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
+        if (network === TESTNET) {
+          return yield getBTCBalance(paymentAddress, network);
+        }
         return yield library.getBalance();
       } else if (provider === XVERSE) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === OYL) {
         const balanceResponse = yield library.getBalance();
         return balanceResponse.btc.total * 1e8;
       } else if (provider === MAGIC_EDEN) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === OKX) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === LEATHER) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === PHANTOM) {
-        return yield getBTCBalance(paymentAddress);
+        return yield getBTCBalance(paymentAddress, network);
       } else if (provider === WIZZ) {
         const balanceResponse = yield library.getBalance();
         return balanceResponse.total * 1e8;
@@ -1193,7 +1303,7 @@ var LaserEyesProvider = ({
     }
   });
   const sendBTC = (to, amount) => __async(void 0, null, function* () {
-    var _a;
+    var _a2;
     try {
       if (amount <= 0)
         throw new Error("Amount must be greater than 0");
@@ -1279,7 +1389,7 @@ var LaserEyesProvider = ({
             }
           ]
         });
-        if ((_a = response == null ? void 0 : response.result) == null ? void 0 : _a.txid) {
+        if ((_a2 = response == null ? void 0 : response.result) == null ? void 0 : _a2.txid) {
           return response.result.txid;
         } else {
           if (response.error.code === RpcErrorCode.USER_REJECTION) {
@@ -1301,7 +1411,7 @@ var LaserEyesProvider = ({
     }
   });
   const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
-    var _a;
+    var _a2;
     try {
       if (!library)
         return;
@@ -1359,8 +1469,7 @@ var LaserEyesProvider = ({
           message,
           paymentType
         });
-        console.log("signed", signed);
-        return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
+        return (_a2 = signed == null ? void 0 : signed.result) == null ? void 0 : _a2.signature;
       } else if (provider === PHANTOM) {
         const utf8Bytes = new TextEncoder().encode(message);
         const uintArray = new Uint8Array(utf8Bytes);
@@ -1492,7 +1601,6 @@ var LaserEyesProvider = ({
         };
       } else if (provider === OYL) {
         const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, true, true);
-        console.log({ signedPsbt });
         const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
         if (broadcast) {
           const txId = yield pushPsbt(psbtSignedPsbt.toHex());
@@ -2516,6 +2624,7 @@ var WalletIcon = ({
   }
 };
 export {
+  FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   LEATHER,
   LEATHER_MAINNET,
@@ -2547,15 +2656,21 @@ export {
   REGTEST,
   SIGNET,
   TESTNET,
+  TESTNET4,
   UNISAT,
+  UNISAT_FRACTAL_MAINNET,
   UNISAT_FRACTAL_TESTNET,
   UNISAT_MAINNET,
+  UNISAT_SIGNET,
   UNISAT_TESTNET,
+  UNISAT_TESTNET4,
   UnisatLogo,
   WALLETS,
   WIZZ,
   WIZZ_MAINNET,
+  WIZZ_SIGNET,
   WIZZ_TESTNET,
+  WIZZ_TESTNET4,
   WalletIcon,
   WizzLogo,
   XVERSE,
@@ -2570,6 +2685,7 @@ export {
   estimateTxSize,
   findOrdinalsAddress,
   findPaymentAddress,
+  getAddressUtxos,
   getBTCBalance,
   getBitcoinNetwork,
   getLeatherNetwork,
