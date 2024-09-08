@@ -2,8 +2,14 @@ import useSWR from 'swr'
 import { useCallback, useEffect, useState } from 'react'
 import { IMempoolUtxo } from '@/types/btc'
 import { getMempoolSpaceUrl } from '@/lib/urls'
-import { MAINNET, TESTNET } from '@omnisat/lasereyes'
-import { FRACTAL_MAINNET, FRACTAL_TESTNET, SIGNET, TESTNET4 } from '../../src'
+import {
+  MAINNET,
+  TESTNET,
+  FRACTAL_MAINNET,
+  FRACTAL_TESTNET,
+  SIGNET,
+  TESTNET4,
+} from '@omnisat/lasereyes'
 
 const useUtxos = (
   address: string,
