@@ -1,5 +1,6 @@
 import { IMempoolUtxo } from '@/types/btc'
 import {
+  FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   MAINNET,
   P2PKH,
@@ -8,6 +9,7 @@ import {
   P2WSH,
   SIGNET,
   TESTNET,
+  TESTNET4,
 } from '@omnisat/lasereyes'
 import * as bitcoin from 'bitcoinjs-lib'
 import { Psbt } from 'bitcoinjs-lib'
@@ -39,7 +41,9 @@ export async function createPsbt(
   network:
     | typeof MAINNET
     | typeof TESTNET
+    | typeof TESTNET4
     | typeof SIGNET
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
 ) {
   if (!outputAddress) return
@@ -105,6 +109,8 @@ export function getRedeemScript(
     | typeof MAINNET
     | typeof TESTNET
     | typeof SIGNET
+    | typeof TESTNET4
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
 ) {
   const p2wpkh = bitcoin.payments.p2wpkh({
@@ -166,10 +172,12 @@ export const getBitcoinNetwork = (
   network:
     | typeof MAINNET
     | typeof TESTNET
+    | typeof TESTNET4
     | typeof SIGNET
+    | typeof FRACTAL_MAINNET
     | typeof FRACTAL_TESTNET
 ) => {
-  if (network === TESTNET) {
+  if (network === TESTNET || network === TESTNET4 || network === SIGNET) {
     return bitcoin.networks.testnet
   } else {
     return bitcoin.networks.bitcoin
