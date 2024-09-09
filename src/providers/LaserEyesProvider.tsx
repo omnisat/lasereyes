@@ -1003,6 +1003,7 @@ const LaserEyesProvider = ({
         console.log("wantedNetwork", wantedNetwork);
         await library?.switchChain(wantedNetwork);
         setNetwork(network);
+        await getBalance();
       } else if (provider === WIZZ) {
         if (network === FRACTAL_TESTNET || network === FRACTAL_MAINNET) {
           return await library.switchNetwork(WIZZ_MAINNET);
@@ -1011,6 +1012,7 @@ const LaserEyesProvider = ({
         const wantedNetwork = getNetworkForWizz(network);
         await library?.switchNetwork(wantedNetwork);
         setNetwork(network);
+        await getBalance();
       } else {
         disconnect();
         throw new Error(
