@@ -62,7 +62,6 @@ const App = ({
   } = useLaserEyes()
 
   const [pkgVersion, setPkgVersion] = useState<string | undefined>()
-
   const [signature, setSignature] = useState<string>('')
   const [unsignedPsbt, setUnsignedPsbt] = useState<string | undefined>()
   const [signedPsbt, setSignedPsbt] = useState<

@@ -127,7 +127,13 @@ const WalletCard = ({
         utxos,
         paymentAddress,
         paymentPublicKey,
-        network as typeof MAINNET | typeof TESTNET
+        network as
+          | typeof MAINNET
+          | typeof TESTNET
+          | typeof TESTNET4
+          | typeof SIGNET
+          | typeof FRACTAL_MAINNET
+          | typeof FRACTAL_TESTNET
       )
         .then((psbt) => {
           if (psbt && psbt.toHex() !== unsigned) {
@@ -142,7 +148,7 @@ const WalletCard = ({
           toast.error(e.message)
         })
     }
-  }, [utxos, connected])
+  }, [utxos, balance, network, connected])
 
   useEffect(() => {
     setUnsigned(undefined)
