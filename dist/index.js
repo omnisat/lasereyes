@@ -792,7 +792,7 @@ var LaserEyesProvider = ({
     setBalance(void 0);
   }, [network]);
   (0, import_react.useEffect)(() => {
-    if (provider !== UNISAT && provider !== WIZZ) {
+    if (provider !== UNISAT && provider !== WIZZ && !library) {
       return;
     }
     library.getAccounts().then((accounts2) => {

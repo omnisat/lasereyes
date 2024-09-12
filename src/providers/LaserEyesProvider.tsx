@@ -331,7 +331,7 @@ const LaserEyesProvider = ({
   }, [network]);
 
   useEffect(() => {
-    if (provider !== UNISAT && provider !== WIZZ) {
+    if (provider !== UNISAT && provider !== WIZZ && !library) {
       return;
     }
 
