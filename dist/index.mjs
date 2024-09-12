@@ -521,16 +521,22 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = useState(null);
-  const [provider, setProvider] = useState();
+  const [library, setLibrary] = useLocalStorage("library", null);
+  const [provider, setProvider] = useLocalStorage("provider", void 0);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useLocalStorage("connected", false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState([]);
-  const [publicKey, setPublicKey] = useState("");
-  const [paymentPublicKey, setPaymentPublicKey] = useState("");
-  const [address2, setAddress] = useState("");
-  const [paymentAddress, setPaymentAddress] = useState("");
+  const [publicKey, setPublicKey] = useLocalStorage("publicKey", "");
+  const [paymentPublicKey, setPaymentPublicKey] = useLocalStorage(
+    "paymentPublicKey",
+    ""
+  );
+  const [address2, setAddress] = useLocalStorage("address", "");
+  const [paymentAddress, setPaymentAddress] = useLocalStorage(
+    "paymentAddress",
+    ""
+  );
   const [balance, setBalance] = useState();
   const [hasUnisat, setHasUnisat] = useState(false);
   const [hasXverse, setHasXverse] = useState(false);
@@ -709,12 +715,12 @@ var LaserEyesProvider = ({
       const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
         LOCAL_STORAGE_DEFAULT_WALLET
       );
-      if (defaultWallet) {
+      if (defaultWallet && !address2) {
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
     }
-  }, [isInitializing]);
+  }, [isInitializing, address2]);
   const connectUnisat = useCallback(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);

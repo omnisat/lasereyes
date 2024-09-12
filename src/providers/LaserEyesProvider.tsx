@@ -95,8 +95,8 @@ const LaserEyesProvider = ({
   });
   const self = selfRef.current;
 
-  const [library, setLibrary] = useState<any>(null);
-  const [provider, setProvider] = useState<
+  const [library, setLibrary] = useLocalStorage<any>("library", null);
+  const [provider, setProvider] = useLocalStorage<
     | typeof UNISAT
     | typeof XVERSE
     | typeof OYL
@@ -106,15 +106,22 @@ const LaserEyesProvider = ({
     | typeof PHANTOM
     | typeof WIZZ
     | undefined
-  >();
+  >("provider", undefined);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useLocalStorage("connected", false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [publicKey, setPublicKey] = useState<string>("");
-  const [paymentPublicKey, setPaymentPublicKey] = useState<string>("");
-  const [address, setAddress] = useState("");
-  const [paymentAddress, setPaymentAddress] = useState("");
+  const [publicKey, setPublicKey] = useLocalStorage<string>("publicKey", "");
+  const [paymentPublicKey, setPaymentPublicKey] = useLocalStorage<string>(
+    "paymentPublicKey",
+    ""
+  );
+  const [address, setAddress] = useLocalStorage("address", "");
+
+  const [paymentAddress, setPaymentAddress] = useLocalStorage(
+    "paymentAddress",
+    ""
+  );
   const [balance, setBalance] = useState<number | undefined>();
 
   const [hasUnisat, setHasUnisat] = useState<boolean>(false);
@@ -353,12 +360,12 @@ const LaserEyesProvider = ({
         | typeof PHANTOM
         | typeof WIZZ
         | undefined;
-      if (defaultWallet) {
+      if (defaultWallet && !address) {
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
     }
-  }, [isInitializing]);
+  }, [isInitializing, address]);
 
   const connectUnisat = useCallback(async () => {
     try {

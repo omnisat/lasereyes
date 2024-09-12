@@ -616,16 +616,22 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = (0, import_react.useState)(null);
-  const [provider, setProvider] = (0, import_react.useState)();
+  const [library, setLibrary] = (0, import_usehooks_ts.useLocalStorage)("library", null);
+  const [provider, setProvider] = (0, import_usehooks_ts.useLocalStorage)("provider", void 0);
   const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
-  const [connected, setConnected] = (0, import_react.useState)(false);
+  const [connected, setConnected] = (0, import_usehooks_ts.useLocalStorage)("connected", false);
   const [isConnecting, setIsConnecting] = (0, import_react.useState)(false);
   const [accounts, setAccounts] = (0, import_react.useState)([]);
-  const [publicKey, setPublicKey] = (0, import_react.useState)("");
-  const [paymentPublicKey, setPaymentPublicKey] = (0, import_react.useState)("");
-  const [address2, setAddress] = (0, import_react.useState)("");
-  const [paymentAddress, setPaymentAddress] = (0, import_react.useState)("");
+  const [publicKey, setPublicKey] = (0, import_usehooks_ts.useLocalStorage)("publicKey", "");
+  const [paymentPublicKey, setPaymentPublicKey] = (0, import_usehooks_ts.useLocalStorage)(
+    "paymentPublicKey",
+    ""
+  );
+  const [address2, setAddress] = (0, import_usehooks_ts.useLocalStorage)("address", "");
+  const [paymentAddress, setPaymentAddress] = (0, import_usehooks_ts.useLocalStorage)(
+    "paymentAddress",
+    ""
+  );
   const [balance, setBalance] = (0, import_react.useState)();
   const [hasUnisat, setHasUnisat] = (0, import_react.useState)(false);
   const [hasXverse, setHasXverse] = (0, import_react.useState)(false);
@@ -804,12 +810,12 @@ var LaserEyesProvider = ({
       const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
         LOCAL_STORAGE_DEFAULT_WALLET
       );
-      if (defaultWallet) {
+      if (defaultWallet && !address2) {
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
     }
-  }, [isInitializing]);
+  }, [isInitializing, address2]);
   const connectUnisat = (0, import_react.useCallback)(() => __async(void 0, null, function* () {
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
