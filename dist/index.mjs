@@ -1583,15 +1583,19 @@ var LaserEyesProvider = ({
         try {
           for (var iter = __forAwait(inputs), more, temp, error; more = !(temp = yield iter.next()).done; more = false) {
             let input = temp.value;
-            const { script } = input.witnessUtxo;
-            const addressFromScript = fromOutputScript(
-              script,
-              getBitcoinNetwork(network)
-            );
-            if (addressFromScript === paymentAddress) {
+            if (input.witnessUtxo === void 0) {
               paymentsAddressData.signingIndexes.push(Number(counter));
-            } else if (addressFromScript === address2) {
-              ordinalAddressData.signingIndexes.push(Number(counter));
+            } else {
+              const { script } = input.witnessUtxo;
+              const addressFromScript = fromOutputScript(
+                script,
+                getBitcoinNetwork(network)
+              );
+              if (addressFromScript === paymentAddress) {
+                paymentsAddressData.signingIndexes.push(Number(counter));
+              } else if (addressFromScript === address2) {
+                ordinalAddressData.signingIndexes.push(Number(counter));
+              }
             }
             counter++;
           }

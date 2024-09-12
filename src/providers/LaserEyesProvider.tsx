@@ -1341,17 +1341,21 @@ const LaserEyesProvider = ({
 
         let counter = 0;
         for await (let input of inputs) {
-          const { script } = input.witnessUtxo!;
-          const addressFromScript = fromOutputScript(
-            script,
-            getBitcoinNetwork(network)
-          );
-
-          if (addressFromScript === paymentAddress) {
+          if (input.witnessUtxo === undefined) {
             paymentsAddressData.signingIndexes.push(Number(counter));
-          } else if (addressFromScript === address) {
-            ordinalAddressData.signingIndexes.push(Number(counter));
+          } else {
+            const { script } = input.witnessUtxo!;
+            const addressFromScript = fromOutputScript(
+              script,
+              getBitcoinNetwork(network)
+            );
+            if (addressFromScript === paymentAddress) {
+              paymentsAddressData.signingIndexes.push(Number(counter));
+            } else if (addressFromScript === address) {
+              ordinalAddressData.signingIndexes.push(Number(counter));
+            }
           }
+
           counter++;
         }
 

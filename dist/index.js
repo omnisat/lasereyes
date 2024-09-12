@@ -352,7 +352,7 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = require("react");
+var import_react = _toESM(require("react"));
 var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
@@ -423,7 +423,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = require("usehooks-ts");
+var import_usehooks_ts = _toESM(require("usehooks-ts"));
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -600,10 +600,10 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = require("sats-connect");
-var import_address = require("bitcoinjs-lib/src/address");
+var import_sats_connect = _toESM(require("sats-connect"));
+var import_address = _toESM(require("bitcoinjs-lib/src/address"));
 var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = require("react/jsx-runtime");
+var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
@@ -1678,15 +1678,19 @@ var LaserEyesProvider = ({
         try {
           for (var iter = __forAwait(inputs), more, temp, error; more = !(temp = yield iter.next()).done; more = false) {
             let input = temp.value;
-            const { script } = input.witnessUtxo;
-            const addressFromScript = (0, import_address.fromOutputScript)(
-              script,
-              getBitcoinNetwork(network)
-            );
-            if (addressFromScript === paymentAddress) {
+            if (input.witnessUtxo === void 0) {
               paymentsAddressData.signingIndexes.push(Number(counter));
-            } else if (addressFromScript === address2) {
-              ordinalAddressData.signingIndexes.push(Number(counter));
+            } else {
+              const { script } = input.witnessUtxo;
+              const addressFromScript = (0, import_address.fromOutputScript)(
+                script,
+                getBitcoinNetwork(network)
+              );
+              if (addressFromScript === paymentAddress) {
+                paymentsAddressData.signingIndexes.push(Number(counter));
+              } else if (addressFromScript === address2) {
+                ordinalAddressData.signingIndexes.push(Number(counter));
+              }
             }
             counter++;
           }
@@ -2005,7 +2009,7 @@ var LaserEyesProvider = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2085,7 +2089,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2145,7 +2149,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2227,7 +2231,7 @@ var PhantomLogo = (_a) => {
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2279,7 +2283,7 @@ var XverseLogo = (_a) => {
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2391,7 +2395,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2462,7 +2466,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2504,7 +2508,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2577,7 +2581,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
 var WalletIcon = ({
   size,
   className,
