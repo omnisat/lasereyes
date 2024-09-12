@@ -741,7 +741,7 @@ const LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(undefined);
-    setLibrary(null);
+    setLibrary({});
     setConnected(false);
     setBalance(undefined);
     localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);

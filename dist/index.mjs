@@ -1038,7 +1038,7 @@ var LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(void 0);
-    setLibrary(null);
+    setLibrary({});
     setConnected(false);
     setBalance(void 0);
     localStorage == null ? void 0 : localStorage.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
