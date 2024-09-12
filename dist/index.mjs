@@ -711,6 +711,7 @@ var LaserEyesProvider = ({
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = window.unisat;
+      setLibrary(lib);
       const unisatAccounts = yield lib.requestAccounts();
       if (!unisatAccounts)
         throw new Error("No accounts found");
@@ -722,7 +723,6 @@ var LaserEyesProvider = ({
       setPaymentAddress(unisatAccounts[0]);
       setPublicKey(unisatPubKey);
       setPaymentPublicKey(unisatPubKey);
-      setLibrary(lib);
       yield getNetwork().then((network2) => {
         if (config.network !== network2) {
           switchNetwork(network2);
@@ -1448,81 +1448,86 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-  const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
-    var _a;
-    try {
-      if (!library)
-        return;
-      if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.signMessage(message);
-      } else if (provider === XVERSE) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = yield request("signMessage", {
-          address: tempAddy,
-          message
-        });
-        if (response.status === "success") {
-          return response.result.signature;
-        } else {
-          if (response.error.code === RpcErrorCode.USER_REJECTION) {
-            throw new Error("User rejected the request");
-          } else {
-            throw new Error("Error signing message: " + response.error.message);
-          }
-        }
-      } else if (provider === OYL) {
-        const tempAddy = toSignAddress || paymentAddress;
-        return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
-      } else if (provider === MAGIC_EDEN) {
-        const tempAddy = toSignAddress || paymentAddress;
-        let signedMessage;
-        yield signMessageSatsConnect({
-          getProvider: () => __async(void 0, null, function* () {
-            return window.magicEden.bitcoin;
-          }),
-          payload: {
-            network: {
-              type: BitcoinNetworkType.Mainnet
-            },
+  const signMessage = useCallback(
+    (message, toSignAddress) => __async(void 0, null, function* () {
+      var _a;
+      try {
+        if (!library)
+          return;
+        if (provider === UNISAT) {
+          return yield library == null ? void 0 : library.signMessage(message);
+        } else if (provider === XVERSE) {
+          const tempAddy = toSignAddress || paymentAddress;
+          const response = yield request("signMessage", {
             address: tempAddy,
-            message,
-            protocol: MessageSigningProtocols.BIP322
-          },
-          onFinish: (response) => {
-            signedMessage = response;
-          },
-          onCancel: () => {
-            alert("Request canceled");
+            message
+          });
+          if (response.status === "success") {
+            return response.result.signature;
+          } else {
+            if (response.error.code === RpcErrorCode.USER_REJECTION) {
+              throw new Error("User rejected the request");
+            } else {
+              throw new Error(
+                "Error signing message: " + response.error.message
+              );
+            }
           }
-        });
-        return signedMessage;
-      } else if (provider === OKX) {
-        return yield library == null ? void 0 : library.signMessage(message);
-      } else if (provider === LEATHER) {
-        const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
-        if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
-          throw new Error("Invalid address to sign message");
+        } else if (provider === OYL) {
+          const tempAddy = toSignAddress || paymentAddress;
+          return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
+        } else if (provider === MAGIC_EDEN) {
+          const tempAddy = toSignAddress || paymentAddress;
+          let signedMessage;
+          yield signMessageSatsConnect({
+            getProvider: () => __async(void 0, null, function* () {
+              return window.magicEden.bitcoin;
+            }),
+            payload: {
+              network: {
+                type: BitcoinNetworkType.Mainnet
+              },
+              address: tempAddy,
+              message,
+              protocol: MessageSigningProtocols.BIP322
+            },
+            onFinish: (response) => {
+              signedMessage = response;
+            },
+            onCancel: () => {
+              alert("Request canceled");
+            }
+          });
+          return signedMessage;
+        } else if (provider === OKX) {
+          return yield library == null ? void 0 : library.signMessage(message);
+        } else if (provider === LEATHER) {
+          const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
+          if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
+            throw new Error("Invalid address to sign message");
+          }
+          const signed = yield library == null ? void 0 : library.request("signMessage", {
+            message,
+            paymentType
+          });
+          return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
+        } else if (provider === PHANTOM) {
+          const utf8Bytes = new TextEncoder().encode(message);
+          const uintArray = new Uint8Array(utf8Bytes);
+          const response = yield library == null ? void 0 : library.signMessage(address2, uintArray);
+          const binaryString = String.fromCharCode(...response.signature);
+          return btoa(binaryString);
+        } else if (provider === WIZZ) {
+          return yield library == null ? void 0 : library.signMessage(message);
+        } else {
+          throw new Error("The connected wallet doesn't support this method..");
         }
-        const signed = yield library == null ? void 0 : library.request("signMessage", {
-          message,
-          paymentType
-        });
-        return (_a = signed == null ? void 0 : signed.result) == null ? void 0 : _a.signature;
-      } else if (provider === PHANTOM) {
-        const utf8Bytes = new TextEncoder().encode(message);
-        const uintArray = new Uint8Array(utf8Bytes);
-        const response = yield library == null ? void 0 : library.signMessage(address2, uintArray);
-        const binaryString = String.fromCharCode(...response.signature);
-        return btoa(binaryString);
-      } else if (provider === WIZZ) {
-        return yield library == null ? void 0 : library.signMessage(message);
-      } else {
-        throw new Error("The connected wallet doesn't support this method..");
+      } catch (error) {
+        throw error;
       }
-    } catch (error) {
-      throw error;
-    }
-  });
+    }),
+    [library, address2, paymentAddress]
+  );
   const signPsbt = (psbt, finalize = false, broadcast = false) => __async(void 0, null, function* () {
     try {
       let psbtHex, psbtBase64;
