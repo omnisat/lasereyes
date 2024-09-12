@@ -888,19 +888,16 @@ var LaserEyesProvider = ({
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
       const lib = window.oyl;
-      const result = yield lib.requestAccounts();
-      const oylPubKey = yield lib.getPublicKey();
-      setPaymentPublicKey(oylPubKey);
-      setAccounts(result);
-      setAddress(result[0]);
-      setPaymentAddress(result[1]);
+      const { nativeSegwit, taproot } = yield lib.getAddresses();
+      setAddress(taproot.address);
+      setPublicKey(taproot.publicKey);
+      setPaymentPublicKey(nativeSegwit.publicKey);
+      setPaymentAddress(nativeSegwit.address);
       setLibrary(lib);
       setProvider(OYL);
-      handleAccountsChanged(result);
       setConnected(true);
-      getBTCBalance(result[1], network).then((totalBalance) => {
-        setBalance(totalBalance);
-      });
+      const balance2 = yield lib == null ? void 0 : lib.getBalance();
+      setBalance(balance2 == null ? void 0 : balance2.total);
     } catch (error) {
       throw new Error(`Can't lasereyes to ${OYL} wallet`);
     }
@@ -1394,9 +1391,9 @@ var LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === OYL) {
-        const balanceResponse = yield library.getBalance();
-        const bal = balanceResponse.btc.total * 1e8;
-        setBalance(bal);
+        const bal = yield library.getBalance();
+        setBalance(bal.total);
+        return bal.total;
         return bal;
       } else if (provider === MAGIC_EDEN) {
         const bal = yield getBTCBalance(paymentAddress, network);
@@ -1476,7 +1473,7 @@ var LaserEyesProvider = ({
           }
         }
       } else if (provider === OYL) {
-        const { psbtHex, psbtBase64 } = yield createSendBtcPsbt(
+        const { psbtHex } = yield createSendBtcPsbt(
           address2,
           paymentAddress,
           to,
@@ -1575,7 +1572,11 @@ var LaserEyesProvider = ({
         }
       } else if (provider === OYL) {
         const tempAddy = toSignAddress || paymentAddress;
-        return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
+        const response = yield library == null ? void 0 : library.signMessage({
+          address: tempAddy,
+          message
+        });
+        return response.signature;
       } else if (provider === MAGIC_EDEN) {
         const tempAddy = toSignAddress || paymentAddress;
         let signedMessage;
@@ -1741,22 +1742,17 @@ var LaserEyesProvider = ({
           txId
         };
       } else if (provider === OYL) {
-        const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, true, true);
-        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
-        if (broadcast) {
-          const txId = yield pushPsbt(psbtSignedPsbt.toHex());
-          return {
-            signedPsbtHex: psbtSignedPsbt.toHex(),
-            signedPsbtBase64: psbtSignedPsbt.toBase64(),
-            txId
-          };
-        } else {
-          return {
-            signedPsbtHex: psbtSignedPsbt.toHex(),
-            signedPsbtBase64: psbtSignedPsbt.toBase64(),
-            txId: void 0
-          };
-        }
+        const { psbt: psbt2, txid } = yield library == null ? void 0 : library.signPsbt({
+          psbt: psbtHex,
+          finalize,
+          broadcast
+        });
+        const psbtSignedPsbt = bitcoin2.Psbt.fromHex(psbt2);
+        return {
+          signedPsbtHex: psbtSignedPsbt.toHex(),
+          signedPsbtBase64: psbtSignedPsbt.toBase64(),
+          txId: txid
+        };
       } else if (provider === MAGIC_EDEN) {
         const toSignPsbt = bitcoin2.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network)
