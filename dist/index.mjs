@@ -521,7 +521,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = useLocalStorage("library", null);
+  const [library, setLibrary] = useLocalStorage("library", {});
   const [provider, setProvider] = useLocalStorage("provider", void 0);
   const [isInitializing, setIsInitializing] = useState(true);
   const [connected, setConnected] = useLocalStorage("connected", false);

@@ -616,7 +616,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = (0, import_usehooks_ts.useLocalStorage)("library", null);
+  const [library, setLibrary] = (0, import_usehooks_ts.useLocalStorage)("library", {});
   const [provider, setProvider] = (0, import_usehooks_ts.useLocalStorage)("provider", void 0);
   const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
   const [connected, setConnected] = (0, import_usehooks_ts.useLocalStorage)("connected", false);
