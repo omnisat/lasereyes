@@ -1643,7 +1643,8 @@ var LaserEyesProvider = ({
         throw new Error("Invalid PSBT format");
       }
       if (provider === UNISAT) {
-        const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
+        const lib = window.unisat;
+        const signedPsbt = yield lib == null ? void 0 : lib.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
         const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);

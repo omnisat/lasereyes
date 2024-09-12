@@ -1318,7 +1318,9 @@ const LaserEyesProvider = ({
       }
 
       if (provider === UNISAT) {
-        const signedPsbt = await library?.signPsbt(psbtHex, {
+        const lib = (window as any).unisat;
+
+        const signedPsbt = await lib?.signPsbt(psbtHex, {
           autoFinalized: finalize,
         });
 
