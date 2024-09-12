@@ -548,7 +548,7 @@ var LaserEyesProvider = ({
   const [hasWizz, setHasWizz] = useState(false);
   const [network, setNetwork] = useLocalStorage("network", (config == null ? void 0 : config.network) || MAINNET);
   useEffect(() => {
-    if (config && config.network) {
+    if (config && config.network && library) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
@@ -560,7 +560,7 @@ var LaserEyesProvider = ({
         }
       });
     }
-  }, [config]);
+  }, [config, library]);
   const checkInitializationComplete = () => {
     if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
       setIsInitializing(false);
@@ -1160,7 +1160,8 @@ var LaserEyesProvider = ({
     var _a, _b;
     try {
       if (provider === UNISAT) {
-        const unisatNetwork = yield library == null ? void 0 : library.getChain();
+        const lib = window.unisat;
+        const unisatNetwork = yield lib == null ? void 0 : lib.getChain();
         if (!unisatNetwork) {
           return (_a = config == null ? void 0 : config.network) != null ? _a : MAINNET;
         }
@@ -1236,9 +1237,10 @@ var LaserEyesProvider = ({
       if (!library)
         return;
       if (provider === UNISAT) {
+        const lib = window.unisat;
         const wantedNetwork = getUnisatNetwork(network2);
         console.log("wantedNetwork", wantedNetwork);
-        yield library == null ? void 0 : library.switchChain(wantedNetwork);
+        yield lib == null ? void 0 : lib.switchChain(wantedNetwork);
         setNetwork(network2);
         yield getBalance();
       } else if (provider === WIZZ) {

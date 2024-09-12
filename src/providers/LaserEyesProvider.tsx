@@ -143,7 +143,7 @@ const LaserEyesProvider = ({
   >("network", config?.network || MAINNET);
 
   useEffect(() => {
-    if (config && config.network) {
+    if (config && config.network && library) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
@@ -155,7 +155,7 @@ const LaserEyesProvider = ({
         }
       });
     }
-  }, [config]);
+  }, [config, library]);
 
   const checkInitializationComplete = () => {
     if (
@@ -906,7 +906,8 @@ const LaserEyesProvider = ({
   const getNetwork = useCallback(async () => {
     try {
       if (provider === UNISAT) {
-        const unisatNetwork = (await library?.getChain()) as {
+        const lib = (window as any).unisat;
+        const unisatNetwork = (await lib?.getChain()) as {
           enum: string;
           name: string;
           network: string;
@@ -1006,9 +1007,10 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
+        const lib = (window as any).unisat;
         const wantedNetwork = getUnisatNetwork(network);
         console.log("wantedNetwork", wantedNetwork);
-        await library?.switchChain(wantedNetwork);
+        await lib?.switchChain(wantedNetwork);
         setNetwork(network);
         await getBalance();
       } else if (provider === WIZZ) {
