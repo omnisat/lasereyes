@@ -330,21 +330,21 @@ const LaserEyesProvider = ({
     setBalance(undefined);
   }, [network]);
 
-  useEffect(() => {
-    if (provider !== UNISAT && provider !== WIZZ && !library) {
-      return;
-    }
-
-    library.getAccounts().then((accounts: string[]) => {
-      handleAccountsChanged(accounts);
-    });
-    library.on("accountsChanged", handleAccountsChanged);
-    library.on("networkChanged", handleNetworkChanged);
-    return () => {
-      library.removeListener("accountsChanged", handleAccountsChanged);
-      library.removeListener("networkChanged", handleNetworkChanged);
-    };
-  }, [library]);
+  // useEffect(() => {
+  //   if (provider !== UNISAT && provider !== WIZZ && !library) {
+  //     return;
+  //   }
+  //
+  //   library.getAccounts().then((accounts: string[]) => {
+  //     handleAccountsChanged(accounts);
+  //   });
+  //   library.on("accountsChanged", handleAccountsChanged);
+  //   library.on("networkChanged", handleNetworkChanged);
+  //   return () => {
+  //     library.removeListener("accountsChanged", handleAccountsChanged);
+  //     library.removeListener("networkChanged", handleNetworkChanged);
+  //   };
+  // }, [library]);
 
   useEffect(() => {
     if (!isInitializing) {
