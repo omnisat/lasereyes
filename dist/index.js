@@ -1552,7 +1552,8 @@ var LaserEyesProvider = ({
         if (!library)
           return;
         if (provider === UNISAT) {
-          return yield library == null ? void 0 : library.signMessage(message);
+          const lib = window.unisat;
+          return yield lib == null ? void 0 : lib.signMessage(message);
         } else if (provider === XVERSE) {
           const tempAddy = toSignAddress || paymentAddress;
           const response = yield (0, import_sats_connect.request)("signMessage", {
