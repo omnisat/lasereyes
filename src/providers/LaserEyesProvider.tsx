@@ -151,7 +151,9 @@ const LaserEyesProvider = ({
             switchNetwork(network);
           }
         } catch (e) {
-          disconnect();
+          if (provider !== XVERSE) {
+            disconnect();
+          }
         }
       });
     }
