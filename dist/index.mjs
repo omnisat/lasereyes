@@ -699,6 +699,21 @@ var LaserEyesProvider = ({
     setBalance(void 0);
   }, [network]);
   useEffect(() => {
+    if (provider !== UNISAT && provider !== WIZZ && !library) {
+      return;
+    }
+    const lib = window.unisat;
+    lib.getAccounts().then((accounts2) => {
+      handleAccountsChanged(accounts2);
+    });
+    lib.on("accountsChanged", handleAccountsChanged);
+    lib.on("networkChanged", handleNetworkChanged);
+    return () => {
+      lib.removeListener("accountsChanged", handleAccountsChanged);
+      lib.removeListener("networkChanged", handleNetworkChanged);
+    };
+  }, [provider, address2]);
+  useEffect(() => {
     if (!isInitializing) {
       const defaultWallet = localStorage == null ? void 0 : localStorage.getItem(
         LOCAL_STORAGE_DEFAULT_WALLET
