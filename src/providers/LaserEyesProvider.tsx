@@ -148,12 +148,12 @@ const LaserEyesProvider = ({
       getNetwork().then((foundNetwork) => {
         try {
           if (config.network !== foundNetwork) {
-            switchNetwork(network);
+            if (provider !== XVERSE) {
+              switchNetwork(network);
+            }
           }
         } catch (e) {
-          if (provider !== XVERSE) {
-            disconnect();
-          }
+          disconnect();
         }
       });
     }
