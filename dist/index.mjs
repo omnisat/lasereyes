@@ -702,7 +702,7 @@ var LaserEyesProvider = ({
     if (provider !== UNISAT && provider !== WIZZ && !library) {
       return;
     }
-    const lib = window.unisat;
+    const lib = provider === WIZZ ? window.wizz : window.unisat;
     lib.getAccounts().then((accounts2) => {
       handleAccountsChanged(accounts2);
     });
@@ -1165,7 +1165,8 @@ var LaserEyesProvider = ({
         );
         return phantomAccountsParsed;
       } else if (provider === WIZZ) {
-        return yield library.requestAccounts();
+        const lib = window.wizz;
+        return yield lib.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1241,7 +1242,8 @@ var LaserEyesProvider = ({
         }
         return MAINNET;
       } else if (provider === WIZZ) {
-        const wizzNetwork = yield library == null ? void 0 : library.getNetwork();
+        const lib = window.wizz;
+        const wizzNetwork = yield lib == null ? void 0 : lib.getNetwork();
         return getNetworkForWizz(wizzNetwork);
       }
       return (_b = config == null ? void 0 : config.network) != null ? _b : MAINNET;
@@ -1261,11 +1263,12 @@ var LaserEyesProvider = ({
         setNetwork(network2);
         yield getBalance();
       } else if (provider === WIZZ) {
+        const lib = window.wizz;
         if (network2 === FRACTAL_TESTNET || network2 === FRACTAL_MAINNET) {
-          return yield library.switchNetwork(WIZZ_MAINNET);
+          return yield lib.switchNetwork(WIZZ_MAINNET);
         }
         const wantedNetwork = getNetworkForWizz(network2);
-        yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
+        yield lib == null ? void 0 : lib.switchNetwork(wantedNetwork);
         setNetwork(network2);
         yield getBalance();
       } else {
@@ -1289,7 +1292,8 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === WIZZ) {
-        return yield library == null ? void 0 : library.getPublicKey();
+        const lib = window.wizz;
+        return yield lib == null ? void 0 : lib.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1332,7 +1336,8 @@ var LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === WIZZ) {
-        const balanceResponse = yield library.getBalance();
+        const lib = window.wizz;
+        const balanceResponse = yield lib.getBalance();
         const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
@@ -1352,7 +1357,8 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library.getInscriptions(0, 10);
       } else if (provider === WIZZ) {
-        return yield library.getInscriptions(0, 10);
+        const lib = window.wizz;
+        return yield lib.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1539,7 +1545,8 @@ var LaserEyesProvider = ({
           const binaryString = String.fromCharCode(...response.signature);
           return btoa(binaryString);
         } else if (provider === WIZZ) {
-          return yield library == null ? void 0 : library.signMessage(message);
+          const lib = window.wizz;
+          return yield lib == null ? void 0 : lib.signMessage(message);
         } else {
           throw new Error("The connected wallet doesn't support this method..");
         }
@@ -1839,7 +1846,8 @@ var LaserEyesProvider = ({
           };
         }
       } else if (provider === WIZZ) {
-        const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
+        const lib = window.wizz;
+        const signedPsbt = yield lib == null ? void 0 : lib.signPsbt(psbtHex, {
           autoFinalized: finalize,
           broadcast: false
         });

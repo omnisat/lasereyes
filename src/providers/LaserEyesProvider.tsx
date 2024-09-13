@@ -337,7 +337,8 @@ const LaserEyesProvider = ({
       return;
     }
 
-    const lib = (window as any).unisat;
+    const lib =
+      provider === WIZZ ? (window as any).wizz : (window as any).unisat;
 
     lib.getAccounts().then((accounts: string[]) => {
       handleAccountsChanged(accounts);
@@ -898,7 +899,8 @@ const LaserEyesProvider = ({
         );
         return phantomAccountsParsed;
       } else if (provider === WIZZ) {
-        return await library.requestAccounts();
+        const lib = (window as any).wizz;
+        return await lib.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -987,7 +989,8 @@ const LaserEyesProvider = ({
         }
         return MAINNET;
       } else if (provider === WIZZ) {
-        const wizzNetwork = await library?.getNetwork();
+        const lib = (window as any).wizz;
+        const wizzNetwork = await lib?.getNetwork();
         return getNetworkForWizz(wizzNetwork) as
           | typeof MAINNET
           | typeof TESTNET;
@@ -1018,12 +1021,13 @@ const LaserEyesProvider = ({
         setNetwork(network);
         await getBalance();
       } else if (provider === WIZZ) {
+        const lib = (window as any).wizz;
         if (network === FRACTAL_TESTNET || network === FRACTAL_MAINNET) {
-          return await library.switchNetwork(WIZZ_MAINNET);
+          return await lib.switchNetwork(WIZZ_MAINNET);
         }
 
         const wantedNetwork = getNetworkForWizz(network);
-        await library?.switchNetwork(wantedNetwork);
+        await lib?.switchNetwork(wantedNetwork);
         setNetwork(network);
         await getBalance();
       } else {
@@ -1047,7 +1051,8 @@ const LaserEyesProvider = ({
       } else if (provider === OKX) {
         return await library?.getPublicKey();
       } else if (provider === WIZZ) {
-        return await library?.getPublicKey();
+        const lib = (window as any).wizz;
+        return await lib?.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1090,7 +1095,8 @@ const LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === WIZZ) {
-        const balanceResponse: WizzBalanceResponse = await library.getBalance();
+        const lib = (window as any).wizz;
+        const balanceResponse: WizzBalanceResponse = await lib.getBalance();
         const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
@@ -1110,7 +1116,8 @@ const LaserEyesProvider = ({
       } else if (provider === OKX) {
         return await library.getInscriptions(0, 10);
       } else if (provider === WIZZ) {
-        return await library.getInscriptions(0, 10);
+        const lib = (window as any).wizz;
+        return await lib.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1292,7 +1299,8 @@ const LaserEyesProvider = ({
           const binaryString = String.fromCharCode(...response.signature);
           return btoa(binaryString);
         } else if (provider === WIZZ) {
-          return await library?.signMessage(message);
+          const lib = (window as any).wizz;
+          return await lib?.signMessage(message);
         } else {
           throw new Error("The connected wallet doesn't support this method..");
         }
@@ -1608,7 +1616,8 @@ const LaserEyesProvider = ({
           };
         }
       } else if (provider === WIZZ) {
-        const signedPsbt = await library?.signPsbt(psbtHex, {
+        const lib = (window as any).wizz;
+        const signedPsbt = await lib?.signPsbt(psbtHex, {
           autoFinalized: finalize,
           broadcast: false,
         });

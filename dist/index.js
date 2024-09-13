@@ -352,7 +352,7 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = _toESM(require("react"));
+var import_react = require("react");
 var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
@@ -423,7 +423,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = _toESM(require("usehooks-ts"));
+var import_usehooks_ts = require("usehooks-ts");
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -600,10 +600,10 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = _toESM(require("sats-connect"));
-var import_address = _toESM(require("bitcoinjs-lib/src/address"));
+var import_sats_connect = require("sats-connect");
+var import_address = require("bitcoinjs-lib/src/address");
 var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime = require("react/jsx-runtime");
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
@@ -797,7 +797,7 @@ var LaserEyesProvider = ({
     if (provider !== UNISAT && provider !== WIZZ && !library) {
       return;
     }
-    const lib = window.unisat;
+    const lib = provider === WIZZ ? window.wizz : window.unisat;
     lib.getAccounts().then((accounts2) => {
       handleAccountsChanged(accounts2);
     });
@@ -1260,7 +1260,8 @@ var LaserEyesProvider = ({
         );
         return phantomAccountsParsed;
       } else if (provider === WIZZ) {
-        return yield library.requestAccounts();
+        const lib = window.wizz;
+        return yield lib.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1336,7 +1337,8 @@ var LaserEyesProvider = ({
         }
         return MAINNET;
       } else if (provider === WIZZ) {
-        const wizzNetwork = yield library == null ? void 0 : library.getNetwork();
+        const lib = window.wizz;
+        const wizzNetwork = yield lib == null ? void 0 : lib.getNetwork();
         return getNetworkForWizz(wizzNetwork);
       }
       return (_b = config == null ? void 0 : config.network) != null ? _b : MAINNET;
@@ -1356,11 +1358,12 @@ var LaserEyesProvider = ({
         setNetwork(network2);
         yield getBalance();
       } else if (provider === WIZZ) {
+        const lib = window.wizz;
         if (network2 === FRACTAL_TESTNET || network2 === FRACTAL_MAINNET) {
-          return yield library.switchNetwork(WIZZ_MAINNET);
+          return yield lib.switchNetwork(WIZZ_MAINNET);
         }
         const wantedNetwork = getNetworkForWizz(network2);
-        yield library == null ? void 0 : library.switchNetwork(wantedNetwork);
+        yield lib == null ? void 0 : lib.switchNetwork(wantedNetwork);
         setNetwork(network2);
         yield getBalance();
       } else {
@@ -1384,7 +1387,8 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library == null ? void 0 : library.getPublicKey();
       } else if (provider === WIZZ) {
-        return yield library == null ? void 0 : library.getPublicKey();
+        const lib = window.wizz;
+        return yield lib == null ? void 0 : lib.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1427,7 +1431,8 @@ var LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === WIZZ) {
-        const balanceResponse = yield library.getBalance();
+        const lib = window.wizz;
+        const balanceResponse = yield lib.getBalance();
         const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
@@ -1447,7 +1452,8 @@ var LaserEyesProvider = ({
       } else if (provider === OKX) {
         return yield library.getInscriptions(0, 10);
       } else if (provider === WIZZ) {
-        return yield library.getInscriptions(0, 10);
+        const lib = window.wizz;
+        return yield lib.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1634,7 +1640,8 @@ var LaserEyesProvider = ({
           const binaryString = String.fromCharCode(...response.signature);
           return btoa(binaryString);
         } else if (provider === WIZZ) {
-          return yield library == null ? void 0 : library.signMessage(message);
+          const lib = window.wizz;
+          return yield lib == null ? void 0 : lib.signMessage(message);
         } else {
           throw new Error("The connected wallet doesn't support this method..");
         }
@@ -1934,7 +1941,8 @@ var LaserEyesProvider = ({
           };
         }
       } else if (provider === WIZZ) {
-        const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
+        const lib = window.wizz;
+        const signedPsbt = yield lib == null ? void 0 : lib.signPsbt(psbtHex, {
           autoFinalized: finalize,
           broadcast: false
         });
@@ -2028,7 +2036,7 @@ var LaserEyesProvider = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime2 = require("react/jsx-runtime");
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2108,7 +2116,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2168,7 +2176,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2250,7 +2258,7 @@ var PhantomLogo = (_a) => {
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime5 = require("react/jsx-runtime");
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2302,7 +2310,7 @@ var XverseLogo = (_a) => {
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2414,7 +2422,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime7 = require("react/jsx-runtime");
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2485,7 +2493,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime8 = require("react/jsx-runtime");
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2527,7 +2535,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime9 = require("react/jsx-runtime");
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2600,7 +2608,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime10 = require("react/jsx-runtime");
 var WalletIcon = ({
   size,
   className,
