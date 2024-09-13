@@ -1058,7 +1058,8 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        const bal = await library.getBalance();
+        const lib = (window as any).unisat;
+        const bal = await lib.getBalance();
         setBalance(bal.total);
         return bal.total;
       } else if (provider === XVERSE) {
