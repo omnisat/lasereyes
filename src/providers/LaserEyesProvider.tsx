@@ -1133,7 +1133,8 @@ const LaserEyesProvider = ({
         throw new Error("Amount must be an integer");
       if (!library) throw new Error("Library not found");
       if (provider === UNISAT) {
-        const txId = await library?.sendBitcoin(to, amount);
+        const lib = (window as any).unisat;
+        const txId = await lib?.sendBitcoin(to, amount);
         if (!txId) throw new Error("Transaction failed");
         return txId;
       } else if (provider === XVERSE) {
@@ -1218,7 +1219,8 @@ const LaserEyesProvider = ({
           }
         }
       } else if (provider === WIZZ) {
-        const txId = await library?.sendBitcoin(to, amount);
+        const lib = (window as any).unisat;
+        const txId = await lib?.sendBitcoin(to, amount);
         if (txId) {
           return txId;
         } else {

@@ -1376,7 +1376,8 @@ var LaserEyesProvider = ({
       if (!library)
         throw new Error("Library not found");
       if (provider === UNISAT) {
-        const txId = yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        const lib = window.unisat;
+        const txId = yield lib == null ? void 0 : lib.sendBitcoin(to, amount);
         if (!txId)
           throw new Error("Transaction failed");
         return txId;
@@ -1463,7 +1464,8 @@ var LaserEyesProvider = ({
           }
         }
       } else if (provider === WIZZ) {
-        const txId = yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        const lib = window.unisat;
+        const txId = yield lib == null ? void 0 : lib.sendBitcoin(to, amount);
         if (txId) {
           return txId;
         } else {
