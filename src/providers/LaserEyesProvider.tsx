@@ -815,7 +815,8 @@ const LaserEyesProvider = ({
     try {
       if (!library) throw new Error("No wallet connected");
       if (provider === UNISAT) {
-        return await library.requestAccounts();
+        const lib = (window as any).unisat;
+        return await lib.requestAccounts();
       } else if (provider === XVERSE) {
         const getAddressOptions = {
           payload: {
