@@ -703,7 +703,9 @@ var LaserEyesProvider = ({
       return;
     }
     const lib = provider === WIZZ ? window.wizz : window.unisat;
-    lib.getAccounts().then((accounts2) => {
+    if (!lib)
+      return;
+    lib == null ? void 0 : lib.getAccounts().then((accounts2) => {
       handleAccountsChanged(accounts2);
     });
     lib.on("accountsChanged", handleAccountsChanged);
