@@ -521,7 +521,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = useLocalStorage("library", {});
+  const [library, setLibrary] = useState({});
   const [provider, setProvider] = useLocalStorage("provider", void 0);
   const [isInitializing, setIsInitializing] = useState(true);
   const [connected, setConnected] = useLocalStorage("connected", false);
@@ -1111,8 +1111,6 @@ var LaserEyesProvider = ({
           }
         };
         return [address2];
-      } else if (provider === OYL) {
-        return yield library.requestAccounts();
       } else if (provider === OKX) {
         if (network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET) {
           return yield library.connect();
@@ -1312,7 +1310,8 @@ var LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === OYL) {
-        const bal = yield library.getBalance();
+        const lib = window == null ? void 0 : window.oyl;
+        const bal = yield lib.getBalance();
         setBalance(bal.total);
         return bal.total;
         return bal;
@@ -1471,48 +1470,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-<<<<<<< HEAD
-  const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
-    var _a;
-    try {
-      if (!library)
-        return;
-      if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.signMessage(message);
-      } else if (provider === XVERSE) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = yield request("signMessage", {
-          address: tempAddy,
-          message
-        });
-        if (response.status === "success") {
-          return response.result.signature;
-        } else {
-          if (response.error.code === RpcErrorCode.USER_REJECTION) {
-            throw new Error("User rejected the request");
-          } else {
-            throw new Error("Error signing message: " + response.error.message);
-          }
-        }
-      } else if (provider === OYL) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = yield library == null ? void 0 : library.signMessage({
-          address: tempAddy,
-          message
-        });
-        return response.signature;
-      } else if (provider === MAGIC_EDEN) {
-        const tempAddy = toSignAddress || paymentAddress;
-        let signedMessage;
-        yield signMessageSatsConnect({
-          getProvider: () => __async(void 0, null, function* () {
-            return window.magicEden.bitcoin;
-          }),
-          payload: {
-            network: {
-              type: BitcoinNetworkType.Mainnet
-            },
-=======
+  console.log(library);
   const signMessage = useCallback(
     (message, toSignAddress) => __async(void 0, null, function* () {
       var _a;
@@ -1525,7 +1483,6 @@ var LaserEyesProvider = ({
         } else if (provider === XVERSE) {
           const tempAddy = toSignAddress || paymentAddress;
           const response = yield request("signMessage", {
->>>>>>> main
             address: tempAddy,
             message
           });
@@ -1541,8 +1498,13 @@ var LaserEyesProvider = ({
             }
           }
         } else if (provider === OYL) {
+          const lib = window == null ? void 0 : window.oyl;
           const tempAddy = toSignAddress || paymentAddress;
-          return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
+          const response = yield lib == null ? void 0 : lib.signMessage({
+            address: tempAddy,
+            message
+          });
+          return response.signature;
         } else if (provider === MAGIC_EDEN) {
           const tempAddy = toSignAddress || paymentAddress;
           let signedMessage;
@@ -1716,7 +1678,8 @@ var LaserEyesProvider = ({
           txId
         };
       } else if (provider === OYL) {
-        const { psbt: psbt2, txid } = yield library == null ? void 0 : library.signPsbt({
+        const lib = window == null ? void 0 : window.oyl;
+        const { psbt: psbt2, txid } = yield lib == null ? void 0 : lib.signPsbt({
           psbt: psbtHex,
           finalize,
           broadcast
@@ -1914,7 +1877,9 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OYL) {
-        return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
+        const oylLib = window == null ? void 0 : window.oyl;
+        const response = yield oylLib.pushPsbt({ psbt });
+        return response.txid;
       } else if (provider === OKX) {
         return yield axios2.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === MAGIC_EDEN) {

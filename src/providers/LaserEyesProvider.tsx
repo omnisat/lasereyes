@@ -95,7 +95,7 @@ const LaserEyesProvider = ({
   });
   const self = selfRef.current;
 
-  const [library, setLibrary] = useLocalStorage<any>("library", {});
+  const [library, setLibrary] = useState<any>({});
   const [provider, setProvider] = useLocalStorage<
     | typeof UNISAT
     | typeof XVERSE
@@ -833,8 +833,6 @@ const LaserEyesProvider = ({
           },
         };
         return [address];
-      } else if (provider === OYL) {
-        return await library.requestAccounts();
       } else if (provider === OKX) {
         if (
           network === TESTNET ||
@@ -1070,7 +1068,8 @@ const LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === OYL) {
-        const bal = await library.getBalance();
+        const lib = (window as any)?.oyl;
+        const bal = await lib.getBalance();
         setBalance(bal.total);
         return bal.total;
         return bal;
@@ -1226,6 +1225,8 @@ const LaserEyesProvider = ({
     }
   };
 
+  console.log(library);
+
   const signMessage = useCallback(
     async (message: string, toSignAddress?: string) => {
       try {
@@ -1252,8 +1253,9 @@ const LaserEyesProvider = ({
             }
           }
         } else if (provider === OYL) {
+          const lib = (window as any)?.oyl;
           const tempAddy = toSignAddress || paymentAddress;
-          const response = await library?.signMessage({
+          const response = await lib?.signMessage({
             address: tempAddy,
             message,
           });
@@ -1437,7 +1439,8 @@ const LaserEyesProvider = ({
           txId,
         };
       } else if (provider === OYL) {
-        const { psbt, txid } = await library?.signPsbt({
+        const lib = (window as any)?.oyl;
+        const { psbt, txid } = await lib?.signPsbt({
           psbt: psbtHex,
           finalize,
           broadcast,
@@ -1649,9 +1652,9 @@ const LaserEyesProvider = ({
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
           .then((res) => res.data);
       } else if (provider === OYL) {
-        return await axios
-          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
-          .then((res) => res.data);
+        const oylLib = (window as any)?.oyl;
+        const response = await oylLib.pushPsbt({ psbt });
+        return response.txid;
       } else if (provider === OKX) {
         return await axios
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)

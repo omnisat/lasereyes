@@ -352,7 +352,7 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = require("react");
+var import_react = _toESM(require("react"));
 var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
@@ -423,7 +423,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = require("usehooks-ts");
+var import_usehooks_ts = _toESM(require("usehooks-ts"));
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -600,10 +600,10 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = require("sats-connect");
-var import_address = require("bitcoinjs-lib/src/address");
+var import_sats_connect = _toESM(require("sats-connect"));
+var import_address = _toESM(require("bitcoinjs-lib/src/address"));
 var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = require("react/jsx-runtime");
+var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
@@ -616,7 +616,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
-  const [library, setLibrary] = (0, import_usehooks_ts.useLocalStorage)("library", {});
+  const [library, setLibrary] = (0, import_react.useState)({});
   const [provider, setProvider] = (0, import_usehooks_ts.useLocalStorage)("provider", void 0);
   const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
   const [connected, setConnected] = (0, import_usehooks_ts.useLocalStorage)("connected", false);
@@ -1206,8 +1206,6 @@ var LaserEyesProvider = ({
           }
         };
         return [address2];
-      } else if (provider === OYL) {
-        return yield library.requestAccounts();
       } else if (provider === OKX) {
         if (network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET) {
           return yield library.connect();
@@ -1407,7 +1405,8 @@ var LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === OYL) {
-        const bal = yield library.getBalance();
+        const lib = window == null ? void 0 : window.oyl;
+        const bal = yield lib.getBalance();
         setBalance(bal.total);
         return bal.total;
         return bal;
@@ -1566,48 +1565,7 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
-<<<<<<< HEAD
-  const signMessage = (message, toSignAddress) => __async(void 0, null, function* () {
-    var _a;
-    try {
-      if (!library)
-        return;
-      if (provider === UNISAT) {
-        return yield library == null ? void 0 : library.signMessage(message);
-      } else if (provider === XVERSE) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = yield (0, import_sats_connect.request)("signMessage", {
-          address: tempAddy,
-          message
-        });
-        if (response.status === "success") {
-          return response.result.signature;
-        } else {
-          if (response.error.code === import_sats_connect.RpcErrorCode.USER_REJECTION) {
-            throw new Error("User rejected the request");
-          } else {
-            throw new Error("Error signing message: " + response.error.message);
-          }
-        }
-      } else if (provider === OYL) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = yield library == null ? void 0 : library.signMessage({
-          address: tempAddy,
-          message
-        });
-        return response.signature;
-      } else if (provider === MAGIC_EDEN) {
-        const tempAddy = toSignAddress || paymentAddress;
-        let signedMessage;
-        yield (0, import_sats_connect.signMessage)({
-          getProvider: () => __async(void 0, null, function* () {
-            return window.magicEden.bitcoin;
-          }),
-          payload: {
-            network: {
-              type: import_sats_connect.BitcoinNetworkType.Mainnet
-            },
-=======
+  console.log(library);
   const signMessage = (0, import_react.useCallback)(
     (message, toSignAddress) => __async(void 0, null, function* () {
       var _a;
@@ -1620,7 +1578,6 @@ var LaserEyesProvider = ({
         } else if (provider === XVERSE) {
           const tempAddy = toSignAddress || paymentAddress;
           const response = yield (0, import_sats_connect.request)("signMessage", {
->>>>>>> main
             address: tempAddy,
             message
           });
@@ -1636,8 +1593,13 @@ var LaserEyesProvider = ({
             }
           }
         } else if (provider === OYL) {
+          const lib = window == null ? void 0 : window.oyl;
           const tempAddy = toSignAddress || paymentAddress;
-          return yield library == null ? void 0 : library.signMessage(message, "bip322", tempAddy);
+          const response = yield lib == null ? void 0 : lib.signMessage({
+            address: tempAddy,
+            message
+          });
+          return response.signature;
         } else if (provider === MAGIC_EDEN) {
           const tempAddy = toSignAddress || paymentAddress;
           let signedMessage;
@@ -1811,7 +1773,8 @@ var LaserEyesProvider = ({
           txId
         };
       } else if (provider === OYL) {
-        const { psbt: psbt2, txid } = yield library == null ? void 0 : library.signPsbt({
+        const lib = window == null ? void 0 : window.oyl;
+        const { psbt: psbt2, txid } = yield lib == null ? void 0 : lib.signPsbt({
           psbt: psbtHex,
           finalize,
           broadcast
@@ -2009,7 +1972,9 @@ var LaserEyesProvider = ({
       if (provider === UNISAT) {
         return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === OYL) {
-        return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
+        const oylLib = window == null ? void 0 : window.oyl;
+        const response = yield oylLib.pushPsbt({ psbt });
+        return response.txid;
       } else if (provider === OKX) {
         return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
       } else if (provider === MAGIC_EDEN) {
@@ -2071,7 +2036,7 @@ var LaserEyesProvider = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2151,7 +2116,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2211,7 +2176,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2293,7 +2258,7 @@ var PhantomLogo = (_a) => {
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2345,7 +2310,7 @@ var XverseLogo = (_a) => {
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2457,7 +2422,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2528,7 +2493,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2570,7 +2535,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2643,7 +2608,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
 var WalletIcon = ({
   size,
   className,
