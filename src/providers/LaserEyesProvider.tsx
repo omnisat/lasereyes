@@ -95,8 +95,8 @@ const LaserEyesProvider = ({
   });
   const self = selfRef.current;
 
-  const [library, setLibrary] = useState<any>(null);
-  const [provider, setProvider] = useState<
+  const [library, setLibrary] = useLocalStorage<any>("library", {});
+  const [provider, setProvider] = useLocalStorage<
     | typeof UNISAT
     | typeof XVERSE
     | typeof OYL
@@ -106,15 +106,22 @@ const LaserEyesProvider = ({
     | typeof PHANTOM
     | typeof WIZZ
     | undefined
-  >();
+  >("provider", undefined);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useLocalStorage("connected", false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [publicKey, setPublicKey] = useState<string>("");
-  const [paymentPublicKey, setPaymentPublicKey] = useState<string>("");
-  const [address, setAddress] = useState("");
-  const [paymentAddress, setPaymentAddress] = useState("");
+  const [publicKey, setPublicKey] = useLocalStorage<string>("publicKey", "");
+  const [paymentPublicKey, setPaymentPublicKey] = useLocalStorage<string>(
+    "paymentPublicKey",
+    ""
+  );
+  const [address, setAddress] = useLocalStorage("address", "");
+
+  const [paymentAddress, setPaymentAddress] = useLocalStorage(
+    "paymentAddress",
+    ""
+  );
   const [balance, setBalance] = useState<number | undefined>();
 
   const [hasUnisat, setHasUnisat] = useState<boolean>(false);
@@ -136,19 +143,21 @@ const LaserEyesProvider = ({
   >("network", config?.network || MAINNET);
 
   useEffect(() => {
-    if (config && config.network) {
+    if (config && config.network && library) {
       setNetwork(config.network);
       getNetwork().then((foundNetwork) => {
         try {
           if (config.network !== foundNetwork) {
-            switchNetwork(network);
+            if (provider !== XVERSE) {
+              switchNetwork(network);
+            }
           }
         } catch (e) {
           disconnect();
         }
       });
     }
-  }, [config]);
+  }, [config, library]);
 
   const checkInitializationComplete = () => {
     if (
@@ -324,20 +333,23 @@ const LaserEyesProvider = ({
   }, [network]);
 
   useEffect(() => {
-    if (provider !== UNISAT && provider !== WIZZ) {
+    if (provider !== UNISAT && provider !== WIZZ && !library) {
       return;
     }
 
-    library.getAccounts().then((accounts: string[]) => {
+    const lib =
+      provider === WIZZ ? (window as any).wizz : (window as any).unisat;
+
+    lib.getAccounts().then((accounts: string[]) => {
       handleAccountsChanged(accounts);
     });
-    library.on("accountsChanged", handleAccountsChanged);
-    library.on("networkChanged", handleNetworkChanged);
+    lib.on("accountsChanged", handleAccountsChanged);
+    lib.on("networkChanged", handleNetworkChanged);
     return () => {
-      library.removeListener("accountsChanged", handleAccountsChanged);
-      library.removeListener("networkChanged", handleNetworkChanged);
+      lib.removeListener("accountsChanged", handleAccountsChanged);
+      lib.removeListener("networkChanged", handleNetworkChanged);
     };
-  }, [library]);
+  }, [provider, address]);
 
   useEffect(() => {
     if (!isInitializing) {
@@ -353,17 +365,18 @@ const LaserEyesProvider = ({
         | typeof PHANTOM
         | typeof WIZZ
         | undefined;
-      if (defaultWallet) {
+      if (defaultWallet && !address) {
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
     }
-  }, [isInitializing]);
+  }, [isInitializing, address]);
 
   const connectUnisat = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, UNISAT);
       const lib = (window as any).unisat;
+      setLibrary(lib);
       const unisatAccounts = await lib.requestAccounts();
       if (!unisatAccounts) throw new Error("No accounts found");
       const unisatPubKey = await lib.getPublicKey();
@@ -373,7 +386,6 @@ const LaserEyesProvider = ({
       setPaymentAddress(unisatAccounts[0]);
       setPublicKey(unisatPubKey);
       setPaymentPublicKey(unisatPubKey);
-      setLibrary(lib);
       await getNetwork().then((network) => {
         if (config!.network !== network) {
           switchNetwork(network);
@@ -730,7 +742,7 @@ const LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(undefined);
-    setLibrary(null);
+    setLibrary({});
     setConnected(false);
     setBalance(undefined);
     localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
@@ -883,7 +895,8 @@ const LaserEyesProvider = ({
         );
         return phantomAccountsParsed;
       } else if (provider === WIZZ) {
-        return await library.requestAccounts();
+        const lib = (window as any).wizz;
+        return await lib.requestAccounts();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -895,7 +908,8 @@ const LaserEyesProvider = ({
   const getNetwork = useCallback(async () => {
     try {
       if (provider === UNISAT) {
-        const unisatNetwork = (await library?.getChain()) as {
+        const lib = (window as any).unisat;
+        const unisatNetwork = (await lib?.getChain()) as {
           enum: string;
           name: string;
           network: string;
@@ -971,7 +985,8 @@ const LaserEyesProvider = ({
         }
         return MAINNET;
       } else if (provider === WIZZ) {
-        const wizzNetwork = await library?.getNetwork();
+        const lib = (window as any).wizz;
+        const wizzNetwork = await lib?.getNetwork();
         return getNetworkForWizz(wizzNetwork) as
           | typeof MAINNET
           | typeof TESTNET;
@@ -995,18 +1010,20 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
+        const lib = (window as any).unisat;
         const wantedNetwork = getUnisatNetwork(network);
         console.log("wantedNetwork", wantedNetwork);
-        await library?.switchChain(wantedNetwork);
+        await lib?.switchChain(wantedNetwork);
         setNetwork(network);
         await getBalance();
       } else if (provider === WIZZ) {
+        const lib = (window as any).wizz;
         if (network === FRACTAL_TESTNET || network === FRACTAL_MAINNET) {
-          return await library.switchNetwork(WIZZ_MAINNET);
+          return await lib.switchNetwork(WIZZ_MAINNET);
         }
 
         const wantedNetwork = getNetworkForWizz(network);
-        await library?.switchNetwork(wantedNetwork);
+        await lib?.switchNetwork(wantedNetwork);
         setNetwork(network);
         await getBalance();
       } else {
@@ -1030,7 +1047,8 @@ const LaserEyesProvider = ({
       } else if (provider === OKX) {
         return await library?.getPublicKey();
       } else if (provider === WIZZ) {
-        return await library?.getPublicKey();
+        const lib = (window as any).wizz;
+        return await lib?.getPublicKey();
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1043,7 +1061,8 @@ const LaserEyesProvider = ({
     try {
       if (!library) return;
       if (provider === UNISAT) {
-        const bal = await library.getBalance();
+        const lib = (window as any).unisat;
+        const bal = await lib.getBalance();
         setBalance(bal.total);
         return bal.total;
       } else if (provider === XVERSE) {
@@ -1072,7 +1091,8 @@ const LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === WIZZ) {
-        const balanceResponse: WizzBalanceResponse = await library.getBalance();
+        const lib = (window as any).wizz;
+        const balanceResponse: WizzBalanceResponse = await lib.getBalance();
         const bal = balanceResponse.total;
         setBalance(bal);
         return bal;
@@ -1092,7 +1112,8 @@ const LaserEyesProvider = ({
       } else if (provider === OKX) {
         return await library.getInscriptions(0, 10);
       } else if (provider === WIZZ) {
-        return await library.getInscriptions(0, 10);
+        const lib = (window as any).wizz;
+        return await lib.getInscriptions(0, 10);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -1205,83 +1226,90 @@ const LaserEyesProvider = ({
     }
   };
 
-  const signMessage = async (message: string, toSignAddress?: string) => {
-    try {
-      if (!library) return;
-      if (provider === UNISAT) {
-        return await library?.signMessage(message);
-      } else if (provider === XVERSE) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = await request("signMessage", {
-          address: tempAddy,
-          message,
-        });
-
-        if (response.status === "success") {
-          return response.result.signature as string;
-        } else {
-          if (response.error.code === RpcErrorCode.USER_REJECTION) {
-            throw new Error("User rejected the request");
-          } else {
-            throw new Error("Error signing message: " + response.error.message);
-          }
-        }
-      } else if (provider === OYL) {
-        const tempAddy = toSignAddress || paymentAddress;
-        const response = await library?.signMessage({
-          address: tempAddy,
-          message,
-        });
-        return response.signature;
-      } else if (provider === MAGIC_EDEN) {
-        const tempAddy = toSignAddress || paymentAddress;
-        let signedMessage;
-        await signMessageSatsConnect({
-          getProvider: async () => (window as any).magicEden.bitcoin,
-          payload: {
-            network: {
-              type: BitcoinNetworkType.Mainnet,
-            },
+  const signMessage = useCallback(
+    async (message: string, toSignAddress?: string) => {
+      try {
+        if (!library) return;
+        if (provider === UNISAT) {
+          const lib = (window as any).unisat;
+          return await lib?.signMessage(message);
+        } else if (provider === XVERSE) {
+          const tempAddy = toSignAddress || paymentAddress;
+          const response = await request("signMessage", {
             address: tempAddy,
-            message: message,
-            protocol: MessageSigningProtocols.BIP322,
-          },
-          onFinish: (response) => {
-            signedMessage = response;
-          },
-          onCancel: () => {
-            alert("Request canceled");
-          },
-        });
-        return signedMessage;
-      } else if (provider === OKX) {
-        return await library?.signMessage(message);
-      } else if (provider === LEATHER) {
-        const paymentType = toSignAddress === address ? P2TR : P2WPKH;
-        if (toSignAddress !== address && toSignAddress !== paymentAddress) {
-          throw new Error("Invalid address to sign message");
-        }
+            message,
+          });
 
-        const signed = await library?.request("signMessage", {
-          message: message,
-          paymentType,
-        });
-        return signed?.result?.signature;
-      } else if (provider === PHANTOM) {
-        const utf8Bytes = new TextEncoder().encode(message);
-        const uintArray = new Uint8Array(utf8Bytes);
-        const response = await library?.signMessage(address, uintArray);
-        const binaryString = String.fromCharCode(...response.signature);
-        return btoa(binaryString);
-      } else if (provider === WIZZ) {
-        return await library?.signMessage(message);
-      } else {
-        throw new Error("The connected wallet doesn't support this method..");
+          if (response.status === "success") {
+            return response.result.signature as string;
+          } else {
+            if (response.error.code === RpcErrorCode.USER_REJECTION) {
+              throw new Error("User rejected the request");
+            } else {
+              throw new Error(
+                "Error signing message: " + response.error.message
+              );
+            }
+          }
+        } else if (provider === OYL) {
+          const tempAddy = toSignAddress || paymentAddress;
+          const response = await library?.signMessage({
+            address: tempAddy,
+            message,
+          });
+          return response.signature;
+        } else if (provider === MAGIC_EDEN) {
+          const tempAddy = toSignAddress || paymentAddress;
+          let signedMessage;
+          await signMessageSatsConnect({
+            getProvider: async () => (window as any).magicEden.bitcoin,
+            payload: {
+              network: {
+                type: BitcoinNetworkType.Mainnet,
+              },
+              address: tempAddy,
+              message: message,
+              protocol: MessageSigningProtocols.BIP322,
+            },
+            onFinish: (response) => {
+              signedMessage = response;
+            },
+            onCancel: () => {
+              alert("Request canceled");
+            },
+          });
+          return signedMessage;
+        } else if (provider === OKX) {
+          return await library?.signMessage(message);
+        } else if (provider === LEATHER) {
+          const paymentType = toSignAddress === address ? P2TR : P2WPKH;
+          if (toSignAddress !== address && toSignAddress !== paymentAddress) {
+            throw new Error("Invalid address to sign message");
+          }
+
+          const signed = await library?.request("signMessage", {
+            message: message,
+            paymentType,
+          });
+          return signed?.result?.signature;
+        } else if (provider === PHANTOM) {
+          const utf8Bytes = new TextEncoder().encode(message);
+          const uintArray = new Uint8Array(utf8Bytes);
+          const response = await library?.signMessage(address, uintArray);
+          const binaryString = String.fromCharCode(...response.signature);
+          return btoa(binaryString);
+        } else if (provider === WIZZ) {
+          const lib = (window as any).wizz;
+          return await lib?.signMessage(message);
+        } else {
+          throw new Error("The connected wallet doesn't support this method..");
+        }
+      } catch (error) {
+        throw error;
       }
-    } catch (error) {
-      throw error;
-    }
-  };
+    },
+    [library, address, paymentAddress]
+  );
 
   const signPsbt = async (
     psbt: string,
@@ -1303,7 +1331,9 @@ const LaserEyesProvider = ({
       }
 
       if (provider === UNISAT) {
-        const signedPsbt = await library?.signPsbt(psbtHex, {
+        const lib = (window as any).unisat;
+
+        const signedPsbt = await lib?.signPsbt(psbtHex, {
           autoFinalized: finalize,
         });
 
@@ -1341,17 +1371,21 @@ const LaserEyesProvider = ({
 
         let counter = 0;
         for await (let input of inputs) {
-          const { script } = input.witnessUtxo!;
-          const addressFromScript = fromOutputScript(
-            script,
-            getBitcoinNetwork(network)
-          );
-
-          if (addressFromScript === paymentAddress) {
+          if (input.witnessUtxo === undefined) {
             paymentsAddressData.signingIndexes.push(Number(counter));
-          } else if (addressFromScript === address) {
-            ordinalAddressData.signingIndexes.push(Number(counter));
+          } else {
+            const { script } = input.witnessUtxo!;
+            const addressFromScript = fromOutputScript(
+              script,
+              getBitcoinNetwork(network)
+            );
+            if (addressFromScript === paymentAddress) {
+              paymentsAddressData.signingIndexes.push(Number(counter));
+            } else if (addressFromScript === address) {
+              ordinalAddressData.signingIndexes.push(Number(counter));
+            }
           }
+
           counter++;
         }
 
@@ -1577,7 +1611,8 @@ const LaserEyesProvider = ({
           };
         }
       } else if (provider === WIZZ) {
-        const signedPsbt = await library?.signPsbt(psbtHex, {
+        const lib = (window as any).wizz;
+        const signedPsbt = await lib?.signPsbt(psbtHex, {
           autoFinalized: finalize,
           broadcast: false,
         });
