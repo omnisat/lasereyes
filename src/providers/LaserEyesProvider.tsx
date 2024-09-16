@@ -95,7 +95,7 @@ const LaserEyesProvider = ({
   });
   const self = selfRef.current;
 
-  const [library, setLibrary] = useState<any>({});
+  const [library, setLibrary] = useLocalStorage<any>("library", {});
   const [provider, setProvider] = useLocalStorage<
     | typeof UNISAT
     | typeof XVERSE
