@@ -4,6 +4,7 @@ import {
   FRACTAL_TESTNET,
   MAINNET,
   P2PKH,
+  P2SH,
   P2TR,
   P2WPKH,
   P2WSH,
@@ -32,6 +33,47 @@ export const getBtcJsNetwork = (network: string): bitcoin.networks.Network => {
     network === 'fractal_testnet'
     ? bitcoin.networks.bitcoin
     : bitcoin.networks.testnet
+}
+
+export const P2SH_P2WPKH = 'p2sh-p2wpkh'
+
+export const getAddressType = (
+  address: string,
+  network: bitcoin.Network
+): string => {
+  try {
+    const decoded = bitcoin.address.fromBase58Check(address)
+
+    // Check the address version for P2PKH or P2SH
+    if (decoded.version === network.pubKeyHash) return P2PKH
+    if (decoded.version === network.scriptHash) {
+      // It's a P2SH, but let's check if it wraps a SegWit script
+      const script = bitcoin.script.decompile(decoded.hash)
+      if (
+        script &&
+        script.length === 2 &&
+        script[0] === bitcoin.opcodes.OP_0 &&
+        script[1].length === 20
+      ) {
+        return P2SH_P2WPKH // Nested SegWit (P2SH-P2WPKH)
+      }
+      return P2SH
+    }
+  } catch (e) {
+    // If fromBase58Check fails, try Bech32 (for SegWit addresses)
+    try {
+      const decoded = bitcoin.address.fromBech32(address)
+
+      // Handle Bech32-based addresses (SegWit P2WPKH, P2WSH, P2TR)
+      if (decoded.version === 0 && decoded.data.length === 20) return P2WPKH
+      if (decoded.version === 0 && decoded.data.length === 32) return P2WSH
+      if (decoded.version === 1 && decoded.data.length === 32) return P2TR
+    } catch (e2) {
+      return 'unknown'
+    }
+  }
+
+  return 'unknown'
 }
 
 export async function createPsbt(
@@ -64,18 +106,29 @@ export async function createPsbt(
   if (!script) {
     throw new Error('Invalid output address')
   }
-
-  if (getAddressType(outputAddress) === P2PKH) {
-    const txHexResponse = await axios(
+  if (getAddressType(outputAddress, getBtcJsNetwork(network)) === P2SH) {
+    console.log('fetching tx hex')
+    const txHexResponse = await axios.get(
       `${getMempoolSpaceUrl(network)}/api/tx/${utxoWithMostValue.txid}/hex`
     )
     const txHex = txHexResponse.data
+
     psbt.addInput({
       hash: utxoWithMostValue.txid,
       index: utxoWithMostValue.vout,
       nonWitnessUtxo: Buffer.from(txHex, 'hex'),
     })
+
+    // If the address type is Nested SegWit (P2SH-P2WPKH), add redeemScript
+    // if (
+    //   getAddressType(outputAddress, getBtcJsNetwork(network)) === P2SH_P2WPKH
+    // ) {
+    console.log('adding redeem script')
+    const redeemScript = getRedeemScript(paymentPublicKey, network)
+    psbt.updateInput(0, { redeemScript })
+    // }
   } else {
+    // Handle P2PKH (legacy) with witnessUtxo
     psbt.addInput({
       hash: utxoWithMostValue.txid,
       index: utxoWithMostValue.vout,
@@ -84,11 +137,6 @@ export async function createPsbt(
         value: utxoWithMostValue.value,
       },
     })
-
-    if (getAddressType(outputAddress) === P2PKH) {
-      let redeemScript = getRedeemScript(paymentPublicKey, network)
-      psbt.updateInput(0, { redeemScript })
-    }
   }
 
   if (utxoWithMostValue.value - 546 < 1000) {
@@ -141,32 +189,32 @@ export function estimateTxSize(
   return baseTxSize + totalInputSize + totalOutputSize
 }
 
-export function getAddressType(address: string) {
-  try {
-    bitcoin.address.fromBase58Check(address)
-    return P2PKH
-  } catch (e) {}
-
-  try {
-    bitcoin.address.fromBase58Check(address)
-    return 'p2psh'
-  } catch (e) {}
-
-  try {
-    const { version, data } = bitcoin.address.fromBech32(address)
-    if (version === 0) {
-      if (data.length === 20) {
-        return P2WPKH
-      } else if (data.length === 32) {
-        return P2WSH
-      }
-    } else if (version === 1 && data.length === 32) {
-      return P2TR
-    }
-  } catch (e) {}
-
-  throw new Error('Invalid address')
-}
+// export function getAddressType(address: string) {
+//   try {
+//     bitcoin.address.fromBase58Check(address)
+//     return P2PKH
+//   } catch (e) {}
+//
+//   try {
+//     bitcoin.address.fromBase58Check(address)
+//     return 'p2psh'
+//   } catch (e) {}
+//
+//   try {
+//     const { version, data } = bitcoin.address.fromBech32(address)
+//     if (version === 0) {
+//       if (data.length === 20) {
+//         return P2WPKH
+//       } else if (data.length === 32) {
+//         return P2WSH
+//       }
+//     } else if (version === 1 && data.length === 32) {
+//       return P2TR
+//     }
+//   } catch (e) {}
+//
+//   throw new Error('Invalid address')
+// }
 
 export const getBitcoinNetwork = (
   network:
