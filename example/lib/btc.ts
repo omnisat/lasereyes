@@ -49,12 +49,7 @@ export const getAddressType = (
     if (decoded.version === network.scriptHash) {
       // It's a P2SH, but let's check if it wraps a SegWit script
       const script = bitcoin.script.decompile(decoded.hash)
-      if (
-        script &&
-        script.length === 2 &&
-        script[0] === bitcoin.opcodes.OP_0 &&
-        script[1].length === 20
-      ) {
+      if (script && script.length === 2 && script[0] === bitcoin.opcodes.OP_0) {
         return P2SH_P2WPKH // Nested SegWit (P2SH-P2WPKH)
       }
       return P2SH
