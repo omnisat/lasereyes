@@ -456,21 +456,19 @@ const LaserEyesProvider = ({
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OYL);
       const lib = (window as any).oyl;
-      const result = await lib.requestAccounts();
-      const oylPubKey = await lib.getPublicKey();
+      console.log({ lib });
+      const { nativeSegwit, taproot } = await lib.getAddresses();
 
-      setPaymentPublicKey(oylPubKey);
+      setAddress(taproot.address);
+      setPublicKey(taproot.publicKey);
+      setPaymentPublicKey(nativeSegwit.publicKey);
+      setPaymentAddress(nativeSegwit.address);
 
-      setAccounts(result);
-      setAddress(result[0]);
-      setPaymentAddress(result[1]);
       setLibrary(lib);
       setProvider(OYL);
-      handleAccountsChanged(result);
       setConnected(true);
-      getBTCBalance(result[1], network).then((totalBalance) => {
-        setBalance(totalBalance);
-      });
+      const balance = await lib?.getBalance();
+      setBalance(balance?.total);
     } catch (error) {
       throw new Error(`Can't lasereyes to ${OYL} wallet`);
     }
@@ -1077,10 +1075,10 @@ const LaserEyesProvider = ({
         setBalance(bal);
         return bal;
       } else if (provider === OYL) {
-        const balanceResponse: OYLBalanceResponse = await library.getBalance();
-        const bal = balanceResponse.btc.total * 100000000;
-        setBalance(bal);
-        return bal;
+        const lib = (window as any)?.oyl;
+        const bal = await lib.getBalance();
+        setBalance(bal.total);
+        return bal.total;
       } else if (provider === MAGIC_EDEN) {
         const bal = await getBTCBalance(paymentAddress, network);
         setBalance(bal);
@@ -1159,7 +1157,7 @@ const LaserEyesProvider = ({
           }
         }
       } else if (provider === OYL) {
-        const { psbtHex, psbtBase64 } = await createSendBtcPsbt(
+        const { psbtHex } = await createSendBtcPsbt(
           address,
           paymentAddress,
           to,
@@ -1261,8 +1259,13 @@ const LaserEyesProvider = ({
             }
           }
         } else if (provider === OYL) {
+          const lib = (window as any)?.oyl;
           const tempAddy = toSignAddress || paymentAddress;
-          return await library?.signMessage(message, "bip322", tempAddy);
+          const response = await lib?.signMessage({
+            address: tempAddy,
+            message,
+          });
+          return response.signature;
         } else if (provider === MAGIC_EDEN) {
           const tempAddy = toSignAddress || paymentAddress;
           let signedMessage;
@@ -1442,23 +1445,18 @@ const LaserEyesProvider = ({
           txId,
         };
       } else if (provider === OYL) {
-        const signedPsbt = await library?.signPsbt(psbtHex, true, true);
-        const psbtSignedPsbt = bitcoin.Psbt.fromHex(signedPsbt);
-
-        if (broadcast) {
-          const txId = await pushPsbt(psbtSignedPsbt.toHex());
-          return {
-            signedPsbtHex: psbtSignedPsbt.toHex(),
-            signedPsbtBase64: psbtSignedPsbt.toBase64(),
-            txId,
-          };
-        } else {
-          return {
-            signedPsbtHex: psbtSignedPsbt.toHex(),
-            signedPsbtBase64: psbtSignedPsbt.toBase64(),
-            txId: undefined,
-          };
-        }
+        const lib = (window as any)?.oyl;
+        const { psbt, txid } = await lib?.signPsbt({
+          psbt: psbtHex,
+          finalize,
+          broadcast,
+        });
+        const psbtSignedPsbt = bitcoin.Psbt.fromHex(psbt);
+        return {
+          signedPsbtHex: psbtSignedPsbt.toHex(),
+          signedPsbtBase64: psbtSignedPsbt.toBase64(),
+          txId: txid,
+        };
       } else if (provider === MAGIC_EDEN) {
         const toSignPsbt = bitcoin.Psbt.fromBase64(String(psbtBase64), {
           network: getBitcoinNetwork(network),
@@ -1659,9 +1657,9 @@ const LaserEyesProvider = ({
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
           .then((res) => res.data);
       } else if (provider === OYL) {
-        return await axios
-          .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
-          .then((res) => res.data);
+        const oylLib = (window as any)?.oyl;
+        const response = await oylLib.pushPsbt({ psbt });
+        return response.txid;
       } else if (provider === OKX) {
         return await axios
           .post(`${getMempoolSpaceUrl(network)}/api/tx`, psbt)
