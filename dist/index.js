@@ -1187,7 +1187,8 @@ var LaserEyesProvider = ({
       if (!library)
         throw new Error("No wallet connected");
       if (provider === UNISAT) {
-        return yield library.requestAccounts();
+        const lib = window.unisat;
+        return yield lib.requestAccounts();
       } else if (provider === XVERSE) {
         const getAddressOptions = {
           payload: {
