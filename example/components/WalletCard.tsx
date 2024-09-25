@@ -94,6 +94,8 @@ const WalletCard = ({
     switchNetwork,
   } = useLaserEyes()
 
+  console.log({ hasOrange })
+
   const [hasError, setHasError] = useState(false)
   const hasRun = useRef(false)
 
