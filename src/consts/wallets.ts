@@ -6,6 +6,7 @@ export const LEATHER = "leather";
 export const MAGIC_EDEN = "magic-eden";
 export const OKX = "okx";
 export const WIZZ = "wizz";
+export const ORANGE = "orange";
 
 export const P2TR = "p2tr";
 export const P2PKH = "p2pkh";

@@ -7,6 +7,7 @@ import {
   PHANTOM,
   UNISAT,
   OYL,
+  ORANGE,
 } from "../consts/wallets";
 import { WizzLogo } from "./wizz";
 import { XverseLogo } from "./xverse";
@@ -16,6 +17,7 @@ import { OkxLogo } from "./okx";
 import { PhantomLogo } from "./phantom";
 import { UnisatLogo } from "./unisat";
 import { OylLogo } from "./oyl";
+import OrangeLogo from "./orange";
 
 const WalletIcon = ({
   size,
@@ -34,7 +36,8 @@ const WalletIcon = ({
     | typeof OKX
     | typeof PHANTOM
     | typeof UNISAT
-    | typeof OYL;
+    | typeof OYL
+    | typeof ORANGE;
 }) => {
   if (walletName === XVERSE) {
     return <XverseLogo size={size} className={className} variant={variant} />;
@@ -54,6 +57,8 @@ const WalletIcon = ({
     return <UnisatLogo size={size} className={className} variant={variant} />;
   } else if (walletName === OYL) {
     return <OylLogo size={size} className={className} variant={variant} />;
+  } else if (walletName === ORANGE) {
+    return <OrangeLogo size={size} className={className} variant={variant} />;
   } else {
     return <LeatherLogo size={size} className={className} variant={variant} />;
   }

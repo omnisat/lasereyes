@@ -15,6 +15,7 @@ import {
   SIGNET,
   TESTNET4,
   WalletIcon,
+  ORANGE,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -84,6 +85,7 @@ const WalletCard = ({
     hasLeather,
     hasPhantom,
     hasWizz,
+    hasOrange,
     sendBTC,
     signMessage,
     signPsbt,
@@ -118,6 +120,7 @@ const WalletCard = ({
     leather: hasLeather,
     phantom: hasPhantom,
     wizz: hasWizz,
+    orange: hasOrange,
   }
 
   useEffect(() => {
@@ -190,6 +193,7 @@ const WalletCard = ({
       | typeof LEATHER
       | typeof PHANTOM
       | typeof WIZZ
+      | typeof ORANGE
   ) => {
     try {
       // @ts-ignore

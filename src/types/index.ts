@@ -36,6 +36,7 @@ export type LaserEyesContextType = {
   hasLeather: boolean;
   hasPhantom: boolean;
   hasWizz: boolean;
+  hasOrange: boolean;
 
   connect: (
     walletName:

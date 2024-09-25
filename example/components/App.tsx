@@ -36,6 +36,8 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { RxReload } from 'react-icons/rx'
+import { ORANGE } from '../../src'
+import OrangeLogo from '../../src/icons/orange'
 
 const App = ({
   setNetwork,
@@ -48,7 +50,7 @@ const App = ({
       | typeof FRACTAL_TESTNET
   ) => void
 }) => {
-  const wallets = [LEATHER, MAGIC_EDEN, OKX, OYL, UNISAT, WIZZ, XVERSE]
+  const wallets = [LEATHER, MAGIC_EDEN, OKX, ORANGE, OYL, UNISAT, WIZZ, XVERSE]
   const {
     address,
     paymentAddress,

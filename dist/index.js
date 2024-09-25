@@ -106,6 +106,9 @@ __export(src_exports, {
   OKX_TESTNET: () => OKX_TESTNET,
   OP_WALLET_MAINNET: () => OP_WALLET_MAINNET,
   OP_WALLET_TESTNET: () => OP_WALLET_TESTNET,
+  ORANGE: () => ORANGE,
+  ORANGE_MAINNET: () => ORANGE_MAINNET,
+  ORANGE_TESTNET: () => ORANGE_TESTNET,
   OYL: () => OYL,
   OkxLogo: () => OkxLogo,
   OylLogo: () => OylLogo,
@@ -159,6 +162,7 @@ __export(src_exports, {
   getNetworkForUnisat: () => getNetworkForUnisat,
   getNetworkForWizz: () => getNetworkForWizz,
   getNetworkForXverse: () => getNetworkForXverse,
+  getOrangeNetwork: () => getOrangeNetwork,
   getRedeemScript: () => getRedeemScript,
   getUnisatNetwork: () => getUnisatNetwork,
   getWizzNetwork: () => getWizzNetwork,
@@ -189,6 +193,8 @@ var WIZZ_MAINNET = "livenet";
 var WIZZ_TESTNET = "testnet";
 var WIZZ_TESTNET4 = "testnet4";
 var WIZZ_SIGNET = "signet";
+var ORANGE_MAINNET = "Mainnet";
+var ORANGE_TESTNET = "Testnet";
 var LEATHER_MAINNET = "mainnet";
 var LEATHER_TESTNET = "testnet";
 var MAINNET = "mainnet";
@@ -206,6 +212,13 @@ var getXverseNetwork = (network) => {
   if (network === SIGNET)
     return XVERSE_SIGNET;
   return XVERSE_MAINNET;
+};
+var getOrangeNetwork = (network) => {
+  if (network === MAINNET)
+    return ORANGE_MAINNET;
+  if (network === TESTNET)
+    return ORANGE_TESTNET;
+  return ORANGE_MAINNET;
 };
 var getLeatherNetwork = (network) => {
   if (network === MAINNET)
@@ -309,6 +322,7 @@ var LEATHER = "leather";
 var MAGIC_EDEN = "magic-eden";
 var OKX = "okx";
 var WIZZ = "wizz";
+var ORANGE = "orange";
 var P2TR = "p2tr";
 var P2PKH = "p2pkh";
 var P2WPKH = "p2wpkh";
@@ -366,6 +380,7 @@ var initialWalletContext = {
   hasLeather: false,
   hasPhantom: false,
   hasWizz: false,
+  hasOrange: false,
   isInitializing: true,
   connected: false,
   isConnecting: false,
@@ -601,9 +616,16 @@ function delay(ms) {
 
 // src/providers/LaserEyesProvider.tsx
 var import_sats_connect = _toESM(require("sats-connect"));
+var import_orange_connect = __toESM(require("@orangecrypto/orange-connect"));
 var import_address = _toESM(require("bitcoinjs-lib/src/address"));
 var import_axios2 = __toESM(require("axios"));
 var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
+var {
+  getAddress: getAddressOrange,
+  signMessage: signMessageOrange,
+  sendBtcTransaction: sendBtcTxOrange,
+  signTransaction: signPsbtOrange
+} = import_orange_connect.default;
 var LaserEyesContext = (0, import_react.createContext)(initialWalletContext);
 var useLaserEyes = () => {
   return (0, import_react.useContext)(LaserEyesContext);
@@ -641,6 +663,7 @@ var LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = (0, import_react.useState)(false);
   const [hasPhantom, setHasPhantom] = (0, import_react.useState)(false);
   const [hasWizz, setHasWizz] = (0, import_react.useState)(false);
+  const [hasOrange, setHasOrange] = (0, import_react.useState)(false);
   const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (config == null ? void 0 : config.network) || MAINNET);
   (0, import_react.useEffect)(() => {
     if (config && config.network && library) {
@@ -770,6 +793,19 @@ var LaserEyesProvider = ({
       const wizzLib = window == null ? void 0 : window.wizz;
       if (wizzLib) {
         setHasWizz(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  (0, import_react.useEffect)(() => {
+    const observer = new MutationObserver(() => {
+      const orangeLib = window == null ? void 0 : window.OrangeBitcoinProvider;
+      if (orangeLib) {
+        setHasOrange(true);
         observer.disconnect();
       }
     });
@@ -1095,6 +1131,45 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
+  const connectOrange = () => __async(void 0, null, function* () {
+    try {
+      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, ORANGE);
+      let orangeNetwork = getOrangeNetwork((config == null ? void 0 : config.network) || MAINNET);
+      const getAddressOptions = {
+        payload: {
+          purposes: ["ordinals", "payment"],
+          message: "Address for receiving Ordinals and payments",
+          network: {
+            type: orangeNetwork
+          }
+        },
+        onFinish: (response) => {
+          setPublicKey(String(response.addresses[0].publicKey));
+          setPaymentPublicKey(String(response.addresses[1].publicKey));
+          const foundAddress = findOrdinalsAddress(response.addresses);
+          const foundPaymentAddress = findPaymentAddress(response.addresses);
+          if (foundAddress && foundPaymentAddress) {
+            setAddress(foundAddress.address);
+            setPaymentAddress(foundPaymentAddress.address);
+            setProvider(ORANGE);
+            setLibrary(window.OrangeBitcoinProvider);
+          }
+          getBTCBalance(foundPaymentAddress.address, network).then(
+            (totalBalance) => {
+              setBalance(totalBalance);
+            }
+          );
+        },
+        onCancel: () => {
+          throw new Error(`User canceled lasereyes to ${ORANGE} wallet`);
+        }
+      };
+      yield getAddressOrange(getAddressOptions);
+      setConnected(true);
+    } catch (e) {
+      throw e;
+    }
+  });
   const connect = (walletName) => __async(void 0, null, function* () {
     setIsConnecting(true);
     try {
@@ -1116,6 +1191,8 @@ var LaserEyesProvider = ({
         yield connectPhantom();
       } else if (walletName === WIZZ) {
         yield connectWizz();
+      } else if (walletName === ORANGE) {
+        yield connectOrange();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -1341,6 +1418,19 @@ var LaserEyesProvider = ({
         const lib = window.wizz;
         const wizzNetwork = yield lib == null ? void 0 : lib.getNetwork();
         return getNetworkForWizz(wizzNetwork);
+      } else if (provider === ORANGE) {
+        if (address2.slice(0, 1) === "t") {
+          if (network === TESTNET) {
+            return TESTNET;
+          } else if (network === TESTNET4) {
+            return TESTNET4;
+          } else if (network === SIGNET) {
+            return SIGNET;
+          } else if (network === FRACTAL_TESTNET) {
+            return FRACTAL_TESTNET;
+          }
+        }
+        return MAINNET;
       }
       return (_b = config == null ? void 0 : config.network) != null ? _b : MAINNET;
     } catch (error) {
@@ -1567,6 +1657,31 @@ var LaserEyesProvider = ({
         } else {
           throw new Error("Error sending BTC");
         }
+      } else if (provider === ORANGE) {
+        let txId = "";
+        const sendBtcOptions = {
+          payload: {
+            network: {
+              type: getOrangeNetwork(network)
+            },
+            recipients: [
+              {
+                address: to,
+                amountSats: BigInt(amount)
+              }
+            ],
+            senderAddress: paymentAddress
+          },
+          onFinish: (response) => {
+            console.log(response);
+            txId = response;
+          },
+          onCancel: () => {
+            throw new Error("User canceled the request");
+          }
+        };
+        yield sendBtcTxOrange(sendBtcOptions);
+        return txId;
       }
     } catch (error) {
       throw error;
@@ -1650,6 +1765,24 @@ var LaserEyesProvider = ({
         } else if (provider === WIZZ) {
           const lib = window.wizz;
           return yield lib == null ? void 0 : lib.signMessage(message);
+        } else if (provider === ORANGE) {
+          let signature = "";
+          const tempAddy = toSignAddress || paymentAddress;
+          const signMessageOptions = {
+            payload: {
+              network: {
+                type: getOrangeNetwork(network)
+              },
+              address: tempAddy,
+              message
+            },
+            onFinish: (response) => {
+              signature = response;
+            },
+            onCancel: () => alert("Signature request canceled")
+          };
+          yield signMessageOrange(signMessageOptions);
+          return signature;
         } else {
           throw new Error("The connected wallet doesn't support this method..");
         }
@@ -1868,9 +2001,9 @@ var LaserEyesProvider = ({
             console.log("Canceled");
             throw new Error("User canceled the request");
           },
-          onError: (error3) => {
-            console.log("error", error3);
-            throw error3;
+          onError: (error4) => {
+            console.log("error", error4);
+            throw error4;
           }
         };
         yield (0, import_sats_connect.signTransaction)(signPsbtOptions);
@@ -1964,11 +2097,94 @@ var LaserEyesProvider = ({
           signedPsbtBase64: psbtSignedPsbt.toBase64(),
           txId: void 0
         };
+      } else if (provider === ORANGE) {
+        const toSignPsbt = bitcoin2.Psbt.fromBase64(String(psbtBase64), {
+          network: getBitcoinNetwork(network)
+        });
+        const inputs = toSignPsbt.data.inputs;
+        const inputsToSign = [];
+        const ordinalAddressData = {
+          address: address2,
+          signingIndexes: []
+        };
+        const paymentsAddressData = {
+          address: paymentAddress,
+          signingIndexes: []
+        };
+        let counter = 0;
+        try {
+          for (var iter3 = __forAwait(inputs), more3, temp3, error3; more3 = !(temp3 = yield iter3.next()).done; more3 = false) {
+            let input = temp3.value;
+            if (input.witnessUtxo === void 0) {
+              paymentsAddressData.signingIndexes.push(Number(counter));
+            } else {
+              const { script } = input.witnessUtxo;
+              const addressFromScript = (0, import_address.fromOutputScript)(
+                script,
+                getBitcoinNetwork(network)
+              );
+              if (addressFromScript === paymentAddress) {
+                paymentsAddressData.signingIndexes.push(Number(counter));
+              } else if (addressFromScript === address2) {
+                ordinalAddressData.signingIndexes.push(Number(counter));
+              }
+            }
+            counter++;
+          }
+        } catch (temp3) {
+          error3 = [temp3];
+        } finally {
+          try {
+            more3 && (temp3 = iter3.return) && (yield temp3.call(iter3));
+          } finally {
+            if (error3)
+              throw error3[0];
+          }
+        }
+        if (ordinalAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(ordinalAddressData);
+        }
+        if (paymentsAddressData.signingIndexes.length > 0) {
+          inputsToSign.push(paymentsAddressData);
+        }
+        let txId, signedPsbtHex, signedPsbtBase64;
+        const signPsbtOptions = {
+          payload: {
+            network: {
+              type: getOrangeNetwork(network)
+            },
+            psbtBase64: toSignPsbt.toBase64(),
+            broadcast,
+            inputsToSign
+          },
+          onFinish: (response) => {
+            console.log(response);
+            if (response.txId) {
+              txId = response.txId;
+            } else if (response.psbtBase64) {
+              const signedPsbt = bitcoin2.Psbt.fromBase64(
+                String(response.psbtBase64),
+                {
+                  network: getBitcoinNetwork(network)
+                }
+              );
+              signedPsbtHex = signedPsbt.toHex();
+              signedPsbtBase64 = signedPsbt.toBase64();
+            }
+          },
+          onCancel: () => console.log("Canceled")
+        };
+        yield signPsbtOrange(signPsbtOptions);
+        return {
+          signedPsbtHex,
+          signedPsbtBase64,
+          txId
+        };
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
-    } catch (error3) {
-      throw error3;
+    } catch (error4) {
+      throw error4;
     }
   });
   const pushPsbt = (psbt) => __async(void 0, null, function* () {
@@ -1991,6 +2207,14 @@ var LaserEyesProvider = ({
         return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, extracted.toHex()).then((res) => res.data);
       } else if (provider === WIZZ) {
         return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, psbt).then((res) => res.data);
+      } else if (provider === ORANGE) {
+        let payload = psbt;
+        if (!psbt.startsWith("02")) {
+          const psbtObj = bitcoin2.Psbt.fromHex(psbt);
+          psbtObj.finalizeAllInputs();
+          payload = psbtObj.extractTransaction().toHex();
+        }
+        return yield import_axios2.default.post(`${getMempoolSpaceUrl2(network)}/api/tx`, payload).then((res) => res.data);
       } else {
         throw new Error("The connected wallet doesn't support this method..");
       }
@@ -2022,6 +2246,7 @@ var LaserEyesProvider = ({
         hasLeather,
         hasPhantom,
         hasWizz,
+        hasOrange,
         // functions
         connect,
         disconnect,
@@ -2613,8 +2838,233 @@ var MagicEdenLogo = (_a) => {
   );
 };
 
-// src/icons/walletIcon.tsx
+// src/icons/orange.tsx
 var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
+var OrangeLogo = (_a) => {
+  var _b = _a, {
+    size = 42,
+    variant = "first",
+    className
+  } = _b, props = __objRest(_b, [
+    "size",
+    "variant",
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    "svg",
+    __spreadProps(__spreadValues({
+      xmlns: "http://www.w3.org/2000/svg",
+      xmlnsXlink: "http://www.w3.org/1999/xlink",
+      width: "42px",
+      height: "42px",
+      viewBox: "0 0 42 42"
+    }, props), {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("defs", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("clipPath", { id: "clip1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("path", { d: "M 9.433594 0 L 32.566406 0 C 37.777344 0 42 4.222656 42 9.433594 L 42 32.566406 C 42 37.777344 37.777344 42 32.566406 42 L 9.433594 42 C 4.222656 42 0 37.777344 0 32.566406 L 0 9.433594 C 0 4.222656 4.222656 0 9.433594 0 Z M 9.433594 0 " }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+            "radialGradient",
+            {
+              id: "radial0",
+              gradientUnits: "userSpaceOnUse",
+              cx: 0,
+              cy: 0,
+              fx: 0,
+              fy: 0,
+              r: 1,
+              gradientTransform: "matrix(0.000000000000001938,31.643555,-31.643555,0.000000000000001938,21,5.578125)",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  "stop",
+                  {
+                    offset: 0,
+                    style: {
+                      stopColor: "rgb(5.098039%,5.490196%,7.058824%)",
+                      stopOpacity: 1
+                    }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  "stop",
+                  {
+                    offset: 1,
+                    style: {
+                      stopColor: "rgb(0%,0%,0%)",
+                      stopOpacity: 1
+                    }
+                  }
+                )
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image91",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,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"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "filter",
+            {
+              id: "alpha",
+              filterUnits: "objectBoundingBox",
+              x: "0%",
+              y: "0%",
+              width: "100%",
+              height: "100%",
+              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                "feColorMatrix",
+                {
+                  type: "matrix",
+                  in: "SourceGraphic",
+                  values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+                }
+              )
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image170",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAACtklEQVRYhWNgGAWjYBSMglEwCkYcmGslLagZ26TedkTUMOD/H11nY2a5Sb+/sJBiBiOtHMfAwMCg73JCaNrNdN2kh/eF0eXKFXf+qZBhvfbqqMkdYsxior7zGBjUK65yXtwsbBq4/7wDNkcyMDAwdN53ZxE87KQX4tNtRIyZVA1Rc3M7ZpZn5eoNd1lVc1hCmInVJ7ov4fwRl0n38amhWoiyP3kmPbfVyfXNw0gNUhzJwMDA8D/3q1bnt2a8bqE4RFPWPhRMLPDTwxXFxIKtN84cUdFSe4VLnuwQhaVDmbBtjpQ6koGBgWHPo6d8+ORJKiIYGBDp0CgsQTXM4Dczw+9y8l2HBB4kJFEv6p2NmeVYi1m170ewcVLmLEzw6HHhye/yjU9xyRMV9XaXNnLcmHTA9slpbhNaONLtgvpfZV5TnOmTgYGIEP3LGciWdPSB/QmDu7zUcxoquNv66c6fWoZL+NQQDNFwZysdWjpS8mnzhzsL664RUoc3M9ld2sixVWiFvBz13IUC2HjqXtzv4z+jcCf/DyG1eKOeb66bnGTiCRPqOQ0Ccpjzvq3gTr5y9IviE2L14I163YZ8HsqdhQDP3hn9vf8m5tq3r+y7SHEkAwOBqH/ncPYvZU6DgEjWToYZ/8UefWbsusrwd9p3ckpevCEqdNL9E5lug4N58opvn6zy2v/iX/AZhr8nv5NrDl6H7vx0/ZXyhqBf5BisuOLXdxnTr2esH188OCdY/j15zkMAguUoX8haFclViXrEGvjsndHfn/+0bjbzSN4q56r9R5nzEICoKlQvzsrk54IreEspWDp8wdh1lZIoxgWIrusrJBTVpl6R15QSOofR1qzc+eH1kW+Pr1AjiqkCJv3+wuJszCwnwaeq23ZE1JC9Q0ktq+09/0C7axSMglEwCkbBKKA/AABq8ekilgplTAAAAABJRU5ErkJggg=="
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("mask", { id: "mask0", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("g", { filter: "url(#alpha)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image170" }) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image125",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAAEF0lEQVRYhe2WTYscVRSGn3NvVXdPzySabwQN2SlGkQgjCC4EFWMU/A+CG925EhN0JSiof8BtxC8SSVZZiK7MRjRElPwEF8Ik0z3d9XXPOS6qJhM1pHucGXHRLxRFN9Sth/d977kFCy200EILLfR/kvwXL/n69NFvs6Y56MmGjUIlsU55TK9998eT866xp6DfvHTkcm9Snop1epBkqDuNQulCHWNT9Xq/s5FOv/7rxo1Za2V7AXjhzLEv+pPy5ODm+KSoSlQDdZI5GCQVCtdcKzuuw/5V4MCsNXfV0S9feeD8YKM4vlKVq5J0kJsR3Ajq4JAcygSjBOMkbEhEl3Ky+5dGb/6wdt+91t41Ry8+f+jS8tr6M3nTHNwEjO5EBxdwQFwIAcBxcxSjqY1Q6vKs9XcMevHMka+WxtPV/mh8IqiSWwcISJdXCIFkYIB5+5/jaHJSdIJa3DPQCy8f+3w4nj7auzl6PDYq0YzMncwcCYBDkIAByaAxaBxq2/pdG6iC2ez3bRv0dg/X1p8KSfu5GcGMgBMFEBAEFyG1ewg1qB3qBJVCqU6lLbDOCbEt0AvPHbyyf219Nd7Rw+BOJrQOGnjnYrfRW/e8A0zOVJ0iQaFQK7hu1WHHoJ+9ePTKynjy8HC0cSIzpff3HhpICLc7qNbu8Mah0TbmonEKc6YJxg1MGiikBWiH1g5Bz79w7Pul9Y3Hsro+nJkykLv38E4HN11sNmO21sVJgo0E0wSlQQpCiELMg+4Y1CfFQxTN4dyULBhBWhfv1sOmm5W1Qp2c0pxSaSEVyqaNfCqCBSH2I/kg03wQZ87ze4J++uzhn8NocsJUMTcQcAOTgPtfY07eRlwlpzYo7ujitLuXBjWCx0DWjwxX8rRvf+5vXV3r7Qg01WlfXVmM6m2sgAQB6SB9K+5aodqMWWHadIDWXgnBsoDkgf4g08Ew0+u/jT++DO/MgpwJqrUNK3OkcfIAwQR1QLbibiHbmKvOvYlCqVAZ1CZoDHge6PWi5ctZWh5mcvanW/15AOcCTU5UBVOQbozkAuCdm23MlbbRFtqe5UWCMggmAoNA7EUfLGVpaZhx7tr6tgDnArUQaFyoVUjm1Or0usPuzsgLawHL7rSpRPAQyHqRwXKWloaZvXt99K8A5wINecg0hFQgWZmEQpzYQOiiT9qC1d7GnOSfPfzlxviDS8Z7O4GEOT7z3n9i/6hcr/bV0wZJRugect8aRykIEgOSBXr9aPnwdg9n7uZdA3018MapR1Y+KTaaflMlUmrnknePexQkD/Ty6P1hloZLkXPX1ncNcG5QgI+ePlSMxrVURerVlYl3oCEIsRfo92MaDqKf3QPAbYFu6sPVA1XdKEk9OEgWxXt54O0fb+V7BbjQQgsttNBC/0/9CbvrotNPsOneAAAAAElFTkSuQmCC"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image142",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAAAmklEQVRYhe2U0QqAIBAE1/7/n+tFIaQyur21aAdEX4RhDgWMMemUul7BkciZ3JopMqKXGhWcJltOzldMkS3dfhe5bOTBSGWXwF3pjxARBYSyUVFAJMsQBQSyLNF0mKKpVdlF02R/OfpGStWsonTZX4++Qa3qohVaVRfdQanqoh3hqi7KRikaGr+LslGLPh6/i7KxKBuLsvmM6AZK+AVU/UCtAQAAAABJRU5ErkJggg=="
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("mask", { id: "mask1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("g", { filter: "url(#alpha)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "rect",
+            {
+              x: 0,
+              y: 0,
+              width: 42,
+              height: 42,
+              style: {
+                fill: "rgb(0%,0%,0%)",
+                fillOpacity: 0.6,
+                stroke: "none"
+              }
+            }
+          ) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image148",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAAEI0lEQVRYhe3XTW4kuREF4I9kZqX+7B61gAFGR5CWPsucZ9zn6Sv4Ct5ZfQAv1IABuaftaUlVmWR4kZS6tPKitBjDegCRZBaT9RA/Lxi84Q1veMMbDkF6msTTPPChz28kP+NTX99+3/+MSwGuhI+47utfhETS169BNEgvCF5JPkluJZeSO8lF/+3rHtl3ncSdcCHcCpfCjXAtXpPs8ILkjeRa8kVyJ7uUkE0SknvJuz2idzgWJg3hUkNzLlxpPiBEJOlQsilI/txJnu+RI7tXJPl5TJKtZJaMwiRshdCE5lhF8141aT4LNL+IlA4jml+QnGRfFQwejE6Mso1qMplwpDl2tj6POTKZVJNs49GIwd8NPituJVfSc0gdgAFcd9d+lb1T/GpwrPhmlAyKwaKoiiy7lxTxsNX626paDDJmZ9At/hd80Q4lmt30pCErsgdFMUg2Tm1kR5IjyYlwKpwa+zOcSk40xzbdst9sMLhXDD2Ufj6UJsOe/GRniq3BHwxmG4uNbFKMFhvJICua1L+omA3mHsfJpsflieY3zZ32LG8HEf0keS/5Z0+gSTEbVWNfTZpJ6cRDUSRNqKowS7bmrh5VM/dwyKqLZ48dSPR2T3pWCsXOIPdEaibVUSe9urVKslAsmkHuKlBVG7MHA93Kt3KXrQOJ/gnfJA/dootiUIRBMqg2hp75q2WH7vjAIssDbVlUYbE1SP2cU0k93Jor0c/doqw2mCRNlrtMMQijbBRGYUDWRElSJRYWydzTsXhUjJLHfu7d4WTz8+xYspEsUo/B78KvOzo6kbyGSE2KppT9fbV/v3StuH8di+b/vuX3ge9EH4SdMAhVyF1mnsYabVXrI9QSa2bX/X2lfz8Ij8LJ69yesp+EP/bDRmHutbuqWDzFXzMXdpoZO9murlV/HWHp9WmVplk46udevMLtyV+td8roFhlUO1W2CItit+a2VJNQ1C74a9aHnWRnsFN7mZi79R+Ef4leUg8keim8F/4h/KiiShbVjNKTg6RZVHlP8Jsqm4WtpRN+tGiq0ndcam5fw6JXwifhx27RrWoy00siqxgtandz2RP8JptVs9HWbKeYHVlQewmN5y7gIKIfcd4vvb+piuTfXU/HnhBh0SxjUebaLVp7smXLJsy7MCt2dmajxb2qai6Eq9cguvY4659WyZnqV0kI30SX/8Fonmu/SDdPJaIJdRe95ofFqRmLE9Vd99LHQ2k+ydNN73cWzVfVD6sFLXaKrerR4MHkXnP/4jl4UD0abTU7T0qxhlF77p8OxP9QK8La2l6LfhNvflLdqU7Mjs0WO5Ote1uTrTOPJlt3/f1i57i7nMXfNOf9rN6JHoohWbtEIXwA4Vzq7W9yqdlKziQnXrbLT0K+Fc722uUvXUleubd/wxve8IY3/B/gP+5/MI8x65+AAAAAAElFTkSuQmCC"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("mask", { id: "mask2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("g", { filter: "url(#alpha)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "rect",
+            {
+              x: 0,
+              y: 0,
+              width: 42,
+              height: 42,
+              style: {
+                fill: "rgb(0%,0%,0%)",
+                fillOpacity: 0.701961,
+                stroke: "none"
+              }
+            }
+          ) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image154",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAAA/ElEQVRYhe2VwW7DIAxAn9M0qcSN///G3JDaFEIPwRvqoUHdWKXJT/IhMokeNiZgGIZhGIZh/EPkVTLnLGWNxvD0Ti6xAVlEtk6eDA1rBDgBZ2ACZu/9DMzleSz5lm+9zVFFh0pyrELYK5m89/dlWSIQRWT9lOipiE1VnCvRCKwaInLtJXrULj2Xdesn4EJpvXPuT1o/NqxR2Vp4YB+gLYSgki+781PeqUL+dYsGWkT1+tmAxH4uNZJzLpVc1w0ctV4lE3Dne4i+himEEEu+2x0KxxV9Fr0B1ypu3vuVvbpdRVv+TDpEGvXmdBMJ2EQkdvI0DMMwDMMwjI/yAInrT4nWGUiJAAAAAElFTkSuQmCC"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image160",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAACY0lEQVRYhe2W227iQBBEj7mFcAkbZf3/HxjtLUtCAtjeh6laN9YSDCHSPkxLrZE92BzXVPcM5MiRI0eOj0RxzZc1TeP3FcBAoxOgCWOtsSmKouFEjD4JcNgZBx3ASlmH688FFWQEHAJj5Uhp0ArYA7uQvv85oAGw6ABOgClwoxwLtBbkG/CqhNYO1wUNy+wl7QLeAjPlNIBWgnzRM9Bz2c8CPeJDL/GNAOfAIuSt5gG2AbImLfuW1hYfBz3iw4kApyT1FsBSeafraQDb6P8q0rKPNder87wL2sOHBlwIzrnU3ESvsnJb2iKL7ety0H+oOOoAzgW0HA6Hd1VVrXS90NxEz+5JBdNtUXG8HDRClmU5fnx8dKFEBVfAqqoqqzjXhxiyInnR1e7c6r576VVADWkFV8ovSvvxluRZ+24PvA0Gg+e6rn8DzjXJr1v9phfoexVnX45JKs0FdQ98BUqN97o/04c3AlwDP+u6/g58U/4Q7AvwWpblri/oUSM3TeO2MyMpeQ88CO6BpOZSH2FAL/ELSbkn4JfySfkXFKlaFMX+FGifpXcRuVc6b8Lz7okb4FkwT51cC3Cjj7F3r+JRwxrYhwz0B1vawogqRvUi4GsAdCFdbQv1i7zd7Wj36SFtA19zqOSapK4V7FZ6DdDniHcKtKHtdTv92YZUXA1JJTS34bCqnzn0oQErzjiDngPqE4/95y1wQ7s1Rm9GwK4P60sA+4LGpfZRzft0EeattgHdIw98eCnkOaDQqudjm+/5IOzCioBn+fAjoPZnhPZhwqD2XlfBi5c5R44cOXLkyJHjv40/gQUmD3HnzocAAAAASUVORK5CYII="
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("mask", { id: "mask3", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("g", { filter: "url(#alpha)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "rect",
+            {
+              x: 0,
+              y: 0,
+              width: 42,
+              height: 42,
+              style: {
+                fill: "rgb(0%,0%,0%)",
+                fillOpacity: 0.2,
+                stroke: "none"
+              }
+            }
+          ) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "image",
+            {
+              id: "image166",
+              width: 42,
+              height: 42,
+              xlinkHref: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABmJLR0QA/wD/AP+gvaeTAAACY0lEQVRYhe2W227iQBBEj7mFcAkbZf3/HxjtLUtCAtjeh6laN9YSDCHSPkxLrZE92BzXVPcM5MiRI0eOj0RxzZc1TeP3FcBAoxOgCWOtsSmKouFEjD4JcNgZBx3ASlmH688FFWQEHAJj5Uhp0ArYA7uQvv85oAGw6ABOgClwoxwLtBbkG/CqhNYO1wUNy+wl7QLeAjPlNIBWgnzRM9Bz2c8CPeJDL/GNAOfAIuSt5gG2AbImLfuW1hYfBz3iw4kApyT1FsBSeafraQDb6P8q0rKPNder87wL2sOHBlwIzrnU3ESvsnJb2iKL7ety0H+oOOoAzgW0HA6Hd1VVrXS90NxEz+5JBdNtUXG8HDRClmU5fnx8dKFEBVfAqqoqqzjXhxiyInnR1e7c6r576VVADWkFV8ovSvvxluRZ+24PvA0Gg+e6rn8DzjXJr1v9phfoexVnX45JKs0FdQ98BUqN97o/04c3AlwDP+u6/g58U/4Q7AvwWpblri/oUSM3TeO2MyMpeQ88CO6BpOZSH2FAL/ELSbkn4JfySfkXFKlaFMX+FGifpXcRuVc6b8Lz7okb4FkwT51cC3Cjj7F3r+JRwxrYhwz0B1vawogqRvUi4GsAdCFdbQv1i7zd7Wj36SFtA19zqOSapK4V7FZ6DdDniHcKtKHtdTv92YZUXA1JJTS34bCqnzn0oQErzjiDngPqE4/95y1wQ7s1Rm9GwK4P60sA+4LGpfZRzft0EeattgHdIw98eCnkOaDQqudjm+/5IOzCioBn+fAjoPZnhPZhwqD2XlfBi5c5R44cOXLkyJHjv40/gQUmD3HnzocAAAAASUVORK5CYII="
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("clipPath", { id: "clip2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x: 0, y: 0, width: 42, height: 42 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { id: "surface169", clipPath: "url(#clip2)", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image125" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image142" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image148", mask: "url(#mask1)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image154", mask: "url(#mask2)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image160" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image166", mask: "url(#mask3)" })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("g", { id: "surface1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { clipPath: "url(#clip1)", clipRule: "nonzero", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "path",
+            {
+              style: {
+                stroke: "none",
+                fillRule: "nonzero",
+                fill: "url(#radial0)"
+              },
+              d: "M 9.433594 0 L 32.566406 0 C 37.777344 0 42 4.222656 42 9.433594 L 42 32.566406 C 42 37.777344 37.777344 42 32.566406 42 L 9.433594 42 C 4.222656 42 0 37.777344 0 32.566406 L 0 9.433594 C 0 4.222656 4.222656 0 9.433594 0 Z M 9.433594 0 "
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image42" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#image91" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("use", { xlinkHref: "#surface169", mask: "url(#mask0)" })
+        ] }) })
+      ]
+    })
+  );
+};
+var orange_default = OrangeLogo;
+
+// src/icons/walletIcon.tsx
+var import_jsx_runtime11 = _toESM(require("react/jsx-runtime"));
 var WalletIcon = ({
   size,
   className,
@@ -2622,23 +3072,25 @@ var WalletIcon = ({
   walletName
 }) => {
   if (walletName === XVERSE) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(XverseLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(XverseLogo, { size, className, variant });
   } else if (walletName === WIZZ) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(WizzLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(WizzLogo, { size, className, variant });
   } else if (walletName === LEATHER) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LeatherLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LeatherLogo, { size, className, variant });
   } else if (walletName === MAGIC_EDEN) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(MagicEdenLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(MagicEdenLogo, { size, className, variant });
   } else if (walletName === OKX) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OkxLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(OkxLogo, { size, className, variant });
   } else if (walletName === PHANTOM) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PhantomLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(PhantomLogo, { size, className, variant });
   } else if (walletName === UNISAT) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(UnisatLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(UnisatLogo, { size, className, variant });
   } else if (walletName === OYL) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(OylLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(OylLogo, { size, className, variant });
+  } else if (walletName === ORANGE) {
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(orange_default, { size, className, variant });
   } else {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LeatherLogo, { size, className, variant });
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LeatherLogo, { size, className, variant });
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
@@ -2661,6 +3113,9 @@ var WalletIcon = ({
   OKX_TESTNET,
   OP_WALLET_MAINNET,
   OP_WALLET_TESTNET,
+  ORANGE,
+  ORANGE_MAINNET,
+  ORANGE_TESTNET,
   OYL,
   OkxLogo,
   OylLogo,
@@ -2714,6 +3169,7 @@ var WalletIcon = ({
   getNetworkForUnisat,
   getNetworkForWizz,
   getNetworkForXverse,
+  getOrangeNetwork,
   getRedeemScript,
   getUnisatNetwork,
   getWizzNetwork,

@@ -1,3 +1,5 @@
+import { BitcoinNetworkType } from "@orangecrypto/orange-connect";
+
 export const XVERSE_NETWORK: "Mainnet" | "Testnet" = "Mainnet";
 
 export const UNISAT_MAINNET = "BITCOIN_MAINNET";
@@ -22,6 +24,9 @@ export const WIZZ_TESTNET = "testnet";
 export const WIZZ_TESTNET4 = "testnet4";
 export const WIZZ_SIGNET = "signet";
 
+export const ORANGE_MAINNET = "Mainnet";
+export const ORANGE_TESTNET = "Testnet";
+
 export const LEATHER_MAINNET = "mainnet";
 export const LEATHER_TESTNET = "testnet";
 export const MAINNET = "mainnet";
@@ -37,6 +42,12 @@ export const getXverseNetwork = (network: string) => {
   if (network === TESTNET) return XVERSE_TESTNET;
   if (network === SIGNET) return XVERSE_SIGNET;
   return XVERSE_MAINNET;
+};
+
+export const getOrangeNetwork = (network: string): BitcoinNetworkType => {
+  if (network === MAINNET) return ORANGE_MAINNET as BitcoinNetworkType;
+  if (network === TESTNET) return ORANGE_TESTNET as BitcoinNetworkType;
+  return ORANGE_MAINNET as BitcoinNetworkType;
 };
 
 export const getLeatherNetwork = (network: string) => {
