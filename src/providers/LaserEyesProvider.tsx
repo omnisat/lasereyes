@@ -147,7 +147,7 @@ const LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = useState<boolean>(false);
   const [hasPhantom, setHasPhantom] = useState<boolean>(false);
   const [hasWizz, setHasWizz] = useState<boolean>(false);
-  const [hasOrange, setHasOrange] = useState<boolean>(true);
+  const [hasOrange, setHasOrange] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
     | typeof MAINNET
@@ -184,7 +184,8 @@ const LaserEyesProvider = ({
       hasOkx !== undefined &&
       hasLeather !== undefined &&
       hasPhantom !== undefined &&
-      hasWizz !== undefined
+      hasWizz !== undefined &&
+      hasOrange !== undefined
     ) {
       setIsInitializing(false);
     }
@@ -334,7 +335,6 @@ const LaserEyesProvider = ({
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const orangeLib = (window as any)?.OrangeBitcoinProvider;
-      console.log(orangeLib);
       if (orangeLib) {
         setHasOrange(true);
         observer.disconnect();
@@ -359,6 +359,7 @@ const LaserEyesProvider = ({
     hasLeather,
     hasPhantom,
     hasWizz,
+    hasOrange,
   ]);
 
   useEffect(() => {
@@ -399,6 +400,7 @@ const LaserEyesProvider = ({
         | typeof LEATHER
         | typeof PHANTOM
         | typeof WIZZ
+        | typeof ORANGE
         | undefined;
       if (defaultWallet && !address) {
         setProvider(defaultWallet);

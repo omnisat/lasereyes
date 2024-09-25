@@ -564,7 +564,7 @@ var LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = useState(false);
   const [hasPhantom, setHasPhantom] = useState(false);
   const [hasWizz, setHasWizz] = useState(false);
-  const [hasOrange, setHasOrange] = useState(true);
+  const [hasOrange, setHasOrange] = useState(false);
   const [network, setNetwork] = useLocalStorage("network", (config == null ? void 0 : config.network) || MAINNET);
   useEffect(() => {
     if (config && config.network && library) {
@@ -583,7 +583,7 @@ var LaserEyesProvider = ({
     }
   }, [config, library]);
   const checkInitializationComplete = () => {
-    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0) {
+    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0 && hasOrange !== void 0) {
       setIsInitializing(false);
     }
   };
@@ -705,7 +705,6 @@ var LaserEyesProvider = ({
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const orangeLib = window == null ? void 0 : window.OrangeBitcoinProvider;
-      console.log(orangeLib);
       if (orangeLib) {
         setHasOrange(true);
         observer.disconnect();
@@ -726,7 +725,8 @@ var LaserEyesProvider = ({
     hasOkx,
     hasLeather,
     hasPhantom,
-    hasWizz
+    hasWizz,
+    hasOrange
   ]);
   useEffect(() => {
     setBalance(void 0);
