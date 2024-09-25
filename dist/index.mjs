@@ -695,16 +695,13 @@ var LaserEyesProvider = ({
       if (orangeLib) {
         setHasOrange(true);
         observer.disconnect();
-      } else {
-        setHasOrange(false);
-        observer.disconnect();
       }
     });
     observer.observe(document, { childList: true, subtree: true });
     return () => {
       observer.disconnect();
     };
-  }, [window]);
+  }, []);
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const wizzLib = window == null ? void 0 : window.wizz;

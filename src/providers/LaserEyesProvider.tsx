@@ -322,9 +322,6 @@ const LaserEyesProvider = ({
       if (orangeLib) {
         setHasOrange(true);
         observer.disconnect();
-      } else {
-        setHasOrange(false);
-        observer.disconnect();
       }
     });
 
@@ -333,7 +330,7 @@ const LaserEyesProvider = ({
     return () => {
       observer.disconnect();
     };
-  }, [window]);
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
