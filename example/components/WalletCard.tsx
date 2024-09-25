@@ -53,6 +53,7 @@ const WalletCard = ({
     | typeof LEATHER
     | typeof PHANTOM
     | typeof WIZZ
+    | typeof ORANGE
   setSignature: (signature: string) => void
   unsignedPsbt: string | undefined
   setUnsignedPsbt: (psbt: string) => void
