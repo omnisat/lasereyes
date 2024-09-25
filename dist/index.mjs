@@ -691,9 +691,12 @@ var LaserEyesProvider = ({
   }, []);
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      const wizzLib = window == null ? void 0 : window.wizz;
-      if (wizzLib) {
-        setHasWizz(true);
+      const orangeLib = window == null ? void 0 : window.OrangeWalletProviders;
+      if (orangeLib) {
+        setHasOrange(true);
+        observer.disconnect();
+      } else {
+        setHasOrange(false);
         observer.disconnect();
       }
     });
@@ -701,15 +704,12 @@ var LaserEyesProvider = ({
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [window]);
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      const orangeLib = window == null ? void 0 : window.OrangeWalletProviders;
-      if (orangeLib) {
-        setHasOrange(true);
-        observer.disconnect();
-      } else {
-        setHasOrange(false);
+      const wizzLib = window == null ? void 0 : window.wizz;
+      if (wizzLib) {
+        setHasWizz(true);
         observer.disconnect();
       }
     });
