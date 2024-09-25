@@ -147,7 +147,7 @@ const LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = useState<boolean>(false);
   const [hasPhantom, setHasPhantom] = useState<boolean>(false);
   const [hasWizz, setHasWizz] = useState<boolean>(false);
-  const [hasOrange, setHasOrange] = useState<boolean>(false);
+  const [hasOrange, setHasOrange] = useState<boolean>(true);
 
   const [network, setNetwork] = useLocalStorage<
     | typeof MAINNET

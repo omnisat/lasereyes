@@ -663,7 +663,7 @@ var LaserEyesProvider = ({
   const [hasLeather, setHasLeather] = (0, import_react.useState)(false);
   const [hasPhantom, setHasPhantom] = (0, import_react.useState)(false);
   const [hasWizz, setHasWizz] = (0, import_react.useState)(false);
-  const [hasOrange, setHasOrange] = (0, import_react.useState)(false);
+  const [hasOrange, setHasOrange] = (0, import_react.useState)(true);
   const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (config == null ? void 0 : config.network) || MAINNET);
   (0, import_react.useEffect)(() => {
     if (config && config.network && library) {
