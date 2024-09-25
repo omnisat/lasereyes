@@ -8,6 +8,7 @@ import {
   TESTNET,
   TESTNET4,
 } from '@omnisat/lasereyes'
+
 import App from '@/components/App'
 import { useState } from 'react'
 
