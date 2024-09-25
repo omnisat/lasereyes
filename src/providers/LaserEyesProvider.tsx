@@ -334,9 +334,12 @@ const LaserEyesProvider = ({
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      const orangeLib = (window as any)?.OrangeBitcoinProvider;
+      const orangeLib = (window as any)?.OrangeWalletProviders;
       if (orangeLib) {
         setHasOrange(true);
+        observer.disconnect();
+      } else {
+        setHasOrange(false);
         observer.disconnect();
       }
     });

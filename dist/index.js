@@ -803,9 +803,12 @@ var LaserEyesProvider = ({
   }, []);
   (0, import_react.useEffect)(() => {
     const observer = new MutationObserver(() => {
-      const orangeLib = window == null ? void 0 : window.OrangeBitcoinProvider;
+      const orangeLib = window == null ? void 0 : window.OrangeWalletProviders;
       if (orangeLib) {
         setHasOrange(true);
+        observer.disconnect();
+      } else {
+        setHasOrange(false);
         observer.disconnect();
       }
     });
