@@ -16,6 +16,7 @@ import {
   useLaserEyes,
   WalletIcon,
   WIZZ,
+  ORANGE,
   XVERSE,
 } from '@omnisat/lasereyes'
 import { satoshisToBTC } from '@/lib/btc'
@@ -36,8 +37,6 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { RxReload } from 'react-icons/rx'
-import { ORANGE } from '../../src'
-import OrangeLogo from '../../src/icons/orange'
 
 const App = ({
   setNetwork,
