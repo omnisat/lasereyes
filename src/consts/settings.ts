@@ -1,4 +1,15 @@
-import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "./wallets";
+import {
+  ASIGNA,
+  LEATHER,
+  MAGIC_EDEN,
+  OKX,
+  ORANGE,
+  OYL,
+  PHANTOM,
+  UNISAT,
+  WIZZ,
+  XVERSE,
+} from "./wallets";
 import {
   FRACTAL_MAINNET,
   FRACTAL_TESTNET,
@@ -21,6 +32,7 @@ export const initialWalletContext = {
   hasPhantom: false,
   hasWizz: false,
   hasOrange: false,
+  hasAsigna: false,
   isInitializing: true,
   connected: false,
   isConnecting: false,
@@ -41,11 +53,17 @@ export const initialWalletContext = {
   accounts: [],
   connect: async (
     walletName:
-      | typeof OYL
       | typeof UNISAT
       | typeof XVERSE
-      | typeof LEATHER
       | typeof MAGIC_EDEN
+      | typeof LEATHER
+      | typeof PHANTOM
+      | typeof OKX
+      | typeof MAGIC_EDEN
+      | typeof OYL
+      | typeof ORANGE
+      | typeof WIZZ
+      | typeof ASIGNA
   ) => {},
   disconnect: () => {},
   requestAccounts: async () => [],

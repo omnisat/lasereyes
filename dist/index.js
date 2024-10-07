@@ -88,6 +88,7 @@ var __forAwait = (obj, it, method) => {
 // src/index.tsx
 var src_exports = {};
 __export(src_exports, {
+  ASIGNA: () => ASIGNA,
   FRACTAL_MAINNET: () => FRACTAL_MAINNET,
   FRACTAL_TESTNET: () => FRACTAL_TESTNET,
   LEATHER: () => LEATHER,
@@ -323,6 +324,7 @@ var MAGIC_EDEN = "magic-eden";
 var OKX = "okx";
 var WIZZ = "wizz";
 var ORANGE = "orange";
+var ASIGNA = "asigna";
 var P2TR = "p2tr";
 var P2PKH = "p2pkh";
 var P2WPKH = "p2wpkh";
@@ -366,7 +368,7 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = _toESM(require("react"));
+var import_react = require("react");
 var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
@@ -381,6 +383,7 @@ var initialWalletContext = {
   hasPhantom: false,
   hasWizz: false,
   hasOrange: false,
+  hasAsigna: false,
   isInitializing: true,
   connected: false,
   isConnecting: false,
@@ -438,7 +441,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = _toESM(require("usehooks-ts"));
+var import_usehooks_ts = require("usehooks-ts");
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -615,11 +618,12 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = _toESM(require("sats-connect"));
+var import_sats_connect = require("sats-connect");
 var import_orange_connect = __toESM(require("@orangecrypto/orange-connect"));
-var import_address = _toESM(require("bitcoinjs-lib/src/address"));
+var import_address = require("bitcoinjs-lib/src/address");
 var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
+var import_btc_connect = require("@asigna/btc-connect");
+var import_jsx_runtime = require("react/jsx-runtime");
 var {
   getAddress: getAddressOrange,
   signMessage: signMessageOrange,
@@ -638,6 +642,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
+  const { connect: connectAsignaFn } = (0, import_btc_connect.useAsignaExtension)();
   const [library, setLibrary] = (0, import_usehooks_ts.useLocalStorage)("library", {});
   const [provider, setProvider] = (0, import_usehooks_ts.useLocalStorage)("provider", void 0);
   const [isInitializing, setIsInitializing] = (0, import_react.useState)(true);
@@ -664,6 +669,7 @@ var LaserEyesProvider = ({
   const [hasPhantom, setHasPhantom] = (0, import_react.useState)(false);
   const [hasWizz, setHasWizz] = (0, import_react.useState)(false);
   const [hasOrange, setHasOrange] = (0, import_react.useState)(false);
+  const [hasAsigna, setHasAsigna] = (0, import_react.useState)(false);
   const [network, setNetwork] = (0, import_usehooks_ts.useLocalStorage)("network", (config == null ? void 0 : config.network) || MAINNET);
   (0, import_react.useEffect)(() => {
     if (config && config.network && library) {
@@ -682,7 +688,7 @@ var LaserEyesProvider = ({
     }
   }, [config, library]);
   const checkInitializationComplete = () => {
-    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0 && hasOrange !== void 0) {
+    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0 && hasOrange !== void 0 && hasAsigna !== void 0) {
       setIsInitializing(false);
     }
   };
@@ -815,6 +821,19 @@ var LaserEyesProvider = ({
     };
   }, []);
   (0, import_react.useEffect)(() => {
+    const observer = new MutationObserver(() => {
+      const asignaLib = window == null ? void 0 : window.AsignaProvider;
+      if (asignaLib) {
+        setHasAsigna(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  (0, import_react.useEffect)(() => {
     checkInitializationComplete();
   }, [
     hasUnisat,
@@ -825,7 +844,8 @@ var LaserEyesProvider = ({
     hasLeather,
     hasPhantom,
     hasWizz,
-    hasOrange
+    hasOrange,
+    hasAsigna
   ]);
   (0, import_react.useEffect)(() => {
     setBalance(void 0);
@@ -853,6 +873,7 @@ var LaserEyesProvider = ({
         LOCAL_STORAGE_DEFAULT_WALLET
       );
       if (defaultWallet && !address2) {
+        console.log("defaultWallet", defaultWallet);
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
@@ -1171,6 +1192,16 @@ var LaserEyesProvider = ({
       throw e;
     }
   });
+  const connectAsigna = () => __async(void 0, null, function* () {
+    try {
+      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, ASIGNA);
+      const lib = window.AsignaProvider;
+      const info = yield connectAsignaFn();
+      console.log({ info });
+    } catch (error) {
+      throw error;
+    }
+  });
   const connect = (walletName) => __async(void 0, null, function* () {
     setIsConnecting(true);
     try {
@@ -1194,6 +1225,8 @@ var LaserEyesProvider = ({
         yield connectWizz();
       } else if (walletName === ORANGE) {
         yield connectOrange();
+      } else if (walletName === ASIGNA) {
+        yield connectAsigna();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -1214,8 +1247,9 @@ var LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(void 0);
-    setLibrary({});
+    setLibrary(void 0);
     setConnected(false);
+    setIsConnecting(false);
     setBalance(void 0);
     localStorage == null ? void 0 : localStorage.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
   };
@@ -2248,6 +2282,7 @@ var LaserEyesProvider = ({
         hasPhantom,
         hasWizz,
         hasOrange,
+        hasAsigna,
         // functions
         connect,
         disconnect,
@@ -2268,7 +2303,7 @@ var LaserEyesProvider = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime2 = require("react/jsx-runtime");
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2348,7 +2383,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2408,7 +2443,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2490,7 +2525,7 @@ var PhantomLogo = (_a) => {
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime5 = require("react/jsx-runtime");
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2542,7 +2577,7 @@ var XverseLogo = (_a) => {
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2654,7 +2689,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime7 = require("react/jsx-runtime");
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2725,7 +2760,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime8 = require("react/jsx-runtime");
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2767,7 +2802,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime9 = require("react/jsx-runtime");
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2840,7 +2875,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/orange.tsx
-var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime10 = require("react/jsx-runtime");
 var OrangeLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3065,7 +3100,7 @@ var OrangeLogo = (_a) => {
 var orange_default = OrangeLogo;
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime11 = _toESM(require("react/jsx-runtime"));
+var import_jsx_runtime11 = require("react/jsx-runtime");
 var WalletIcon = ({
   size,
   className,
@@ -3096,6 +3131,7 @@ var WalletIcon = ({
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  ASIGNA,
   FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   LEATHER,

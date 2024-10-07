@@ -208,6 +208,7 @@ var MAGIC_EDEN = "magic-eden";
 var OKX = "okx";
 var WIZZ = "wizz";
 var ORANGE = "orange";
+var ASIGNA = "asigna";
 var P2TR = "p2tr";
 var P2PKH = "p2pkh";
 var P2WPKH = "p2wpkh";
@@ -273,6 +274,7 @@ var initialWalletContext = {
   hasPhantom: false,
   hasWizz: false,
   hasOrange: false,
+  hasAsigna: false,
   isInitializing: true,
   connected: false,
   isConnecting: false,
@@ -520,6 +522,7 @@ import {
 import orange from "@orangecrypto/orange-connect";
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import axios2 from "axios";
+import { useAsignaExtension } from "@asigna/btc-connect";
 import { jsx } from "react/jsx-runtime";
 var {
   getAddress: getAddressOrange,
@@ -539,6 +542,7 @@ var LaserEyesProvider = ({
     accounts: []
   });
   const self = selfRef.current;
+  const { connect: connectAsignaFn } = useAsignaExtension();
   const [library, setLibrary] = useLocalStorage("library", {});
   const [provider, setProvider] = useLocalStorage("provider", void 0);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -565,6 +569,7 @@ var LaserEyesProvider = ({
   const [hasPhantom, setHasPhantom] = useState(false);
   const [hasWizz, setHasWizz] = useState(false);
   const [hasOrange, setHasOrange] = useState(false);
+  const [hasAsigna, setHasAsigna] = useState(false);
   const [network, setNetwork] = useLocalStorage("network", (config == null ? void 0 : config.network) || MAINNET);
   useEffect(() => {
     if (config && config.network && library) {
@@ -583,7 +588,7 @@ var LaserEyesProvider = ({
     }
   }, [config, library]);
   const checkInitializationComplete = () => {
-    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0 && hasOrange !== void 0) {
+    if (hasUnisat !== void 0 && hasXverse !== void 0 && hasOyl !== void 0 && hasMagicEden !== void 0 && hasOkx !== void 0 && hasLeather !== void 0 && hasPhantom !== void 0 && hasWizz !== void 0 && hasOrange !== void 0 && hasAsigna !== void 0) {
       setIsInitializing(false);
     }
   };
@@ -716,6 +721,19 @@ var LaserEyesProvider = ({
     };
   }, []);
   useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const asignaLib = window == null ? void 0 : window.AsignaProvider;
+      if (asignaLib) {
+        setHasAsigna(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  useEffect(() => {
     checkInitializationComplete();
   }, [
     hasUnisat,
@@ -726,7 +744,8 @@ var LaserEyesProvider = ({
     hasLeather,
     hasPhantom,
     hasWizz,
-    hasOrange
+    hasOrange,
+    hasAsigna
   ]);
   useEffect(() => {
     setBalance(void 0);
@@ -754,6 +773,7 @@ var LaserEyesProvider = ({
         LOCAL_STORAGE_DEFAULT_WALLET
       );
       if (defaultWallet && !address2) {
+        console.log("defaultWallet", defaultWallet);
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
@@ -1072,6 +1092,16 @@ var LaserEyesProvider = ({
       throw e;
     }
   });
+  const connectAsigna = () => __async(void 0, null, function* () {
+    try {
+      localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, ASIGNA);
+      const lib = window.AsignaProvider;
+      const info = yield connectAsignaFn();
+      console.log({ info });
+    } catch (error) {
+      throw error;
+    }
+  });
   const connect = (walletName) => __async(void 0, null, function* () {
     setIsConnecting(true);
     try {
@@ -1095,6 +1125,8 @@ var LaserEyesProvider = ({
         yield connectWizz();
       } else if (walletName === ORANGE) {
         yield connectOrange();
+      } else if (walletName === ASIGNA) {
+        yield connectAsigna();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -1115,8 +1147,9 @@ var LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(void 0);
-    setLibrary({});
+    setLibrary(void 0);
     setConnected(false);
+    setIsConnecting(false);
     setBalance(void 0);
     localStorage == null ? void 0 : localStorage.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
   };
@@ -2149,6 +2182,7 @@ var LaserEyesProvider = ({
         hasPhantom,
         hasWizz,
         hasOrange,
+        hasAsigna,
         // functions
         connect,
         disconnect,
@@ -2996,6 +3030,7 @@ var WalletIcon = ({
   }
 };
 export {
+  ASIGNA,
   FRACTAL_MAINNET,
   FRACTAL_TESTNET,
   LEATHER,

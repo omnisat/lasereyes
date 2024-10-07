@@ -16,6 +16,7 @@ import {
   TESTNET4,
   WalletIcon,
   ORANGE,
+  ASIGNA,
 } from '@omnisat/lasereyes'
 import {
   Card,
@@ -54,6 +55,7 @@ const WalletCard = ({
     | typeof PHANTOM
     | typeof WIZZ
     | typeof ORANGE
+    | typeof ASIGNA
   setSignature: (signature: string) => void
   unsignedPsbt: string | undefined
   setUnsignedPsbt: (psbt: string) => void
@@ -87,6 +89,7 @@ const WalletCard = ({
     hasPhantom,
     hasWizz,
     hasOrange,
+    hasAsigna,
     sendBTC,
     signMessage,
     signPsbt,
@@ -122,6 +125,7 @@ const WalletCard = ({
     phantom: hasPhantom,
     wizz: hasWizz,
     orange: hasOrange,
+    asigna: hasAsigna,
   }
 
   useEffect(() => {
@@ -195,12 +199,23 @@ const WalletCard = ({
       | typeof PHANTOM
       | typeof WIZZ
       | typeof ORANGE
+      | typeof ASIGNA
   ) => {
     try {
       // @ts-ignore
       await connect(walletName)
     } catch (error) {
       console.log('error!', error)
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
+  const disconnectWallet = async () => {
+    try {
+      await disconnect()
+    } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
       }
@@ -392,7 +407,7 @@ const WalletCard = ({
               disabled={isMissingWallet}
               variant={'default'}
               onClick={() =>
-                isConnected ? disconnect() : connectWallet(walletName)
+                address ? disconnectWallet() : connectWallet(walletName)
               }
             >
               {isInitializing

@@ -24,6 +24,7 @@ import {
   WizzBalanceResponse,
 } from "../types";
 import {
+  ASIGNA,
   LEATHER,
   MAGIC_EDEN,
   OKX,
@@ -82,6 +83,7 @@ import orange, {
 import { fromOutputScript } from "bitcoinjs-lib/src/address";
 import axios from "axios";
 import { getMempoolSpaceUrl } from "../lib/urls";
+import { useAsignaExtension } from "@asigna/btc-connect";
 
 const {
   getAddress: getAddressOrange,
@@ -109,6 +111,8 @@ const LaserEyesProvider = ({
   });
   const self = selfRef.current;
 
+  const { connect: connectAsignaFn } = useAsignaExtension();
+
   const [library, setLibrary] = useLocalStorage<any>("library", {});
   const [provider, setProvider] = useLocalStorage<
     | typeof UNISAT
@@ -120,6 +124,7 @@ const LaserEyesProvider = ({
     | typeof PHANTOM
     | typeof WIZZ
     | typeof ORANGE
+    | typeof ASIGNA
     | undefined
   >("provider", undefined);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -148,6 +153,7 @@ const LaserEyesProvider = ({
   const [hasPhantom, setHasPhantom] = useState<boolean>(false);
   const [hasWizz, setHasWizz] = useState<boolean>(false);
   const [hasOrange, setHasOrange] = useState<boolean>(false);
+  const [hasAsigna, setHasAsigna] = useState<boolean>(false);
 
   const [network, setNetwork] = useLocalStorage<
     | typeof MAINNET
@@ -185,7 +191,8 @@ const LaserEyesProvider = ({
       hasLeather !== undefined &&
       hasPhantom !== undefined &&
       hasWizz !== undefined &&
-      hasOrange !== undefined
+      hasOrange !== undefined &&
+      hasAsigna !== undefined
     ) {
       setIsInitializing(false);
     }
@@ -349,6 +356,22 @@ const LaserEyesProvider = ({
   }, []);
 
   useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const asignaLib = (window as any)?.AsignaProvider;
+      if (asignaLib) {
+        setHasAsigna(true);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     checkInitializationComplete();
   }, [
     hasUnisat,
@@ -360,6 +383,7 @@ const LaserEyesProvider = ({
     hasPhantom,
     hasWizz,
     hasOrange,
+    hasAsigna,
   ]);
 
   useEffect(() => {
@@ -401,8 +425,10 @@ const LaserEyesProvider = ({
         | typeof PHANTOM
         | typeof WIZZ
         | typeof ORANGE
+        | typeof ASIGNA
         | undefined;
       if (defaultWallet && !address) {
+        console.log("defaultWallet", defaultWallet);
         setProvider(defaultWallet);
         connect(defaultWallet);
       }
@@ -770,6 +796,41 @@ const LaserEyesProvider = ({
     }
   };
 
+  const connectAsigna = async () => {
+    try {
+      localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, ASIGNA);
+      const lib = (window as any).AsignaProvider;
+
+      const info = await connectAsignaFn();
+
+      console.log({ info });
+
+      // const asignaAccounts = await lib.requestAccounts();
+      // if (!asignaAccounts) throw new Error("No accounts found");
+      // const asignaPubKey = await lib.getPublicKey();
+      // if (!asignaPubKey) throw new Error("No public key found");
+      // setAccounts(asignaAccounts);
+      // setAddress(asignaAccounts[0]);
+      // setPaymentAddress(asignaAccounts[0]);
+      // setPublicKey(asignaPubKey);
+      // setPaymentPublicKey(asignaPubKey);
+      // await getNetwork().then((network) => {
+      //   if (config!.network !== network) {
+      //     switchNetwork(network);
+      //   }
+      // });
+      // getBTCBalance(asignaAccounts[0], network).then((totalBalance) => {
+      //   setBalance(totalBalance);
+      // });
+      // setProvider(ASIGNA);
+      // setConnected(true);
+      // const balance = await lib?.getBalance();
+      // setBalance(balance?.total);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const connect = async (
     walletName:
       | typeof UNISAT
@@ -781,6 +842,7 @@ const LaserEyesProvider = ({
       | typeof PHANTOM
       | typeof WIZZ
       | typeof ORANGE
+      | typeof ASIGNA
   ) => {
     setIsConnecting(true);
     try {
@@ -803,6 +865,8 @@ const LaserEyesProvider = ({
         await connectWizz();
       } else if (walletName === ORANGE) {
         await connectOrange();
+      } else if (walletName === ASIGNA) {
+        await connectAsigna();
       } else {
         throw new Error("Unsupported wallet..");
       }
@@ -825,8 +889,9 @@ const LaserEyesProvider = ({
     setPaymentPublicKey("");
     setAccounts([]);
     setProvider(undefined);
-    setLibrary({});
+    setLibrary(undefined);
     setConnected(false);
+    setIsConnecting(false);
     setBalance(undefined);
     localStorage?.removeItem(LOCAL_STORAGE_DEFAULT_WALLET);
   };
@@ -1936,6 +2001,7 @@ const LaserEyesProvider = ({
         hasPhantom,
         hasWizz,
         hasOrange,
+        hasAsigna,
 
         // functions
         connect,

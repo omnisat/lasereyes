@@ -8,6 +8,7 @@ import {
   UNISAT,
   OYL,
   ORANGE,
+  ASIGNA,
 } from "../consts/wallets";
 import { WizzLogo } from "./wizz";
 import { XverseLogo } from "./xverse";
@@ -29,15 +30,17 @@ const WalletIcon = ({
   className?: string;
   variant?: "first" | "second";
   walletName:
-    | typeof XVERSE
-    | typeof WIZZ
-    | typeof LEATHER
-    | typeof MAGIC_EDEN
-    | typeof OKX
-    | typeof PHANTOM
     | typeof UNISAT
+    | typeof XVERSE
+    | typeof MAGIC_EDEN
+    | typeof LEATHER
+    | typeof PHANTOM
+    | typeof OKX
+    | typeof MAGIC_EDEN
     | typeof OYL
-    | typeof ORANGE;
+    | typeof ORANGE
+    | typeof WIZZ
+    | typeof ASIGNA;
 }) => {
   if (walletName === XVERSE) {
     return <XverseLogo size={size} className={className} variant={variant} />;

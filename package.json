@@ -16,11 +16,14 @@
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
   },
   "dependencies": {
+    "@asigna/btc-connect": "^0.0.3",
     "@bitcoinerlab/secp256k1": "^1.1.1",
     "@changesets/cli": "^2.27.5",
     "@orangecrypto/orange-connect": "^1.2.2",
     "axios": "^1.7.2",
+    "bip322-js": "^2.0.0",
     "bitcoinjs-lib": "^6.1.3",
+    "jotai": "^2.10.0",
     "react": "^18",
     "react-dom": "^18",
     "sats-connect": "^2.6.0",

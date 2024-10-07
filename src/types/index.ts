@@ -1,4 +1,15 @@
-import { LEATHER, MAGIC_EDEN, OYL, UNISAT, XVERSE } from "../consts/wallets";
+import {
+  ASIGNA,
+  LEATHER,
+  MAGIC_EDEN,
+  OKX,
+  ORANGE,
+  OYL,
+  PHANTOM,
+  UNISAT,
+  WIZZ,
+  XVERSE,
+} from "../consts/wallets";
 import {
   FRACTAL_MAINNET,
   FRACTAL_TESTNET,
@@ -37,6 +48,7 @@ export type LaserEyesContextType = {
   hasPhantom: boolean;
   hasWizz: boolean;
   hasOrange: boolean;
+  hasAsigna: boolean;
 
   connect: (
     walletName:
@@ -44,8 +56,13 @@ export type LaserEyesContextType = {
       | typeof XVERSE
       | typeof MAGIC_EDEN
       | typeof LEATHER
+      | typeof PHANTOM
+      | typeof OKX
       | typeof MAGIC_EDEN
       | typeof OYL
+      | typeof ORANGE
+      | typeof WIZZ
+      | typeof ASIGNA
   ) => Promise<void>;
   disconnect: () => void;
   requestAccounts: () => Promise<string[]>;

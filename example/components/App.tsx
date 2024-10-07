@@ -16,6 +16,7 @@ import {
   useLaserEyes,
   WalletIcon,
   WIZZ,
+  ASIGNA,
   ORANGE,
   XVERSE,
 } from '@omnisat/lasereyes'
@@ -49,7 +50,17 @@ const App = ({
       | typeof FRACTAL_TESTNET
   ) => void
 }) => {
-  const wallets = [LEATHER, MAGIC_EDEN, OKX, ORANGE, OYL, UNISAT, WIZZ, XVERSE]
+  const wallets = [
+    LEATHER,
+    MAGIC_EDEN,
+    OKX,
+    ORANGE,
+    OYL,
+    UNISAT,
+    WIZZ,
+    XVERSE,
+    ASIGNA,
+  ]
   const {
     address,
     paymentAddress,
@@ -431,12 +442,15 @@ const App = ({
               walletName as
                 | typeof UNISAT
                 | typeof XVERSE
-                | typeof OYL
                 | typeof MAGIC_EDEN
-                | typeof OKX
                 | typeof LEATHER
                 | typeof PHANTOM
+                | typeof OKX
+                | typeof MAGIC_EDEN
+                | typeof OYL
+                | typeof ORANGE
                 | typeof WIZZ
+                | typeof ASIGNA
             }
             setSignature={setSignature}
             unsignedPsbt={unsignedPsbt}

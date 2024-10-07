@@ -57,6 +57,7 @@ declare const MAGIC_EDEN = "magic-eden";
 declare const OKX = "okx";
 declare const WIZZ = "wizz";
 declare const ORANGE = "orange";
+declare const ASIGNA = "asigna";
 declare const P2TR = "p2tr";
 declare const P2PKH = "p2pkh";
 declare const P2WPKH = "p2wpkh";
@@ -114,7 +115,8 @@ type LaserEyesContextType = {
     hasPhantom: boolean;
     hasWizz: boolean;
     hasOrange: boolean;
-    connect: (walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN | typeof LEATHER | typeof MAGIC_EDEN | typeof OYL) => Promise<void>;
+    hasAsigna: boolean;
+    connect: (walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN | typeof LEATHER | typeof PHANTOM | typeof OKX | typeof MAGIC_EDEN | typeof OYL | typeof ORANGE | typeof WIZZ | typeof ASIGNA) => Promise<void>;
     disconnect: () => void;
     requestAccounts: () => Promise<string[]>;
     getNetwork: () => Promise<string | undefined>;
@@ -222,7 +224,7 @@ declare const WalletIcon: ({ size, className, variant, walletName, }: {
     size: number;
     className?: string | undefined;
     variant?: "first" | "second" | undefined;
-    walletName: typeof XVERSE | typeof WIZZ | typeof LEATHER | typeof MAGIC_EDEN | typeof OKX | typeof PHANTOM | typeof UNISAT | typeof OYL | typeof ORANGE;
+    walletName: typeof UNISAT | typeof XVERSE | typeof MAGIC_EDEN | typeof LEATHER | typeof PHANTOM | typeof OKX | typeof MAGIC_EDEN | typeof OYL | typeof ORANGE | typeof WIZZ | typeof ASIGNA;
 }) => react_jsx_runtime.JSX.Element;
 
-export { FRACTAL_MAINNET, FRACTAL_TESTNET, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, ORANGE, ORANGE_MAINNET, ORANGE_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, TESTNET4, UNISAT, UNISAT_FRACTAL_MAINNET, UNISAT_FRACTAL_TESTNET, UNISAT_MAINNET, UNISAT_SIGNET, UNISAT_TESTNET, UNISAT_TESTNET4, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_SIGNET, WIZZ_TESTNET, WIZZ_TESTNET4, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getOrangeNetwork, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };
+export { ASIGNA, FRACTAL_MAINNET, FRACTAL_TESTNET, LEATHER, LEATHER_MAINNET, LEATHER_TESTNET, LaserEyesProvider, LeatherLogo, MAGIC_EDEN, MAINNET, MEMPOOL_SPACE_SIGNET_URL, MEMPOOL_SPACE_TESTNET_URL, MEMPOOL_SPACE_URL, MagicEdenLogo, OKX, OKX_MAINNET, OKX_TESTNET, OP_WALLET_MAINNET, OP_WALLET_TESTNET, ORANGE, ORANGE_MAINNET, ORANGE_TESTNET, OYL, OkxLogo, OylLogo, P2PKH, P2PSH, P2SH, P2TR, P2WPKH, P2WSH, PHANTOM, PhantomLogo, REGTEST, SIGNET, TESTNET, TESTNET4, UNISAT, UNISAT_FRACTAL_MAINNET, UNISAT_FRACTAL_TESTNET, UNISAT_MAINNET, UNISAT_SIGNET, UNISAT_TESTNET, UNISAT_TESTNET4, UnisatLogo, WALLETS, WIZZ, WIZZ_MAINNET, WIZZ_SIGNET, WIZZ_TESTNET, WIZZ_TESTNET4, WalletIcon, WizzLogo, XVERSE, XVERSE_MAINNET, XVERSE_NETWORK, XVERSE_SIGNET, XVERSE_TESTNET, XverseLogo, createConfig, createSendBtcPsbt, delay, estimateTxSize, findOrdinalsAddress, findPaymentAddress, getAddressUtxos, getBTCBalance, getBitcoinNetwork, getLeatherNetwork, getMempoolSpaceUrl, getNetworkForLeather, getNetworkForOkx, getNetworkForUnisat, getNetworkForWizz, getNetworkForXverse, getOrangeNetwork, getRedeemScript, getUnisatNetwork, getWizzNetwork, getXverseNetwork, isBase64, isHex, satoshisToBTC, useLaserEyes };
