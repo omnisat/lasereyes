@@ -37,6 +37,8 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { RxReload } from 'react-icons/rx'
+import { useLocalStorage } from 'usehooks-ts'
+import { ClickToCopyNpmInstallPill } from '@/components/ClickToCopyNpmInstallPill'
 
 const App = ({
   setNetwork,
@@ -131,6 +133,7 @@ const App = ({
         </Link>
 
         <div className={'grow'} />
+        <ClickToCopyNpmInstallPill className={'mr-6'} />
         <Link
           href={'https://www.lasereyes.build/docs/getting-started'}
           className={

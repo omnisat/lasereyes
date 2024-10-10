@@ -366,7 +366,7 @@ var createConfig = (config) => {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_react = require("react");
+var import_react = _toESM(require("react"));
 var bitcoin2 = __toESM(require("bitcoinjs-lib"));
 
 // src/consts/settings.ts
@@ -438,7 +438,7 @@ var initialWalletContext = {
 };
 
 // src/providers/LaserEyesProvider.tsx
-var import_usehooks_ts = require("usehooks-ts");
+var import_usehooks_ts = _toESM(require("usehooks-ts"));
 
 // src/lib/helpers.ts
 var bitcoin = __toESM(require("bitcoinjs-lib"));
@@ -615,11 +615,11 @@ function delay(ms) {
 }
 
 // src/providers/LaserEyesProvider.tsx
-var import_sats_connect = require("sats-connect");
+var import_sats_connect = _toESM(require("sats-connect"));
 var import_orange_connect = __toESM(require("@orangecrypto/orange-connect"));
-var import_address = require("bitcoinjs-lib/src/address");
+var import_address = _toESM(require("bitcoinjs-lib/src/address"));
 var import_axios2 = __toESM(require("axios"));
-var import_jsx_runtime = require("react/jsx-runtime");
+var import_jsx_runtime = _toESM(require("react/jsx-runtime"));
 var {
   getAddress: getAddressOrange,
   signMessage: signMessageOrange,
@@ -1637,12 +1637,18 @@ var LaserEyesProvider = ({
           throw new Error("Error sending BTC");
         return sendResponse.txid;
       } else if (provider === OKX) {
-        const txId = yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        const lib = getOkxLibrary();
+        setLibrary(lib);
+        const txId = yield lib == null ? void 0 : lib.sendBitcoin(to, amount);
         if (!txId)
           throw new Error("Transaction failed");
         return txId;
       } else if (provider === LEATHER) {
-        const response = yield library == null ? void 0 : library.request("sendTransfer", {
+        const lib = window.LeatherProvider;
+        if (!lib)
+          throw new Error("Library not found");
+        setLibrary(lib);
+        const response = yield lib == null ? void 0 : lib.request("sendTransfer", {
           recipients: [
             {
               address: to,
@@ -1758,11 +1764,13 @@ var LaserEyesProvider = ({
           const lib = getOkxLibrary();
           return yield lib == null ? void 0 : lib.signMessage(message);
         } else if (provider === LEATHER) {
+          const lib = window.LeatherProvider;
+          setLibrary(lib);
           const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
           if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
             throw new Error("Invalid address to sign message");
           }
-          const signed = yield library == null ? void 0 : library.request("signMessage", {
+          const signed = yield lib == null ? void 0 : lib.request("signMessage", {
             message,
             paymentType
           });
@@ -2060,7 +2068,9 @@ var LaserEyesProvider = ({
           broadcast: false,
           network
         };
-        const response = yield library == null ? void 0 : library.request(
+        const lib = window.LeatherProvider;
+        setLibrary(lib);
+        const response = yield lib == null ? void 0 : lib.request(
           "signPsbt",
           requestParams
         );
@@ -2279,7 +2289,7 @@ var LaserEyesProvider = ({
 };
 
 // src/icons/oyl.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime2 = _toESM(require("react/jsx-runtime"));
 var OylLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2359,7 +2369,7 @@ var OylLogo = (_a) => {
 };
 
 // src/icons/leather.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime3 = _toESM(require("react/jsx-runtime"));
 var LeatherLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2419,7 +2429,7 @@ var LeatherLogo = (_a) => {
 };
 
 // src/icons/phantom.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime4 = _toESM(require("react/jsx-runtime"));
 var PhantomLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2501,7 +2511,7 @@ var PhantomLogo = (_a) => {
 };
 
 // src/icons/xverse.tsx
-var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_jsx_runtime5 = _toESM(require("react/jsx-runtime"));
 var XverseLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2553,7 +2563,7 @@ var XverseLogo = (_a) => {
 };
 
 // src/icons/unisat.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_jsx_runtime6 = _toESM(require("react/jsx-runtime"));
 var UnisatLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2665,7 +2675,7 @@ var UnisatLogo = (_a) => {
 };
 
 // src/icons/wizz.tsx
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime7 = _toESM(require("react/jsx-runtime"));
 var WizzLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2736,7 +2746,7 @@ var WizzLogo = (_a) => {
 };
 
 // src/icons/okx.tsx
-var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_jsx_runtime8 = _toESM(require("react/jsx-runtime"));
 var OkxLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2778,7 +2788,7 @@ var OkxLogo = (_a) => {
 };
 
 // src/icons/magiceden.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime9 = _toESM(require("react/jsx-runtime"));
 var MagicEdenLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -2851,7 +2861,7 @@ var MagicEdenLogo = (_a) => {
 };
 
 // src/icons/orange.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime10 = _toESM(require("react/jsx-runtime"));
 var OrangeLogo = (_a) => {
   var _b = _a, {
     size = 42,
@@ -3076,7 +3086,7 @@ var OrangeLogo = (_a) => {
 var orange_default = OrangeLogo;
 
 // src/icons/walletIcon.tsx
-var import_jsx_runtime11 = require("react/jsx-runtime");
+var import_jsx_runtime11 = _toESM(require("react/jsx-runtime"));
 var WalletIcon = ({
   size,
   className,

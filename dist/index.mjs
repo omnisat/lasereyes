@@ -1538,12 +1538,18 @@ var LaserEyesProvider = ({
           throw new Error("Error sending BTC");
         return sendResponse.txid;
       } else if (provider === OKX) {
-        const txId = yield library == null ? void 0 : library.sendBitcoin(to, amount);
+        const lib = getOkxLibrary();
+        setLibrary(lib);
+        const txId = yield lib == null ? void 0 : lib.sendBitcoin(to, amount);
         if (!txId)
           throw new Error("Transaction failed");
         return txId;
       } else if (provider === LEATHER) {
-        const response = yield library == null ? void 0 : library.request("sendTransfer", {
+        const lib = window.LeatherProvider;
+        if (!lib)
+          throw new Error("Library not found");
+        setLibrary(lib);
+        const response = yield lib == null ? void 0 : lib.request("sendTransfer", {
           recipients: [
             {
               address: to,
@@ -1659,11 +1665,13 @@ var LaserEyesProvider = ({
           const lib = getOkxLibrary();
           return yield lib == null ? void 0 : lib.signMessage(message);
         } else if (provider === LEATHER) {
+          const lib = window.LeatherProvider;
+          setLibrary(lib);
           const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
           if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
             throw new Error("Invalid address to sign message");
           }
-          const signed = yield library == null ? void 0 : library.request("signMessage", {
+          const signed = yield lib == null ? void 0 : lib.request("signMessage", {
             message,
             paymentType
           });
@@ -1961,7 +1969,9 @@ var LaserEyesProvider = ({
           broadcast: false,
           network
         };
-        const response = yield library == null ? void 0 : library.request(
+        const lib = window.LeatherProvider;
+        setLibrary(lib);
+        const response = yield lib == null ? void 0 : lib.request(
           "signPsbt",
           requestParams
         );

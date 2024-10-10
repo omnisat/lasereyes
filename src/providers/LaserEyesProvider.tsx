@@ -1297,11 +1297,16 @@ const LaserEyesProvider = ({
         // @ts-ignore
         return sendResponse.txid;
       } else if (provider === OKX) {
-        const txId = await library?.sendBitcoin(to, amount);
+        const lib = getOkxLibrary();
+        setLibrary(lib);
+        const txId = await lib?.sendBitcoin(to, amount);
         if (!txId) throw new Error("Transaction failed");
         return txId;
       } else if (provider === LEATHER) {
-        const response = await library?.request("sendTransfer", {
+        const lib = (window as any).LeatherProvider;
+        if (!lib) throw new Error("Library not found");
+        setLibrary(lib);
+        const response = await lib?.request("sendTransfer", {
           recipients: [
             {
               address: to,
@@ -1416,12 +1421,14 @@ const LaserEyesProvider = ({
           const lib = getOkxLibrary();
           return await lib?.signMessage(message);
         } else if (provider === LEATHER) {
+          const lib = (window as any).LeatherProvider;
+          setLibrary(lib);
           const paymentType = toSignAddress === address ? P2TR : P2WPKH;
           if (toSignAddress !== address && toSignAddress !== paymentAddress) {
             throw new Error("Invalid address to sign message");
           }
 
-          const signed = await library?.request("signMessage", {
+          const signed = await lib?.request("signMessage", {
             message: message,
             paymentType,
           });
@@ -1734,7 +1741,10 @@ const LaserEyesProvider = ({
           network,
         };
 
-        const response: LeatherRPCResponse = await library?.request(
+        const lib = (window as any).LeatherProvider;
+        setLibrary(lib);
+
+        const response: LeatherRPCResponse = await lib?.request(
           "signPsbt",
           requestParams
         );
