@@ -596,7 +596,6 @@ const LaserEyesProvider = ({
       setPublicKey(okxAccounts.publicKey);
       setPaymentPublicKey(okxAccounts.publicKey);
       setLibrary(lib);
-      console.log("lib", lib);
       setProvider(OKX);
       setConnected(true);
       const balance = await lib?.getBalance();
