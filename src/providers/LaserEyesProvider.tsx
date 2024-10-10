@@ -556,18 +556,25 @@ const LaserEyesProvider = ({
     }
   };
 
+  const getOkxLibrary = useCallback(() => {
+    let foundOkx;
+    if (
+      network === TESTNET ||
+      network === TESTNET4 ||
+      network === SIGNET ||
+      network === FRACTAL_TESTNET
+    ) {
+      foundOkx = (window as any)?.okxwallet?.bitcoinTestnet;
+    } else if (network === MAINNET || network === FRACTAL_MAINNET) {
+      foundOkx = (window as any)?.okxwallet?.bitcoin;
+    }
+    return foundOkx;
+  }, []);
+
   const connectOkx = useCallback(async () => {
     try {
       localStorage?.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
-      console.log("connecting", network);
-      const lib =
-        network === TESTNET ||
-        network === TESTNET4 ||
-        network === FRACTAL_TESTNET
-          ? (window as any).okxwallet.bitcoinTestnet
-          : network === SIGNET
-          ? (window as any).okxwallet.bitcoinSignet
-          : (window as any).okxwallet.bitcoin;
+      const lib = getOkxLibrary();
 
       const okxAccounts = await lib.connect();
       if (!okxAccounts) throw new Error("No accounts found");
@@ -589,6 +596,7 @@ const LaserEyesProvider = ({
       setPublicKey(okxAccounts.publicKey);
       setPaymentPublicKey(okxAccounts.publicKey);
       setLibrary(lib);
+      console.log("lib", lib);
       setProvider(OKX);
       setConnected(true);
       const balance = await lib?.getBalance();
@@ -1406,7 +1414,8 @@ const LaserEyesProvider = ({
           });
           return signedMessage;
         } else if (provider === OKX) {
-          return await library?.signMessage(message);
+          const lib = getOkxLibrary();
+          return await lib?.signMessage(message);
         } else if (provider === LEATHER) {
           const paymentType = toSignAddress === address ? P2TR : P2WPKH;
           if (toSignAddress !== address && toSignAddress !== paymentAddress) {
@@ -1691,7 +1700,8 @@ const LaserEyesProvider = ({
           };
         }
       } else if (provider === OKX) {
-        const signedPsbt = await library?.signPsbt(psbtHex, {
+        const lib = getOkxLibrary();
+        const signedPsbt = await lib?.signPsbt(psbtHex, {
           autoFinalized: finalize,
         });
 

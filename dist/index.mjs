@@ -898,12 +898,21 @@ var LaserEyesProvider = ({
       throw error;
     }
   });
+  const getOkxLibrary = useCallback(() => {
+    var _a, _b;
+    let foundOkx;
+    if (network === TESTNET || network === TESTNET4 || network === SIGNET || network === FRACTAL_TESTNET) {
+      foundOkx = (_a = window == null ? void 0 : window.okxwallet) == null ? void 0 : _a.bitcoinTestnet;
+    } else if (network === MAINNET || network === FRACTAL_MAINNET) {
+      foundOkx = (_b = window == null ? void 0 : window.okxwallet) == null ? void 0 : _b.bitcoin;
+    }
+    return foundOkx;
+  }, []);
   const connectOkx = useCallback(() => __async(void 0, null, function* () {
     var _a;
     try {
       localStorage == null ? void 0 : localStorage.setItem(LOCAL_STORAGE_DEFAULT_WALLET, OKX);
-      console.log("connecting", network);
-      const lib = network === TESTNET || network === TESTNET4 || network === FRACTAL_TESTNET ? window.okxwallet.bitcoinTestnet : network === SIGNET ? window.okxwallet.bitcoinSignet : window.okxwallet.bitcoin;
+      const lib = getOkxLibrary();
       const okxAccounts = yield lib.connect();
       if (!okxAccounts)
         throw new Error("No accounts found");
@@ -919,6 +928,7 @@ var LaserEyesProvider = ({
       setPublicKey(okxAccounts.publicKey);
       setPaymentPublicKey(okxAccounts.publicKey);
       setLibrary(lib);
+      console.log("lib", lib);
       setProvider(OKX);
       setConnected(true);
       const balance2 = yield lib == null ? void 0 : lib.getBalance();
@@ -1647,7 +1657,8 @@ var LaserEyesProvider = ({
           });
           return signedMessage;
         } else if (provider === OKX) {
-          return yield library == null ? void 0 : library.signMessage(message);
+          const lib = getOkxLibrary();
+          return yield lib == null ? void 0 : lib.signMessage(message);
         } else if (provider === LEATHER) {
           const paymentType = toSignAddress === address2 ? P2TR : P2WPKH;
           if (toSignAddress !== address2 && toSignAddress !== paymentAddress) {
@@ -1927,7 +1938,8 @@ var LaserEyesProvider = ({
           };
         }
       } else if (provider === OKX) {
-        const signedPsbt = yield library == null ? void 0 : library.signPsbt(psbtHex, {
+        const lib = getOkxLibrary();
+        const signedPsbt = yield lib == null ? void 0 : lib.signPsbt(psbtHex, {
           autoFinalized: finalize
         });
         const psbtSignedPsbt = bitcoin2.Psbt.fromHex(signedPsbt);
