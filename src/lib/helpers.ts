@@ -198,7 +198,7 @@ export async function createSendBtcPsbt(
   if (amountGathered > satsNeeded) {
     psbt.addOutput({
       address: paymentAddress,
-      value: amountGathered - satsNeeded - amount,
+      value: amountGathered - satsNeeded,
     });
   }
 
